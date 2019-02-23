@@ -254,7 +254,7 @@ object NavigationHelper {
         serviceId: Int,
         url: String?,
         title: String?,
-        autoPlay: Boolean = true  // it was false
+        autoPlay: Boolean = false  // it was false
     ) {
         if (fragmentManager == null) {
             Log.d(TAG, "openVideoDetailFragment() with fragmentManager = null")

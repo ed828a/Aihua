@@ -63,12 +63,18 @@ abstract class BaseLocalListFragment<I, N> : BaseStateFragment<I>(), ListViewCon
      */
     protected fun isGridLayout(): Boolean {
         val listMode = PreferenceManager.getDefaultSharedPreferences(activity).getString(getString(R.string.list_view_mode_key), getString(R.string.list_view_mode_value))
-        return if ("auto" == listMode) {
-            val configuration = resources.configuration
-            configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && configuration.isLayoutSizeAtLeast(
-                Configuration.SCREENLAYOUT_SIZE_LARGE)
-        } else {
-            "grid" == listMode
+
+
+        return when (listMode){
+            "list" -> {
+                val configuration = resources.configuration
+                configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                        configuration.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE)
+            }
+
+            "auto",
+            "grid"-> true
+            else -> false
         }
     }
 

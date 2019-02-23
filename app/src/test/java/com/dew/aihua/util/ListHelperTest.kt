@@ -19,6 +19,7 @@ class ListHelperTest {
 
         var expected = Arrays.asList("144p", "240p", "360p", "480p", "720p", "720p60", "1080p", "1080p60", "1440p60", "2160p", "2160p60")
         //for (VideoStream videoStream : result) System.out.println(videoStream.resolution + " > " + MediaFormat.getSuffixById(videoStream.format) + " > " + videoStream.isVideoOnly);
+//        println("${videoStream.resolution} > " + "${MediaFormat.getSuffixById(videoStream.format)}  >  ${videoStream.isVideoOnly}")
 
         Assert.assertEquals(result.size.toLong(), expected.size.toLong())
         for (i in result.indices) {
@@ -278,7 +279,7 @@ class ListHelperTest {
     }
 
     companion object {
-        private val BEST_RESOLUTION_KEY = "best_resolution"
+        private const val BEST_RESOLUTION_KEY = "best_resolution"
         private val audioStreamsTestList = Arrays.asList(
             AudioStream("", MediaFormat.M4A, /**/ 128),
             AudioStream("", MediaFormat.WEBMA, /**/ 192),

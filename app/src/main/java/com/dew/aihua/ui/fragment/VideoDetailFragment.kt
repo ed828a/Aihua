@@ -1156,6 +1156,9 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
             openVideoPlayer()
             // Only auto play in the first open
             autoPlayEnabled = false
+        } else {
+//            context?.sendBroadcast(Intent(ACTION_CLOSE))
+            openPopupPlayer(true)
         }
 
         val related = relatedStreamRootLayout!!.parent
