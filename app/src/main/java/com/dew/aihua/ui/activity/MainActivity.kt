@@ -24,6 +24,8 @@ import com.dew.aihua.ui.fragment.SearchFragment
 import com.dew.aihua.ui.fragment.VideoDetailFragment
 import com.dew.aihua.util.*
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.toolbar_layout.*
+import kotlinx.android.synthetic.main.toolbar_layout.view.*
 import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.StreamingService
 import org.schabi.newpipe.extractor.exceptions.ExtractionException
@@ -61,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         if (supportFragmentManager != null && supportFragmentManager.backStackEntryCount == 0) {
             initFragments()
         }
+
 
         setSupportActionBar(findViewById(R.id.toolbar))
         try {
@@ -383,7 +386,8 @@ class MainActivity : AppCompatActivity() {
 
         val fragment = supportFragmentManager.findFragmentById(R.id.fragment_holder)
         if (fragment !is VideoDetailFragment) {
-            findViewById<View>(R.id.toolbar).findViewById<View>(R.id.toolbarSpinner).visibility = View.GONE
+//            findViewById<View>(R.id.toolbar).findViewById<View>(R.id.toolbarSpinner).visibility = View.GONE
+            findViewById<View>(R.id.toolbar).toolbarSpinner.visibility = View.GONE
         }
 
         if (fragment !is SearchFragment) {

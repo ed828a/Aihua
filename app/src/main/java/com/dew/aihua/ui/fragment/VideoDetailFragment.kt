@@ -53,6 +53,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.toolbar_layout.view.*
 import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.exceptions.ContentNotAvailableException
 import org.schabi.newpipe.extractor.exceptions.ParsingException
@@ -430,7 +431,8 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
 
     override fun initViews(rootView: View, savedInstanceState: Bundle?) {
         super.initViews(rootView, savedInstanceState)
-        toolbarSpinner = activity!!.findViewById<View>(R.id.toolbar).findViewById(R.id.toolbarSpinner)
+//        toolbarSpinner = activity!!.findViewById<View>(R.id.toolbar).findViewById(R.id.toolbarSpinner)
+        toolbarSpinner = activity!!.findViewById<View>(R.id.toolbar).toolbarSpinner
 
         parallaxScrollRootView = rootView.findViewById(R.id.detail_main_content)
 
