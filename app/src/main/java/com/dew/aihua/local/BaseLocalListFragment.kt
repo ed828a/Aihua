@@ -64,7 +64,6 @@ abstract class BaseLocalListFragment<I, N> : BaseStateFragment<I>(), ListViewCon
     protected fun isGridLayout(): Boolean {
         val listMode = PreferenceManager.getDefaultSharedPreferences(activity).getString(getString(R.string.list_view_mode_key), getString(R.string.list_view_mode_value))
 
-
         return when (listMode){
             "list" -> {
                 val configuration = resources.configuration
@@ -100,6 +99,7 @@ abstract class BaseLocalListFragment<I, N> : BaseStateFragment<I>(), ListViewCon
         if (updateFlags != FLAG_NO_UPDATE) {
             if ((updateFlags and LIST_MODE_UPDATE_FLAG) != FLAG_NO_UPDATE) {
                 val useGrid = isGridLayout()
+                Log.d(TAG, "onResume(): isGridLayout() = $useGrid")
                 itemsList?.layoutManager = if (useGrid) getGridLayoutManager() else getListLayoutManager()
                 itemListAdapter?.setGridItemVariants(useGrid)
                 itemListAdapter?.notifyDataSetChanged()
@@ -114,6 +114,7 @@ abstract class BaseLocalListFragment<I, N> : BaseStateFragment<I>(), ListViewCon
         itemListAdapter = LocalItemListAdapter(activity)
 
         val useGrid = isGridLayout()
+        Log.d(TAG, "initViews(): isGridLayout() = $useGrid")
         itemsList = rootView.findViewById(R.id.items_list)
         itemsList?.layoutManager = if (useGrid) getGridLayoutManager() else getListLayoutManager()
 

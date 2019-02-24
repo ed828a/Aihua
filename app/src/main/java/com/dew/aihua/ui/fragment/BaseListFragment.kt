@@ -41,7 +41,7 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
 
     protected var infoListAdapter: InfoListAdapter? = null
     protected var itemsList: androidx.recyclerview.widget.RecyclerView? = null
-    private var updateFlags = 0
+    private var updateFlags = FLAG_NO_UPDATE
 
     ///////////////////////////////////////////////////////////////////////////
     // State Saving
@@ -73,12 +73,23 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
     private val isGridLayout: Boolean
         get() {
             val listMode = PreferenceManager.getDefaultSharedPreferences(activity).getString(getString(R.string.list_view_mode_key), getString(R.string.list_view_mode_value))
-            return if ("auto" == listMode) {
-                val configuration = resources.configuration
-                configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && configuration.isLayoutSizeAtLeast(
-                    Configuration.SCREENLAYOUT_SIZE_LARGE)
-            } else {
-                "grid" == listMode
+//            return if ("auto" == listMode) {
+//                val configuration = resources.configuration
+//                configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && configuration.isLayoutSizeAtLeast(
+//                    Configuration.SCREENLAYOUT_SIZE_LARGE)
+//            } else {
+//                "grid" == listMode
+//            }
+            return when (listMode){
+                "list" -> {
+                    val configuration = resources.configuration
+                    configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                            configuration.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE)
+                }
+
+                "auto",
+                "grid"-> true
+                else -> false
             }
         }
 
@@ -111,6 +122,7 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
         if (updateFlags != FLAG_NO_UPDATE) {
             if (updateFlags and LIST_MODE_UPDATE_FLAG != FLAG_NO_UPDATE) {
                 val useGrid = isGridLayout
+                Log.d(TAG, "onResume(): useGrid = $useGrid ")
                 itemsList?.layoutManager = if (useGrid) getGridLayoutManager() else getListLayoutManager()
                 infoListAdapter?.setGridItemVariants(useGrid)
                 infoListAdapter?.notifyDataSetChanged()
