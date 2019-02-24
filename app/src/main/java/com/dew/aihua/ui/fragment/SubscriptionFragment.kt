@@ -1,4 +1,4 @@
-package com.dew.aihua.local.subscription
+package com.dew.aihua.ui.fragment
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -18,6 +18,8 @@ import android.widget.Toast
 import androidx.annotation.DrawableRes
 import com.dew.aihua.R
 import com.dew.aihua.info_list.adapter.InfoListAdapter
+import com.dew.aihua.local.subscription.ImportConfirmationDialog
+import com.dew.aihua.local.subscription.SubscriptionService
 import com.dew.aihua.local.subscription.service.SubscriptionsExportService
 import com.dew.aihua.local.subscription.service.SubscriptionsImportService
 import com.dew.aihua.local.subscription.service.SubscriptionsImportService.Companion.KEY_MODE
@@ -26,7 +28,6 @@ import com.dew.aihua.local.subscription.service.SubscriptionsImportService.Compa
 import com.dew.aihua.report.UserAction
 import com.dew.aihua.repository.database.subscription.SubscriptionEntity
 import com.dew.aihua.repository.remote.helper.ServiceHelper
-import com.dew.aihua.ui.fragment.BaseStateFragment
 import com.dew.aihua.util.*
 import com.dew.aihua.util.AnimationUtils.animateRotation
 import com.dew.aihua.util.AnimationUtils.animateView
@@ -291,7 +292,9 @@ class SubscriptionFragment : BaseStateFragment<List<SubscriptionEntity>>(), Shar
     }
 
     private fun onImportPreviousSelected() {
-        startActivityForResult(FilePickerActivityHelper.chooseSingleFile(activity!!), REQUEST_IMPORT_CODE)
+        startActivityForResult(FilePickerActivityHelper.chooseSingleFile(activity!!),
+            REQUEST_IMPORT_CODE
+        )
     }
 
     private fun onExportSelected() {
@@ -299,7 +302,9 @@ class SubscriptionFragment : BaseStateFragment<List<SubscriptionEntity>>(), Shar
         val exportName = "newpipe_subscriptions_$date.json"
         val exportFile = File(Environment.getExternalStorageDirectory(), exportName)
 
-        startActivityForResult(FilePickerActivityHelper.chooseFileToSave(activity!!, exportFile.absolutePath), REQUEST_EXPORT_CODE)
+        startActivityForResult(FilePickerActivityHelper.chooseFileToSave(activity!!, exportFile.absolutePath),
+            REQUEST_EXPORT_CODE
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -318,9 +323,11 @@ class SubscriptionFragment : BaseStateFragment<List<SubscriptionEntity>>(), Shar
                 }
                 REQUEST_IMPORT_CODE -> {
                     val path = Utils.getFileForUri(data.data!!).absolutePath
-                    ImportConfirmationDialog.show(this, Intent(activity, SubscriptionsImportService::class.java)
-                        .putExtra(KEY_MODE, PREVIOUS_EXPORT_MODE)
-                        .putExtra(KEY_VALUE, path))
+                    ImportConfirmationDialog.show(
+                        this, Intent(activity, SubscriptionsImportService::class.java)
+                            .putExtra(KEY_MODE, PREVIOUS_EXPORT_MODE)
+                            .putExtra(KEY_VALUE, path)
+                    )
                 }
             }
         }

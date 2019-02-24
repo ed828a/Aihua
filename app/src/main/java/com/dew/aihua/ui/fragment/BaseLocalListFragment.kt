@@ -1,4 +1,4 @@
-package com.dew.aihua.local
+package com.dew.aihua.ui.fragment
 
 import android.content.SharedPreferences
 import android.content.res.Configuration
@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import com.dew.aihua.R
 import com.dew.aihua.local.adapter.LocalItemListAdapter
 import com.dew.aihua.ui.contract.ListViewContract
-import com.dew.aihua.ui.fragment.BaseStateFragment
 import com.dew.aihua.util.AnimationUtils.animateView
 
 /**

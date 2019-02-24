@@ -1,4 +1,4 @@
-package com.dew.aihua.local.feed
+package com.dew.aihua.ui.fragment
 
 import android.os.Bundle
 import android.os.Handler
@@ -8,7 +8,6 @@ import com.dew.aihua.R
 import com.dew.aihua.local.subscription.SubscriptionService
 import com.dew.aihua.report.UserAction
 import com.dew.aihua.repository.database.subscription.SubscriptionEntity
-import com.dew.aihua.ui.fragment.BaseListFragment
 import io.reactivex.Flowable
 import io.reactivex.MaybeObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -191,7 +190,8 @@ class FeedFragment : BaseListFragment<List<SubscriptionEntity>, Void>() {
                 feedSubscriber = subscription
 
                 var requestSize = FEED_LOAD_COUNT - infoListAdapter!!.itemsList.size
-                if (wasLoading.getAndSet(false)) requestSize = FEED_LOAD_COUNT
+                if (wasLoading.getAndSet(false)) requestSize =
+                    FEED_LOAD_COUNT
 
                 val hasToLoad = requestSize > 0
                 if (hasToLoad) {

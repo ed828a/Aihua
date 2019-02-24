@@ -137,6 +137,7 @@ class MainVideoPlayer : AppCompatActivity(), StateSaver.WriteRead, PlaybackParam
 
         // start playing on Landscape
         isLandscape = true
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
 
         if (globalScreenOrientationLocked()) {
             val lastOrientationWasLandscape =

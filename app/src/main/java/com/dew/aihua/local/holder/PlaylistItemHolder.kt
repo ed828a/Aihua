@@ -23,7 +23,7 @@ abstract class PlaylistItemHolder(infoItemBuilder: LocalItemBuilder,
     val itemUploaderView: TextView = itemView.findViewById(R.id.itemUploaderView)
     val itemStreamCountView: TextView = itemView.findViewById(R.id.itemStreamCountView)
 
-    constructor(infoItemBuilder: LocalItemBuilder, parent: ViewGroup) : this(infoItemBuilder, R.layout.list_playlist_mini_item, parent)
+    constructor(infoItemBuilder: LocalItemBuilder, parent: ViewGroup) : this(infoItemBuilder, R.layout.list_playlist_item, parent)
 
     override fun updateFromItem(item: LocalItem, dateFormat: DateFormat) {
         itemView.setOnClickListener { view ->

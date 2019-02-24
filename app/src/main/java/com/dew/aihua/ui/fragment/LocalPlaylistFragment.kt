@@ -1,4 +1,4 @@
-package com.dew.aihua.local.playlist
+package com.dew.aihua.ui.fragment
 
 import android.content.DialogInterface
 import android.content.Intent
@@ -16,7 +16,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.dew.aihua.R
 import com.dew.aihua.info_list.adapter.InfoItemDialog
-import com.dew.aihua.local.BaseLocalListFragment
+import com.dew.aihua.local.playlist.LocalPlaylistManager
 import com.dew.aihua.player.playerUI.PopupVideoPlayer.Companion.ACTION_CLOSE
 import com.dew.aihua.player.playqueque.queque.PlayQueue
 import com.dew.aihua.player.playqueque.queque.SinglePlayQueue

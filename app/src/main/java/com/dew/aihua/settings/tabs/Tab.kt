@@ -4,10 +4,10 @@ import android.content.Context
 import android.util.Log
 import androidx.annotation.DrawableRes
 import com.dew.aihua.R
-import com.dew.aihua.local.bookmark.BookmarkFragment
-import com.dew.aihua.local.feed.FeedFragment
-import com.dew.aihua.local.history.StatisticsPlaylistFragment
-import com.dew.aihua.local.subscription.SubscriptionFragment
+import com.dew.aihua.ui.fragment.BookmarkFragment
+import com.dew.aihua.ui.fragment.FeedFragment
+import com.dew.aihua.ui.fragment.StatisticsPlaylistFragment
+import com.dew.aihua.ui.fragment.SubscriptionFragment
 import com.dew.aihua.settings.tabs.Tab.Type.Companion.BLANK_TAB_ID
 import com.dew.aihua.settings.tabs.Tab.Type.Companion.BOOKMARK_TAB_ID
 import com.dew.aihua.settings.tabs.Tab.Type.Companion.CHANNEL_TAB_ID

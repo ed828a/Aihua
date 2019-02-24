@@ -1,4 +1,4 @@
-package com.dew.aihua.local.history
+package com.dew.aihua.ui.fragment
 
 import android.content.DialogInterface
 import android.content.Intent
@@ -12,7 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.dew.aihua.R
 import com.dew.aihua.info_list.adapter.InfoItemDialog
-import com.dew.aihua.local.BaseLocalListFragment
+import com.dew.aihua.local.history.HistoryRecordManager
 import com.dew.aihua.player.playerUI.PopupVideoPlayer.Companion.ACTION_CLOSE
 import com.dew.aihua.player.playqueque.queque.PlayQueue
 import com.dew.aihua.player.playqueque.queque.SinglePlayQueue
@@ -67,13 +67,13 @@ class StatisticsPlaylistFragment : BaseLocalListFragment<List<StreamStatisticsEn
         val convertList: MutableList<StreamStatisticsEntry> = arrayListOf()
         convertList.addAll(results)
         when (sortMode) {
-            StatisticsPlaylistFragment.StatisticSortMode.LAST_PLAYED -> {
+            StatisticSortMode.LAST_PLAYED -> {
                 convertList.sortWith(Comparator { left, right ->
                     right.latestAccessDate.compareTo(left.latestAccessDate)
                 })
             }
 
-            StatisticsPlaylistFragment.StatisticSortMode.MOST_PLAYED -> {
+            StatisticSortMode.MOST_PLAYED -> {
                 convertList.sortWith(Comparator { left, right ->
                     java.lang.Long.compare(right.watchCount, left.watchCount)
                 })

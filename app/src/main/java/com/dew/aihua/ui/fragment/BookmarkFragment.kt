@@ -1,4 +1,4 @@
-package com.dew.aihua.local.bookmark
+package com.dew.aihua.ui.fragment
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dew.aihua.R
-import com.dew.aihua.local.BaseLocalListFragment
 import com.dew.aihua.local.playlist.LocalPlaylistManager
 import com.dew.aihua.local.playlist.RemotePlaylistManager
 import com.dew.aihua.report.UserAction

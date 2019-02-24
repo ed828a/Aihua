@@ -1,4 +1,4 @@
-package com.dew.aihua.local.subscription
+package com.dew.aihua.ui.fragment
 
 import android.app.Activity
 import android.content.Intent
@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.core.text.util.LinkifyCompat
 import com.dew.aihua.R
+import com.dew.aihua.local.subscription.ImportConfirmationDialog
 import com.dew.aihua.local.subscription.service.SubscriptionsImportService
 import com.dew.aihua.local.subscription.service.SubscriptionsImportService.Companion.CHANNEL_URL_MODE
 import com.dew.aihua.local.subscription.service.SubscriptionsImportService.Companion.INPUT_STREAM_MODE
@@ -24,7 +25,6 @@ import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
 import com.dew.aihua.report.UserAction
 import com.dew.aihua.repository.remote.helper.ServiceHelper
-import com.dew.aihua.ui.fragment.BaseFragment
 import com.dew.aihua.util.Constants
 import com.dew.aihua.util.FilePickerActivityHelper
 import com.nononsenseapps.filepicker.Utils
@@ -142,15 +142,19 @@ class SubscriptionsImportFragment : BaseFragment() {
     }
 
     fun onImportUrl(value: String) {
-        ImportConfirmationDialog.show(this, Intent(activity, SubscriptionsImportService::class.java)
-            .putExtra(KEY_MODE, CHANNEL_URL_MODE)
-            .putExtra(KEY_VALUE, value)
-            .putExtra(Constants.KEY_SERVICE_ID, currentServiceId))
+        ImportConfirmationDialog.show(
+            this, Intent(activity, SubscriptionsImportService::class.java)
+                .putExtra(KEY_MODE, CHANNEL_URL_MODE)
+                .putExtra(KEY_VALUE, value)
+                .putExtra(Constants.KEY_SERVICE_ID, currentServiceId)
+        )
     }
 
     // youtube import file
     fun onImportFile() {
-        startActivityForResult(FilePickerActivityHelper.chooseSingleFile(activity!!), REQUEST_IMPORT_FILE_CODE)
+        startActivityForResult(FilePickerActivityHelper.chooseSingleFile(activity!!),
+            REQUEST_IMPORT_FILE_CODE
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -160,10 +164,12 @@ class SubscriptionsImportFragment : BaseFragment() {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_IMPORT_FILE_CODE && data.data != null) {
             val path = Utils.getFileForUri(data.data!!).absolutePath
             Log.d(TAG, "before ImportConfirmationDialog: currentServiceId = $currentServiceId, path = $path, INPUT_STREAM_MODE")
-            ImportConfirmationDialog.show(this, Intent(activity, SubscriptionsImportService::class.java)
-                .putExtra(KEY_MODE, INPUT_STREAM_MODE)
-                .putExtra(KEY_VALUE, path)
-                .putExtra(Constants.KEY_SERVICE_ID, currentServiceId))
+            ImportConfirmationDialog.show(
+                this, Intent(activity, SubscriptionsImportService::class.java)
+                    .putExtra(KEY_MODE, INPUT_STREAM_MODE)
+                    .putExtra(KEY_VALUE, path)
+                    .putExtra(Constants.KEY_SERVICE_ID, currentServiceId)
+            )
         }
     }
 
