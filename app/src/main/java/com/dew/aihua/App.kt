@@ -82,7 +82,7 @@ class App: Application() {
     private fun initACRA() {
         try {
             val acraConfig = ConfigurationBuilder(this)
-                .setReportSenderFactoryClasses(*reportSenderFactoryClasses as Array<Class<out ReportSenderFactory>>)
+                .setReportSenderFactoryClasses(*reportSenderFactoryClasses)
                 .setBuildConfigClass(BuildConfig::class.java)
                 .build()
             ACRA.init(this, acraConfig)
@@ -143,7 +143,7 @@ class App: Application() {
     companion object {
         private val TAG = App::class.java.toString()
 
-        private val reportSenderFactoryClasses = arrayOf<Class<*>>(AcraReportSenderFactory::class.java)
+        private val reportSenderFactoryClasses = arrayOf(AcraReportSenderFactory::class.java)
 
         fun getRefWatcher(context: Context): RefWatcher? {
             val application = context.applicationContext as App
