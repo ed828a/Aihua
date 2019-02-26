@@ -32,11 +32,11 @@ object ImportExportJsonHelper {
     private const val JSON_APP_VERSION_KEY = "app_version"
     private const val JSON_APP_VERSION_INT_KEY = "app_version_int"
 
-    private const val JSON_SUBSCRIPTIONS_ARRAY_KEY = "subscriptions"
+    const val JSON_SUBSCRIPTIONS_ARRAY_KEY = "subscriptions"
 
-    private const val JSON_SERVICE_ID_KEY = "service_id"
-    private const val JSON_URL_KEY = "url"
-    private const val JSON_NAME_KEY = "name"
+    const val JSON_SERVICE_ID_KEY = "service_id"
+    const val JSON_URL_KEY = "url"
+    const val JSON_NAME_KEY = "name"
 
     /**
      * Read a JSON source through the input stream and return the parsed subscription items.

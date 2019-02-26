@@ -96,13 +96,13 @@ dependencies {
 
     // square
     implementation "com.squareup.okhttp3:okhttp:${okHttpLibVersion}"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryLibVersion}"
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryLibVersion}"
+//    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${leakCanaryLibVersion}"
+    implementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryLibVersion}"
 
     // stetho
-    debugImplementation "com.facebook.stetho:stetho:${stethoLibVersion}"
-    debugImplementation "com.facebook.stetho:stetho-urlconnection:${stethoLibVersion}"
-    debugImplementation "com.facebook.stetho:stetho-okhttp3:${stethoLibVersion}"
+    implementation "com.facebook.stetho:stetho:${stethoLibVersion}"
+    implementation "com.facebook.stetho:stetho-urlconnection:${stethoLibVersion}"
+    implementation "com.facebook.stetho:stetho-okhttp3:${stethoLibVersion}"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.2-alpha01'

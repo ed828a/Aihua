@@ -6,10 +6,13 @@ import android.text.TextUtils
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.dew.aihua.R
+import com.dew.aihua.local.subscription.ImportExportEventListener
 import com.dew.aihua.local.subscription.ImportExportJsonHelper
 import com.dew.aihua.repository.database.subscription.SubscriptionEntity
 import com.dew.aihua.repository.remote.helper.ExtractorHelper
 import com.dew.aihua.util.Constants
+import com.grack.nanojson.JsonObject
+import com.grack.nanojson.JsonParser
 import io.reactivex.Flowable
 import io.reactivex.Notification
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,6 +23,7 @@ import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
 import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.channel.ChannelInfo
+import org.schabi.newpipe.extractor.subscription.SubscriptionExtractor
 import org.schabi.newpipe.extractor.subscription.SubscriptionItem
 import java.io.*
 import java.util.ArrayList
@@ -197,7 +201,45 @@ class SubscriptionsImportService : BaseImportExportService() {
     }
 
     private fun importFromPreviousExport(): Flowable<List<SubscriptionItem>> {
-        return Flowable.fromCallable { ImportExportJsonHelper.readFrom(inputStream, null) }
+        return Flowable.fromCallable {
+//            ImportExportJsonHelper.readFrom(inputStream, null)
+            readFrom(inputStream, null)
+        }
+    }
+
+    @Throws(SubscriptionExtractor.InvalidSourceException::class)
+    fun readFrom(inputStream: InputStream?, eventListener: ImportExportEventListener?): List<SubscriptionItem> {
+        if (inputStream == null) throw SubscriptionExtractor.InvalidSourceException("input is null")
+
+        val channels = ArrayList<SubscriptionItem>()
+
+        try {
+            val parentObject = JsonParser.`object`().from(inputStream)
+            val channelsArray = parentObject.getArray(ImportExportJsonHelper.JSON_SUBSCRIPTIONS_ARRAY_KEY)
+            if (channelsArray == null || channelsArray.isEmpty()){
+                Log.e(ImportExportJsonHelper.TAG, "Error: Channels array is null/Empty")
+                return channels
+            }
+
+            eventListener?.onSizeReceived(channelsArray.size)
+
+            for (obj in channelsArray) {
+                if (obj is JsonObject) {
+                    val serviceId = obj.getInt(ImportExportJsonHelper.JSON_SERVICE_ID_KEY, 0)
+                    val url = obj.getString(ImportExportJsonHelper.JSON_URL_KEY)
+                    val name = obj.getString(ImportExportJsonHelper.JSON_NAME_KEY)
+
+                    if (url != null && name != null && !url.isEmpty() && !name.isEmpty()) {
+                        channels.add(SubscriptionItem(serviceId, url, name))
+                        eventListener?.onItemCompleted(name)
+                    }
+                }
+            }
+        } catch (e: Throwable) {
+            throw SubscriptionExtractor.InvalidSourceException("Couldn't parse json", e)
+        }
+
+        return channels
     }
 
     protected fun handleError(error: Throwable) {
@@ -233,5 +275,40 @@ class SubscriptionsImportService : BaseImportExportService() {
          * a better performance as we can then use db transactions.
          */
         const val BUFFER_COUNT_BEFORE_INSERT = 50
+
+//        @Throws(SubscriptionExtractor.InvalidSourceException::class)
+//        fun readFrom(inputStream: InputStream?, eventListener: ImportExportEventListener?): List<SubscriptionItem> {
+//            if (inputStream == null) throw SubscriptionExtractor.InvalidSourceException("input is null")
+//
+//            val channels = ArrayList<SubscriptionItem>()
+//
+//            try {
+//                val parentObject = JsonParser.`object`().from(inputStream)
+//                val channelsArray = parentObject.getArray(ImportExportJsonHelper.JSON_SUBSCRIPTIONS_ARRAY_KEY)
+//                if (channelsArray == null || channelsArray.isEmpty()){
+//                    Log.e(ImportExportJsonHelper.TAG, "Error: Channels array is null/Empty")
+//                    return channels
+//                }
+//
+//                eventListener?.onSizeReceived(channelsArray.size)
+//
+//                for (obj in channelsArray) {
+//                    if (obj is JsonObject) {
+//                        val serviceId = obj.getInt(ImportExportJsonHelper.JSON_SERVICE_ID_KEY, 0)
+//                        val url = obj.getString(ImportExportJsonHelper.JSON_URL_KEY)
+//                        val name = obj.getString(ImportExportJsonHelper.JSON_NAME_KEY)
+//
+//                        if (url != null && name != null && !url.isEmpty() && !name.isEmpty()) {
+//                            channels.add(SubscriptionItem(serviceId, url, name))
+//                            eventListener?.onItemCompleted(name)
+//                        }
+//                    }
+//                }
+//            } catch (e: Throwable) {
+//                throw SubscriptionExtractor.InvalidSourceException("Couldn't parse json", e)
+//            }
+//
+//            return channels
+//        }
     }
 }
