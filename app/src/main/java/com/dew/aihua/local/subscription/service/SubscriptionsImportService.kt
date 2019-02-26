@@ -198,7 +198,6 @@ class SubscriptionsImportService : BaseImportExportService() {
     // YouTube import goes here List<SubscriptionItem>
     private fun importFromInputStream(): Flowable<List<SubscriptionItem>> {
         return Flowable.fromCallable {
-            //            val temp =
             NewPipe.getService(currentServiceId)
                 .subscriptionExtractor
                 .fromInputStream(inputStream)
@@ -282,39 +281,5 @@ class SubscriptionsImportService : BaseImportExportService() {
          */
         const val BUFFER_COUNT_BEFORE_INSERT = 50
 
-//        @Throws(SubscriptionExtractor.InvalidSourceException::class)
-//        fun readFrom(inputStream: InputStream?, eventListener: ImportExportEventListener?): List<SubscriptionItem> {
-//            if (inputStream == null) throw SubscriptionExtractor.InvalidSourceException("input is null")
-//
-//            val channels = ArrayList<SubscriptionItem>()
-//
-//            try {
-//                val parentObject = JsonParser.`object`().from(inputStream)
-//                val channelsArray = parentObject.getArray(ImportExportJsonHelper.JSON_SUBSCRIPTIONS_ARRAY_KEY)
-//                if (channelsArray == null || channelsArray.isEmpty()){
-//                    Log.e(ImportExportJsonHelper.TAG, "Error: Channels array is null/Empty")
-//                    return channels
-//                }
-//
-//                eventListener?.onSizeReceived(channelsArray.size)
-//
-//                for (obj in channelsArray) {
-//                    if (obj is JsonObject) {
-//                        val serviceId = obj.getInt(ImportExportJsonHelper.JSON_SERVICE_ID_KEY, 0)
-//                        val url = obj.getString(ImportExportJsonHelper.JSON_URL_KEY)
-//                        val name = obj.getString(ImportExportJsonHelper.JSON_NAME_KEY)
-//
-//                        if (url != null && name != null && !url.isEmpty() && !name.isEmpty()) {
-//                            channels.add(SubscriptionItem(serviceId, url, name))
-//                            eventListener?.onItemCompleted(name)
-//                        }
-//                    }
-//                }
-//            } catch (e: Throwable) {
-//                throw SubscriptionExtractor.InvalidSourceException("Couldn't parse json", e)
-//            }
-//
-//            return channels
-//        }
     }
 }
