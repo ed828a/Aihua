@@ -57,9 +57,10 @@ class SubscriptionsImportService : BaseImportExportService() {
             }
 
             override fun onComplete() {
-                androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(this@SubscriptionsImportService).sendBroadcast(
-                    Intent(IMPORT_COMPLETE_ACTION)
-                )
+                androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(this@SubscriptionsImportService)
+                    .sendBroadcast(
+                        Intent(IMPORT_COMPLETE_ACTION)
+                    )
                 showToast(R.string.import_complete_toast)
                 stopService()
             }
@@ -93,7 +94,10 @@ class SubscriptionsImportService : BaseImportExportService() {
         } else {
             val filePath = intent.getStringExtra(KEY_VALUE)
             if (TextUtils.isEmpty(filePath)) {
-                stopAndReportError(IllegalStateException("Importing getTabFrom input stream, but file path is empty or null"), "Importing subscriptions")
+                stopAndReportError(
+                    IllegalStateException("Importing getTabFrom input stream, but file path is empty or null"),
+                    "Importing subscriptions"
+                )
                 return Service.START_NOT_STICKY
             }
 
@@ -107,7 +111,8 @@ class SubscriptionsImportService : BaseImportExportService() {
         }
 
         if (currentMode == -1 || currentMode == CHANNEL_URL_MODE && channelUrl == null) {
-            val errorDescription = "Some important field is null or in illegal state: currentMode=[$currentMode], channelUrl=[$channelUrl], inputStream=[$inputStream]"
+            val errorDescription =
+                "Some important field is null or in illegal state: currentMode=[$currentMode], channelUrl=[$channelUrl], inputStream=[$inputStream]"
             stopAndReportError(IllegalStateException(errorDescription), "Importing subscriptions")
             return Service.START_NOT_STICKY
         }
@@ -132,10 +137,10 @@ class SubscriptionsImportService : BaseImportExportService() {
     private fun startImport() {
         showToast(R.string.import_ongoing)
 
-        val flowable: Flowable<List<SubscriptionItem>>? =  when (currentMode) {
+        val flowable: Flowable<List<SubscriptionItem>>? = when (currentMode) {
             CHANNEL_URL_MODE -> importFromChannelUrl()
             INPUT_STREAM_MODE -> importFromInputStream()
-            PREVIOUS_EXPORT_MODE -> importFromPreviousExport()
+//            PREVIOUS_EXPORT_MODE -> importFromPreviousExport()
             else -> null
         }
 
@@ -145,34 +150,34 @@ class SubscriptionsImportService : BaseImportExportService() {
             return
         }
 
-        val tem =
-            flowable.doOnNext { subscriptionItems -> eventListener.onSizeReceived(subscriptionItems.size) }
-                .flatMap { Flowable.fromIterable(it) }
-                .parallel(PARALLEL_EXTRACTIONS)
-                .runOn(Schedulers.io())
-                .map { subscriptionItem ->
-                    try {
-                        return@map Notification.createOnNext(
-                            ExtractorHelper.getChannelInfo(subscriptionItem.serviceId, subscriptionItem.url, true)
-                                .blockingGet())
-                    } catch (e: Throwable) {
-                        return@map Notification.createOnError<ChannelInfo>(e)
-                    }
+        flowable.doOnNext { subscriptionItems -> eventListener.onSizeReceived(subscriptionItems.size) }
+            .flatMap { Flowable.fromIterable(it) }
+            .parallel(PARALLEL_EXTRACTIONS)
+            .runOn(Schedulers.io())
+            .map { subscriptionItem ->
+                try {
+                    return@map Notification.createOnNext(
+                        ExtractorHelper.getChannelInfo(subscriptionItem.serviceId, subscriptionItem.url, true)
+                            .blockingGet()
+                    )
+                } catch (e: Throwable) {
+                    return@map Notification.createOnError<ChannelInfo>(e)
                 }
-                .sequential()
+            }
+            .sequential()
 
-                .observeOn(Schedulers.io())
-                .doOnNext(getNotificationsConsumer())
-                .buffer(BUFFER_COUNT_BEFORE_INSERT)
-                .map(upsertBatch())
+            .observeOn(Schedulers.io())
+            .doOnNext(getNotificationsConsumer())
+            .buffer(BUFFER_COUNT_BEFORE_INSERT)
+            .map(upsertBatch())
 
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(subscriber)
     }
 
     private fun upsertBatch(): io.reactivex.functions.Function<List<Notification<ChannelInfo>>, List<SubscriptionEntity>> {
-        return Function{ notificationList ->
+        return Function { notificationList ->
             val infoList = ArrayList<ChannelInfo>(notificationList.size)
             for (notification in notificationList) {
                 if (notification.isOnNext) infoList.add(notification.value!!)
@@ -202,7 +207,7 @@ class SubscriptionsImportService : BaseImportExportService() {
 
     private fun importFromPreviousExport(): Flowable<List<SubscriptionItem>> {
         return Flowable.fromCallable {
-//            ImportExportJsonHelper.readFrom(inputStream, null)
+            //            ImportExportJsonHelper.readFrom(inputStream, null)
             readFrom(inputStream, null)
         }
     }
@@ -216,7 +221,7 @@ class SubscriptionsImportService : BaseImportExportService() {
         try {
             val parentObject = JsonParser.`object`().from(inputStream)
             val channelsArray = parentObject.getArray(ImportExportJsonHelper.JSON_SUBSCRIPTIONS_ARRAY_KEY)
-            if (channelsArray == null || channelsArray.isEmpty()){
+            if (channelsArray == null || channelsArray.isEmpty()) {
                 Log.e(ImportExportJsonHelper.TAG, "Error: Channels array is null/Empty")
                 return channels
             }
@@ -258,7 +263,8 @@ class SubscriptionsImportService : BaseImportExportService() {
         /**
          * A [local broadcast][LocalBroadcastManager] will be made with this action when the import is successfully completed.
          */
-        const val IMPORT_COMPLETE_ACTION = "org.schabi.newpipe.local.subscription.services.SubscriptionsImportService.IMPORT_COMPLETE"
+        const val IMPORT_COMPLETE_ACTION =
+            "org.schabi.newpipe.local.subscription.services.SubscriptionsImportService.IMPORT_COMPLETE"
         const val IMPORT_NOTIFICATION_ID = 4568
 
         ///////////////////////////////////////////////////////////////////////////
