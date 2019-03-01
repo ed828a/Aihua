@@ -5,7 +5,8 @@
     <string name="view_count_text">%1$s views</string>
     <string name="upload_date_text">Published on %1$s</string>
     <string name="no_player_found" translatable="false">No stream player found. Do you want to install VLC?</string>
-    <string name="no_player_found_toast" translatable="false">No stream player found (you can install VLC to play it).</string>
+    <string name="no_player_found_toast" translatable="false">No stream player found (you can install VLC to play it).
+    </string>
     <string name="install">Install</string>
     <string name="cancel">Cancel</string>
     <string name="fdroid_vlc_url" translatable="false">https://f-droid.org/repository/browse/?fdfilter=vlc&amp;fdid=org.videolan.vlc</string>
@@ -74,19 +75,28 @@
     <string name="popup_remember_size_pos_title">Remember popup size and position</string>
     <string name="popup_remember_size_pos_summary">Remember last size and position of popup</string>
     <string name="use_inexact_seek_title">Use fast inexact seek</string>
-    <string name="use_inexact_seek_summary">Inexact seek allows the player to seek to positions faster with reduced precision</string>
+    <string name="use_inexact_seek_summary">Inexact seek allows the player to seek to positions faster with reduced
+        precision
+    </string>
     <string name="download_thumbnail_title">Load thumbnails</string>
-    <string name="download_thumbnail_summary">When off no thumbnails load, saving data and memory usage. Changes clear both in-memory and on-disk image cache.</string>
+    <string name="download_thumbnail_summary">When off no thumbnails load, saving data and memory usage. Changes clear
+        both in-memory and on-disk image cache.
+    </string>
     <string name="thumbnail_cache_wipe_complete_notice">Image cache wiped</string>
     <string name="metadata_cache_wipe_title">Wipe cached metadata</string>
     <string name="metadata_cache_wipe_summary">Remove all cached webpage data</string>
     <string name="metadata_cache_wipe_complete_notice">Metadata cache wiped</string>
     <string name="auto_queue_title">Auto-queue next stream</string>
-    <string name="auto_queue_summary">Auto-append a related stream when playing the last stream in a non-repeating queue.</string>
+    <string name="auto_queue_summary">Auto-append a related stream when playing the last stream in a non-repeating
+        queue.
+    </string>
     <string name="volume_gesture_control_title" translatable="true">Volume gesture control</string>
-    <string name="volume_gesture_control_summary" translatable="true">Use gestures to control the volume of the player</string>
+    <string name="volume_gesture_control_summary" translatable="true">Use gestures to control the volume of the player
+    </string>
     <string name="brightness_gesture_control_title" translatable="false">Brightness gesture control</string>
-    <string name="brightness_gesture_control_summary" translatable="false">Use gestures to control the brightness of the player</string>
+    <string name="brightness_gesture_control_summary" translatable="false">Use gestures to control the brightness of the
+        player
+    </string>
     <string name="show_search_suggestions_title">Search suggestions</string>
     <string name="show_search_suggestions_summary">Show suggestions when searching</string>
     <string name="enable_search_history_title">Search history</string>
@@ -99,7 +109,9 @@
     <string name="next_video_title">Next</string>
     <string name="show_next_and_similar_title">Show \'Next\' and \'Similar\' videos</string>
     <string name="show_hold_to_append_title">Show \"Hold to append\" tip</string>
-    <string name="show_hold_to_append_summary">Show tip when background or popup button is pressed on video details page</string>
+    <string name="show_hold_to_append_summary">Show tip when background or popup button is pressed on video details
+        page
+    </string>
     <string name="url_not_supported_toast">Unsupported URL</string>
     <string name="default_content_country_title">Default content country</string>
     <string name="service_title">Service</string>
@@ -112,6 +124,7 @@
     <string name="settings_category_appearance_title">Appearance</string>
     <string name="settings_category_other_title">Other</string>
     <string name="settings_category_debug_title">Debug</string>
+    <string name="settings_category_updates_title" translatable="false">Updates</string>
     <string name="background_player_playing_toast">Playing in background</string>
     <string name="popup_playing_toast">Playing in popup mode</string>
     <string name="background_player_append">Queued on background player</string>
@@ -120,7 +133,9 @@
     <string name="play_btn_text">Play</string>
     <string name="content">Content</string>
     <string name="show_age_restricted_content_title">Age restricted content</string>
-    <string name="video_is_age_restricted">Show age Restricted Video. Allowing such material is possible from \"Settings\".</string>
+    <string name="video_is_age_restricted">Show age Restricted Video. Allowing such material is possible from
+        \"Settings\".
+    </string>
     <string name="duration_live">live</string>
     <string name="duration_live_button" translatable="false">LIVE</string>
     <string name="downloads">Downloads</string>
@@ -174,7 +189,9 @@
     <!-- error strings -->
     <string name="general_error">Error</string>
     <string name="download_to_sdcard_error_title" translatable="false">External storage unavailable</string>
-    <string name="download_to_sdcard_error_message" translatable="false">Download to external SD card is not possible yet. Reset download folder location?</string>
+    <string name="download_to_sdcard_error_message" translatable="false">Download to external SD card is not possible
+        yet. Reset download folder location?
+    </string>
     <string name="network_error">Network error</string>
     <string name="could_not_load_thumbnails">Could not load all thumbnails</string>
     <string name="youtube_signature_decryption_error">Could not decrypt video URL signature</string>
@@ -200,7 +217,8 @@
     <string name="file_name_empty_error">Filename cannot be empty</string>
     <string name="error_occurred_detail">An error occurred: %1$s</string>
     <string name="no_streams_available_download">No streams available to download</string>
-    <string name="saved_tabs_invalid_json" translatable="false">Using default tabs, error while reading saved tabs</string>
+    <string name="saved_tabs_invalid_json" translatable="false">Using default tabs, error while reading saved tabs
+    </string>
     <string name="restore_defaults" translatable="false">Restore defaults</string>
     <string name="restore_defaults_confirmation" translatable="false">Do you want to restore the defaults?</string>
 
@@ -212,7 +230,9 @@
     <string name="error_snackbar_action">REPORT</string>
     <string name="what_device_headline">Info:</string>
     <string name="what_happened_headline">What happened:</string>
-    <string name="info_labels">What:\\nRequest:\\nContent Lang:\\nService:\\nGMT Time:\\nPackage:\\nVersion:\\nOS version:</string>
+    <string name="info_labels">What:\\nRequest:\\nContent Lang:\\nService:\\nGMT Time:\\nPackage:\\nVersion:\\nOS
+        version:
+    </string>
     <string name="your_comment">Your comment (in English):</string>
     <string name="error_details_headline">Details:</string>
 
@@ -224,7 +244,9 @@
     <string name="detail_likes_img_view_description">Likes</string>
     <string name="detail_dislikes_img_view_description">Dislikes</string>
     <string name="use_tor_title">Use Tor</string>
-    <string name="use_tor_summary">(Experimental) Force download traffic through Tor for increased privacy (streaming videos not yet supported).</string>
+    <string name="use_tor_summary">(Experimental) Force download traffic through Tor for increased privacy (streaming
+        videos not yet supported).
+    </string>
     <string name="report_error">Report an Error</string>
     <string name="user_report">User report</string>
     <string name="search_no_results">No results</string>
@@ -426,14 +448,20 @@
     <string name="normal_caption_font_size">Medium</string>
     <string name="larger_caption_font_size">Large</string>
     <string name="caption_setting_title">Captions</string>
-    <string name="caption_setting_description">Modify player caption text scale and background styles. Requires app restart to take effect.</string>
+    <string name="caption_setting_description">Modify player caption text scale and background styles. Requires app
+        restart to take effect.
+    </string>
 
     <!-- Debug Settings -->
     <string name="enable_leak_canary_title">Enable LeakCanary</string>
-    <string name="enable_leak_canary_summary">Memory leak monitoring may cause the app to become unresponsive when heap dumping</string>
+    <string name="enable_leak_canary_summary">Memory leak monitoring may cause the app to become unresponsive when heap
+        dumping
+    </string>
 
     <string name="enable_disposed_exceptions_title">Report out-of-lifecycle errors</string>
-    <string name="enable_disposed_exceptions_summary">Force reporting of undeliverable Rx exceptions outside of fragment or activity lifecycle after disposal</string>
+    <string name="enable_disposed_exceptions_summary">Force reporting of undeliverable Rx exceptions outside of fragment
+        or activity lifecycle after disposal
+    </string>
 
     <!-- Subscriptions import/export -->
     <string name="import_export_title">Import/export</string>
@@ -450,11 +478,18 @@
     <string name="subscriptions_import_unsuccessful">Could not import subscriptions</string>
     <string name="subscriptions_export_unsuccessful">Could not export subscriptions</string>
 
-    <string name="import_youtube_instructions">Import YouTube subscriptions by downloading the export file:\n\n1. Go to this URL: %1$s\n2. Log in when asked\n3. A download should start (that\'s the export file) </string>
-    <string name="import_soundcloud_instructions">Import a SoundCloud profile by typing either the URL or your ID:\n\n1. Enable \"desktop mode\" in a web-browser (the site is not available for mobile devices)\n2. Go to this URL: %1$s\n3. Log in when asked\n4. Copy the profile URL you were redirected to.</string>
+    <string name="import_youtube_instructions">Import YouTube subscriptions by downloading the export file:\n\n1. Go to
+        this URL: %1$s\n2. Log in when asked\n3. A download should start (that\'s the export file)
+    </string>
+    <string name="import_soundcloud_instructions">Import a SoundCloud profile by typing either the URL or your ID:\n\n1.
+        Enable \"desktop mode\" in a web-browser (the site is not available for mobile devices)\n2. Go to this URL:
+        %1$s\n3. Log in when asked\n4. Copy the profile URL you were redirected to.
+    </string>
     <string name="import_soundcloud_instructions_hint">yourID, soundcloud.com/yourid</string>
 
-    <string name="import_network_expensive_warning">Keep in mind this operation can be network expensive.\n\nDo you want to continue?</string>
+    <string name="import_network_expensive_warning">Keep in mind this operation can be network expensive.\n\nDo you want
+        to continue?
+    </string>
 
     <!-- Playback Parameters -->
     <string name="playback_speed_control">Playback Speed Controls</string>
@@ -468,7 +503,9 @@
     <string name="playback_default">Default</string>
 
     <!-- GDPR dialog -->
-    <string name="start_accept_privacy_policy">This app just collects the stack trace of the crashed app. For building a better app, you must agree it to send us the bug report.</string>
+    <string name="start_accept_privacy_policy">This app just collects the stack trace of the crashed app. For building a
+        better app, you must agree it to send us the bug report.
+    </string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
 
@@ -487,6 +524,10 @@
         <item>240p</item>
         <item>144p</item>
     </string-array>
+
+    <!-- Updates Settings -->
+    <string name="updates_setting_title" translatable="false">Updates</string>
+    <string name="updates_setting_description" translatable="false">Show a notification to prompt app update when a new version is available</string>
 
     <!-- Minimize to exit action -->
     <string name="minimize_on_exit_title">Minimize on app switch</string>
@@ -509,11 +550,58 @@
     <string name="app_update_notification_content_text" translatable="false">Tap to download</string>
     <string name="app_update_notification_channel_id" translatable="false">AihuaAppUpdate</string>
     <string name="app_update_notification_channel_name" translatable="false">App Update Notification</string>
-    <string name="app_update_notification_channel_description" translatable="false">Notifications for new Aihua version</string>
-    <string name="action_settings">Action Settings</string>
-    <string name="nav_header_desc">Navigation Header Description</string>
-    <string name="nav_header_title">Navigation Header Title</string>
-    <string name="nav_header_subtitle">Header Sub Title</string>
-    <string name="navigation_drawer_open">Navigation Drawer Open</string>
-    <string name="navigation_drawer_close">Navigation Drawer Close</string>
+    <string name="app_update_notification_channel_description" translatable="false">Notifications for new Aihua
+        version
+    </string>
+    <string name="missions_header_finished" translatable="false">Finished</string>
+    <string name="missions_header_pending" translatable="false">In queue</string>
+
+    <string name="paused" translatable="false">paused</string>
+    <string name="queued" translatable="false">queued</string>
+    <string name="post_processing" translatable="false">post-processing</string>
+
+    <string name="enqueue" translatable="false">Queue</string>
+
+    <string name="permission_denied" translatable="false">Action denied by the system</string>
+
+    <!-- download notifications -->
+    <string name="download_failed" translatable="false" >Download failed</string>
+    <string name="download_finished" translatable="false">Download finished</string>
+    <string name="download_finished_more" translatable="false">%s downloads finished</string>
+
+    <!-- dialog about existing downloads -->
+    <string name="generate_unique_name" translatable="false">Generate unique name</string>
+    <string name="overwrite" translatable="false">Overwrite</string>
+    <string name="overwrite_warning" translatable="false">A downloaded file with this name already exists</string>
+    <string name="download_already_running" translatable="false">There is a download in progress with this name</string>
+
+    <!-- message dialog about download error -->
+    <string name="show_error" translatable="false">Show error</string>
+    <string name="label_code" translatable="false">Code</string>
+    <string name="error_path_creation" translatable="false">The file can not be created</string>
+    <string name="error_file_creation" translatable="false">The destination folder can not be created</string>
+    <string name="error_permission_denied" translatable="false">Permission denied by the system</string>
+    <string name="error_ssl_exception" translatable="false">Secure connection failed</string>
+    <string name="error_unknown_host" translatable="false">Can not found the server</string>
+    <string name="error_connect_host" translatable="false">Can not connect to the server</string>
+    <string name="error_http_no_content" translatable="false">The server does not send data</string>
+    <string name="error_http_unsupported_range" translatable="false">The server does not accept multi-threaded downloads, retry with @string/msg_threads = 1</string>
+    <string name="error_http_requested_range_not_satisfiable" translatable="false">Requested Range Not Satisfiable</string>
+    <string name="error_http_not_found" translatable="false">Not found</string>
+    <string name="error_postprocessing_failed" translatable="false">Post-processing failed</string>
+
+    <string name="clear_finished_download" translatable="false">Clear finished downloads</string>
+    <string name="msg_pending_downloads" translatable="false">You have %s pending downloads, goto Downloads to continue</string>
+    <string name="stop" translatable="false">Stop</string>
+    <string name="max_retry_msg" translatable="false">Maximum retry</string>
+    <string name="max_retry_desc" translatable="false">Maximum number of attempts before canceling the download</string>
+    <string name="pause_downloads_on_mobile" translatable="false">Pause on switching to mobile data</string>
+    <string name="pause_downloads_on_mobile_desc" translatable="false">Not all downloads can be suspended, in those cases, will be restarted</string>
+
+    <string name="action_settings" translatable="false">Action Settings</string>
+    <string name="nav_header_desc" translatable="false">Navigation Header Description</string>
+    <string name="nav_header_title" translatable="false">Navigation Header Title</string>
+    <string name="nav_header_subtitle" translatable="false">Header Sub Title</string>
+    <string name="navigation_drawer_open" translatable="false">Navigation Drawer Open</string>
+    <string name="navigation_drawer_close" translatable="false">Navigation Drawer Close</string>
 </resources>

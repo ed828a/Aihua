@@ -6,5 +6,4 @@
         android:title="@string/share"
         app:showAsAction="ifRoom"
         android:icon="?attr/share"/>
-
 </menu>
