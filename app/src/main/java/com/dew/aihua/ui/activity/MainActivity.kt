@@ -1,6 +1,7 @@
 package com.dew.aihua.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.core.view.GravityCompat
@@ -64,7 +65,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.nav_camera -> {
                 // Handle the camera action
-                val errorActivityTest = 35 / 0
+//                val errorActivityTest = 35 / 0
+                Log.d(TAG, "show this line")
             }
             R.id.nav_gallery -> {
 
@@ -85,5 +87,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    companion object {
+        const val TAG = "Main"
     }
 }

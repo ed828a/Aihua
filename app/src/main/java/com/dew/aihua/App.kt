@@ -2,25 +2,34 @@ package com.dew.aihua
 
 
 
+import android.annotation.TargetApi
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
+import android.util.Log
 import androidx.multidex.MultiDex
-import androidx.preference.PreferenceManager
 import com.dew.aihua.report.AcraReportSenderFactory
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
 import com.dew.aihua.report.UserAction
 import com.facebook.stetho.Stetho
-import com.facebook.stetho.okhttp3.StethoInterceptor
-import com.nostra13.universalimageloader.core.ImageLoader
 import com.squareup.leakcanary.*
-import okhttp3.OkHttpClient
+import io.reactivex.exceptions.CompositeException
+import io.reactivex.exceptions.MissingBackpressureException
+import io.reactivex.exceptions.OnErrorNotImplementedException
+import io.reactivex.exceptions.UndeliverableException
+import io.reactivex.functions.Consumer
+import io.reactivex.plugins.RxJavaPlugins
 import org.acra.ACRA
 import org.acra.config.ACRAConfigurationException
 import org.acra.config.ConfigurationBuilder
-import org.acra.sender.ReportSenderFactory
 import java.io.File
+import java.io.IOException
+import java.io.InterruptedIOException
+import java.net.SocketException
 import java.util.concurrent.TimeUnit
 
 class App: Application() {
@@ -64,13 +73,15 @@ class App: Application() {
             return
         }
         refWatcher = installLeakCanary()
+
+        INSTANCE = this
 //
 //        // Initialize settings first because others inits can use its values
 //        SettingsActivity.initSettings(this)
 //
 //        NewPipe.init(downloader, org.schabi.newpipe.util.Localization.getPreferredExtractorLocal(this))
 //        StateSaver.init(this)
-//        initNotificationChannel()
+        initNotificationChannel()
 //
 //        // Initialize image loader
 //        ImageLoader.getInstance().init(getImageLoaderConfigurations(10, 50))
@@ -78,6 +89,89 @@ class App: Application() {
 //        configureRxJavaErrorHandler()
 
     }
+
+//    private fun configureRxJavaErrorHandler() {
+//        // https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling
+//        RxJavaPlugins.setErrorHandler(object : Consumer<Throwable> {
+//            override fun accept(throwable: Throwable) {
+//                var throwable1 = throwable
+//                Log.e(TAG, "RxJavaPlugins.ErrorHandler called with -> : " +
+//                        "throwable = [" + throwable1.javaClass.name + "]")
+//
+//                if (throwable1 is UndeliverableException && throwable1.cause != null) {
+//                    // As UndeliverableException is a wrapper, get the cause of it to get the "real" exception
+//                    throwable1 = throwable1.cause!!
+//                }
+//
+//                val errors: List<Throwable>
+//                if (throwable1 is CompositeException) {
+//                    errors = throwable1.exceptions
+//                } else {
+//                    errors = listOf(throwable1)
+//                }
+//
+//                for (error in errors) {
+//                    if (isThrowableIgnored(error)) return
+//                    if (isThrowableCritical(error)) {
+//                        reportException(error)
+//                        return
+//                    }
+//                }
+//
+//                // Out-of-lifecycle exceptions should only be reported if a debug user wishes so,
+//                // When exception is not reported, log it
+//                if (isDisposedRxExceptionsReported) {
+//                    reportException(throwable1)
+//                } else {
+//                    Log.e(TAG, "RxJavaPlugin: Undeliverable Exception received: ", throwable1)
+//                }
+//            }
+//
+//            private fun isThrowableIgnored(throwable: Throwable): Boolean {
+//                // Don't crash the application over a simple network problem
+//                return ExtractorHelper.hasAssignableCauseThrowable(throwable,
+//                    IOException::class.java, SocketException::class.java, // network api cancellation
+//                    InterruptedException::class.java, InterruptedIOException::class.java) // blocking code disposed
+//            }
+//
+//            private fun isThrowableCritical(throwable: Throwable): Boolean {
+//                // Though these exceptions cannot be ignored
+//                return ExtractorHelper.hasAssignableCauseThrowable(throwable,
+//                    NullPointerException::class.java, IllegalArgumentException::class.java, // bug in app
+//                    OnErrorNotImplementedException::class.java, MissingBackpressureException::class.java,
+//                    IllegalStateException::class.java) // bug in operator
+//            }
+//
+//            private fun reportException(throwable: Throwable) {
+//                // Throw uncaught exception that will trigger the report system
+//                Thread.currentThread().uncaughtExceptionHandler
+//                    .uncaughtException(Thread.currentThread(), throwable)
+//            }
+//        })
+//    }
+
+
+    @TargetApi(Build.VERSION_CODES.O)
+    private fun initNotificationChannel() {
+        if (Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+            return
+        }
+
+        val id = getString(R.string.notification_channel_id)
+        val name = getString(R.string.notification_channel_name)
+        val description = getString(R.string.notification_channel_description)
+
+        // Keep this below DEFAULT to avoid making noise on every notification update
+        val importance = NotificationManager.IMPORTANCE_LOW
+
+        val mChannel = NotificationChannel(id, name, importance)
+        mChannel.description = description
+
+        val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        mNotificationManager.createNotificationChannel(mChannel)
+
+    }
+
 
     private fun initACRA() {
         try {
