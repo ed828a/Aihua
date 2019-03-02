@@ -7,6 +7,7 @@ import android.view.View
 import com.dew.aihua.player.helper.ImageDisplayConstants
 import com.dew.aihua.player.helper.Localization
 import com.dew.aihua.player.model.PlayQueueItem
+import com.dew.aihua.player.playqueque.holder.PlayQueueItemHolder
 import com.nostra13.universalimageloader.core.ImageLoader
 import org.schabi.newpipe.extractor.NewPipe
 

@@ -1,4 +1,4 @@
-package com.dew.aihua.player.playqueque.adapter
+package com.dew.aihua.player.playqueque.holder
 
 import android.view.View
 

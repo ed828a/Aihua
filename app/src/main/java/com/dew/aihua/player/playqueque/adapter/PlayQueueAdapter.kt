@@ -1,6 +1,5 @@
 package com.dew.aihua.player.playqueque.adapter
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +7,8 @@ import android.view.ViewGroup
 import com.dew.aihua.R
 import com.dew.aihua.player.model.PlayQueueItem
 import com.dew.aihua.player.playqueque.event.*
+import com.dew.aihua.player.playqueque.holder.FallbackViewHolder
+import com.dew.aihua.player.playqueque.holder.PlayQueueItemHolder
 import com.dew.aihua.player.playqueque.queque.PlayQueue
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
@@ -137,7 +138,13 @@ class PlayQueueAdapter(private val playQueue: PlayQueue) : androidx.recyclerview
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         return when (type) {
             FOOTER_VIEW_TYPE_ID -> HFHolder(footer!!)
-            ITEM_VIEW_TYPE_ID -> PlayQueueItemHolder(LayoutInflater.from(parent.context).inflate(R.layout.play_queue_item, parent, false))
+            ITEM_VIEW_TYPE_ID -> PlayQueueItemHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.play_queue_item,
+                    parent,
+                    false
+                )
+            )
             else -> {
                 Log.e(TAG, "Attempting to create view holder with undefined type: $type")
                 FallbackViewHolder(View(parent.context))
