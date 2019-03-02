@@ -195,7 +195,7 @@ object ExtractorHelper {
     /**
      * A simple and general error handler that show a Toast for known exceptions, and for others, opens the report error activity with the (optional) error message.
      */
-    fun handleGeneralException(context: Context, serviceId: Int, url: String, exception: Throwable, userAction: UserAction, optionalErrorMessage: String?) {
+    fun handleGeneralException(context: Context, serviceId: Int, url: String?, exception: Throwable, userAction: UserAction, optionalErrorMessage: String?) {
         val handler = Handler(context.mainLooper)
 
         handler.post {

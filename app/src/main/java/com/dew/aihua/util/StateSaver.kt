@@ -34,6 +34,7 @@ object StateSaver {
         val externalCacheDir = context.externalCacheDir
         cacheDirPath = externalCacheDir?.absolutePath
         if (TextUtils.isEmpty(cacheDirPath)) cacheDirPath = context.cacheDir.absolutePath
+        Log.d(TAG, "init(): cacheDirPath = $cacheDirPath")
     }
 
     /**
@@ -238,7 +239,7 @@ object StateSaver {
      * Clear all the files in cache (in memory and disk).
      */
     fun clearStateFiles() {
-        Log.d(TAG, "clearStateFiles() called")
+        Log.d(TAG, "clearStateFiles() called: cacheDirPath = $cacheDirPath")
 
         stateObjectsHolder.clear()
         var cacheDir = File(cacheDirPath)

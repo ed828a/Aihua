@@ -11,11 +11,22 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.util.Log
 import androidx.multidex.MultiDex
+import androidx.preference.PreferenceManager
+import com.dew.aihua.player.helper.ExtractorHelper
+import com.dew.aihua.player.helper.Localization
 import com.dew.aihua.report.AcraReportSenderFactory
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
 import com.dew.aihua.report.UserAction
+import com.dew.aihua.settings.SettingsActivity
+import com.dew.aihua.util.ImageDownloader
+import com.dew.aihua.util.PageDownloader
+import com.dew.aihua.util.StateSaver
 import com.facebook.stetho.Stetho
+import com.facebook.stetho.okhttp3.StethoInterceptor
+import com.nostra13.universalimageloader.cache.memory.impl.LRULimitedMemoryCache
+import com.nostra13.universalimageloader.core.ImageLoader
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.squareup.leakcanary.*
 import io.reactivex.exceptions.CompositeException
 import io.reactivex.exceptions.MissingBackpressureException
@@ -23,9 +34,11 @@ import io.reactivex.exceptions.OnErrorNotImplementedException
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.functions.Consumer
 import io.reactivex.plugins.RxJavaPlugins
+import okhttp3.OkHttpClient
 import org.acra.ACRA
 import org.acra.config.ACRAConfigurationException
 import org.acra.config.ConfigurationBuilder
+import org.schabi.newpipe.extractor.NewPipe
 import java.io.File
 import java.io.IOException
 import java.io.InterruptedIOException
@@ -35,20 +48,20 @@ import java.util.concurrent.TimeUnit
 class App: Application() {
     private var refWatcher: RefWatcher? = null
 
-//    protected open val downloader: Downloader
-//        get() = if (BuildConfig.DEBUG){
-//    org.schabi.newpipe.util.Downloader.getInstance(
-//                                OkHttpClient.Builder()
-//                                .addNetworkInterceptor(StethoInterceptor()))
-//    } else {
-//    org.schabi.newpipe.util.Downloader.getInstance(null)
-//}
+    protected open val downloader: PageDownloader
+        get() = if (BuildConfig.DEBUG){
+    PageDownloader.init(
+                                OkHttpClient.Builder()
+                                .addNetworkInterceptor(StethoInterceptor()))
+    } else {
+    PageDownloader.init(null)
+}
 
-//    protected open val isDisposedRxExceptionsReported: Boolean
-//        get() = if (BuildConfig.DEBUG){
-//            PreferenceManager.getDefaultSharedPreferences(this)
-//                .getBoolean(getString(R.string.allow_disposed_exceptions_key), false)
-//        } else false
+    protected open val isDisposedRxExceptionsReported: Boolean
+        get() = if (BuildConfig.DEBUG){
+            PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(getString(R.string.allow_disposed_exceptions_key), false)
+        } else false
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
@@ -75,80 +88,90 @@ class App: Application() {
         refWatcher = installLeakCanary()
 
         INSTANCE = this
-//
-//        // Initialize settings first because others inits can use its values
-//        SettingsActivity.initSettings(this)
-//
-//        NewPipe.init(downloader, org.schabi.newpipe.util.Localization.getPreferredExtractorLocal(this))
-//        StateSaver.init(this)
+
+        // Initialize settings first because others inits can use its values
+        SettingsActivity.initSettings(this)
+
+        NewPipe.init(downloader, Localization.getPreferredExtractorLocal(this))
+        StateSaver.init(this)
         initNotificationChannel()
-//
-//        // Initialize image loader
-//        ImageLoader.getInstance().init(getImageLoaderConfigurations(10, 50))
-//
-//        configureRxJavaErrorHandler()
+
+        // Initialize image loader
+        ImageLoader.getInstance().init(getImageLoaderConfigurations(10, 50))
+
+        configureRxJavaErrorHandler()
 
     }
 
-//    private fun configureRxJavaErrorHandler() {
-//        // https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling
-//        RxJavaPlugins.setErrorHandler(object : Consumer<Throwable> {
-//            override fun accept(throwable: Throwable) {
-//                var throwable1 = throwable
-//                Log.e(TAG, "RxJavaPlugins.ErrorHandler called with -> : " +
-//                        "throwable = [" + throwable1.javaClass.name + "]")
-//
-//                if (throwable1 is UndeliverableException && throwable1.cause != null) {
-//                    // As UndeliverableException is a wrapper, get the cause of it to get the "real" exception
-//                    throwable1 = throwable1.cause!!
-//                }
-//
-//                val errors: List<Throwable>
-//                if (throwable1 is CompositeException) {
-//                    errors = throwable1.exceptions
-//                } else {
-//                    errors = listOf(throwable1)
-//                }
-//
-//                for (error in errors) {
-//                    if (isThrowableIgnored(error)) return
-//                    if (isThrowableCritical(error)) {
-//                        reportException(error)
-//                        return
-//                    }
-//                }
-//
-//                // Out-of-lifecycle exceptions should only be reported if a debug user wishes so,
-//                // When exception is not reported, log it
-//                if (isDisposedRxExceptionsReported) {
-//                    reportException(throwable1)
-//                } else {
-//                    Log.e(TAG, "RxJavaPlugin: Undeliverable Exception received: ", throwable1)
-//                }
-//            }
-//
-//            private fun isThrowableIgnored(throwable: Throwable): Boolean {
-//                // Don't crash the application over a simple network problem
-//                return ExtractorHelper.hasAssignableCauseThrowable(throwable,
-//                    IOException::class.java, SocketException::class.java, // network api cancellation
-//                    InterruptedException::class.java, InterruptedIOException::class.java) // blocking code disposed
-//            }
-//
-//            private fun isThrowableCritical(throwable: Throwable): Boolean {
-//                // Though these exceptions cannot be ignored
-//                return ExtractorHelper.hasAssignableCauseThrowable(throwable,
-//                    NullPointerException::class.java, IllegalArgumentException::class.java, // bug in app
-//                    OnErrorNotImplementedException::class.java, MissingBackpressureException::class.java,
-//                    IllegalStateException::class.java) // bug in operator
-//            }
-//
-//            private fun reportException(throwable: Throwable) {
-//                // Throw uncaught exception that will trigger the report system
-//                Thread.currentThread().uncaughtExceptionHandler
-//                    .uncaughtException(Thread.currentThread(), throwable)
-//            }
-//        })
-//    }
+    private fun getImageLoaderConfigurations(
+        memoryCacheSizeMb: Int,
+        diskCacheSizeMb: Int
+    ): ImageLoaderConfiguration =
+        ImageLoaderConfiguration.Builder(this)
+            .memoryCache(LRULimitedMemoryCache(memoryCacheSizeMb * 1024 * 1024))
+            .diskCacheSize(diskCacheSizeMb * 1024 * 1024)
+            .imageDownloader(ImageDownloader(applicationContext))
+            .build()
+
+    private fun configureRxJavaErrorHandler() {
+        // https://github.com/ReactiveX/RxJava/wiki/What's-different-in-2.0#error-handling
+        RxJavaPlugins.setErrorHandler(object : Consumer<Throwable> {
+            override fun accept(throwable: Throwable) {
+                var throwable1 = throwable
+                Log.e(TAG, "RxJavaPlugins.ErrorHandler called with -> : " +
+                        "throwable = [" + throwable1.javaClass.name + "]")
+
+                if (throwable1 is UndeliverableException && throwable1.cause != null) {
+                    // As UndeliverableException is a wrapper, get the cause of it to get the "real" exception
+                    throwable1 = throwable1.cause!!
+                }
+
+                val errors: List<Throwable>
+                if (throwable1 is CompositeException) {
+                    errors = throwable1.exceptions
+                } else {
+                    errors = listOf(throwable1)
+                }
+
+                for (error in errors) {
+                    if (isThrowableIgnored(error)) return
+                    if (isThrowableCritical(error)) {
+                        reportException(error)
+                        return
+                    }
+                }
+
+                // Out-of-lifecycle exceptions should only be reported if a debug user wishes so,
+                // When exception is not reported, log it
+                if (isDisposedRxExceptionsReported) {
+                    reportException(throwable1)
+                } else {
+                    Log.e(TAG, "RxJavaPlugin: Undeliverable Exception received: ", throwable1)
+                }
+            }
+
+            private fun isThrowableIgnored(throwable: Throwable): Boolean {
+                // Don't crash the application over a simple network problem
+                return ExtractorHelper.hasAssignableCauseThrowable(throwable,
+                    IOException::class.java, SocketException::class.java, // network api cancellation
+                    InterruptedException::class.java, InterruptedIOException::class.java) // blocking code disposed
+            }
+
+            private fun isThrowableCritical(throwable: Throwable): Boolean {
+                // Though these exceptions cannot be ignored
+                return ExtractorHelper.hasAssignableCauseThrowable(throwable,
+                    NullPointerException::class.java, IllegalArgumentException::class.java, // bug in app
+                    OnErrorNotImplementedException::class.java, MissingBackpressureException::class.java,
+                    IllegalStateException::class.java) // bug in operator
+            }
+
+            private fun reportException(throwable: Throwable) {
+                // Throw uncaught exception that will trigger the report system
+                Thread.currentThread().uncaughtExceptionHandler
+                    .uncaughtException(Thread.currentThread(), throwable)
+            }
+        })
+    }
 
 
     @TargetApi(Build.VERSION_CODES.O)

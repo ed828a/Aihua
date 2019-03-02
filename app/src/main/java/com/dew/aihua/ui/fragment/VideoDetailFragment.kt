@@ -1169,7 +1169,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
         }
     }
 
-    private fun openDownloadDialog() {
+    fun openDownloadDialog() {
         try {
             val downloadDialog = DownloadDialog.newInstance(currentInfo!!).apply {
                 setVideoStreams(sortedVideoStreams!!)
