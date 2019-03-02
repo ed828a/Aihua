@@ -565,7 +565,7 @@
     <string name="permission_denied" translatable="false">Action denied by the system</string>
 
     <!-- download notifications -->
-    <string name="download_failed" translatable="false" >Download failed</string>
+    <string name="download_failed" translatable="false">Download failed</string>
     <string name="download_finished" translatable="false">Download finished</string>
     <string name="download_finished_more" translatable="false">%s downloads finished</string>
 
