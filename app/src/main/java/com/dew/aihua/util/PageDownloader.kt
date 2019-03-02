@@ -1,4 +1,4 @@
-package com.dew.aihua.helper
+package com.dew.aihua.util
 
 import android.text.TextUtils
 
@@ -143,7 +143,8 @@ class PageDownloader private constructor(builder: OkHttpClient.Builder) : org.sc
          * @param builder if null, default builder will be used
          */
         fun init(builder: OkHttpClient.Builder?): PageDownloader {
-            instance = PageDownloader(builder ?: OkHttpClient.Builder())
+            instance =
+                PageDownloader(builder ?: OkHttpClient.Builder())
             return instance!!
         }
     }

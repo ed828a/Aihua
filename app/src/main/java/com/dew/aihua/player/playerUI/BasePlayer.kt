@@ -19,6 +19,7 @@ import com.dew.aihua.player.playback.PlaybackListener
 import com.dew.aihua.player.playqueque.adapter.PlayQueueAdapter
 import com.dew.aihua.player.playqueque.queque.PlayQueue
 import com.dew.aihua.R
+import com.dew.aihua.local.history.HistoryRecordManager
 import com.dew.aihua.player.helper.*
 import com.dew.aihua.player.mediasession.BasePlayerMediaSession
 import com.dew.aihua.player.mediasource.FailedMediaSource
@@ -57,8 +58,7 @@ abstract class BasePlayer(protected val context: Context) : Player.EventListener
     }
     private val intentFilter: IntentFilter = IntentFilter()  // for setup receiver of this class and its subclass
 
-    // TODO: open later
-//    private val recordManager: HistoryRecordManager = HistoryRecordManager(context)
+    private val recordManager: HistoryRecordManager = HistoryRecordManager(context)
 
     private val loadControl: LoadControl = LoadController()
     private val renderFactory: RenderersFactory = DefaultRenderersFactory(context)
@@ -923,13 +923,12 @@ abstract class BasePlayer(protected val context: Context) : Player.EventListener
     private fun registerView() {
         if (currentMetadata == null) return
         val currentInfo = currentMetadata!!.metadata
-        // TODO: open later
-//        val d = recordManager.onViewed(currentInfo).onErrorComplete()
-//            .subscribe(
-//                {/* successful */ _ -> },
-//                { error -> Log.e(TAG, "Player onViewed() failure: ", error) }
-//            )
-//        databaseUpdateReactor.add(d)
+        val d = recordManager.onViewed(currentInfo).onErrorComplete()
+            .subscribe(
+                {/* successful */ _ -> },
+                { error -> Log.e(TAG, "Player onViewed() failure: ", error) }
+            )
+        databaseUpdateReactor.add(d)
     }
 
     protected fun reload() {
@@ -943,15 +942,15 @@ abstract class BasePlayer(protected val context: Context) : Player.EventListener
 
     private fun savePlaybackState(info: StreamInfo?, progress: Long) {
         if (info == null) return
-        // TODO: open later
-//        val d = recordManager.saveStreamState(info, progress)
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .onErrorComplete()
-//            .subscribe(
-//                {/* successful */ _ -> },
-//                { error -> Log.e(TAG, "savePlaybackState() failure: ", error) }
-//            )
-//        databaseUpdateReactor.add(d)
+
+        val d = recordManager.saveStreamState(info, progress)
+            .observeOn(AndroidSchedulers.mainThread())
+            .onErrorComplete()
+            .subscribe(
+                {/* successful */ _ -> },
+                { error -> Log.e(TAG, "savePlaybackState() failure: ", error) }
+            )
+        databaseUpdateReactor.add(d)
     }
 
     private fun savePlaybackState() {

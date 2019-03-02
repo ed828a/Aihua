@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.dew.aihua.R
+import com.dew.aihua.local.dialog.PlaylistAppendDialog
 import com.dew.aihua.player.dialog.PlaybackParameterDialog
 import com.dew.aihua.player.helper.Localization
 import com.dew.aihua.player.helper.PlayerHelper.formatPitch
@@ -29,6 +30,7 @@ import com.dew.aihua.player.playqueque.adapter.PlayQueueItemBuilder
 import com.dew.aihua.player.playqueque.adapter.PlayQueueItemTouchCallback
 import com.dew.aihua.player.playqueque.holder.PlayQueueItemHolder
 import com.dew.aihua.ui.contract.OnScrollBelowItemsListener
+import com.dew.aihua.util.NavigationHelper
 import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.Player
 import org.schabi.newpipe.extractor.stream.StreamInfo
@@ -186,8 +188,7 @@ abstract class ServicePlayerActivity : AppCompatActivity(),
                 return true
             }
             R.id.action_settings -> {
-                // TODO: open later
-//                NavigationHelper.openSettings(this)
+                NavigationHelper.openSettings(this)
                 redraw = true
                 return true
             }
@@ -392,8 +393,7 @@ abstract class ServicePlayerActivity : AppCompatActivity(),
     }
 
     private fun onOpenDetail(serviceId: Int, videoUrl: String, videoTitle: String) {
-        // TODO: open later
-//        NavigationHelper.openVideoDetail(this, serviceId, videoUrl, videoTitle)
+        NavigationHelper.openVideoDetail(this, serviceId, videoUrl, videoTitle)
     }
 
     private fun scrollToSelected() {
@@ -492,9 +492,8 @@ abstract class ServicePlayerActivity : AppCompatActivity(),
 
     private fun openPlaylistAppendDialog(playlist: List<PlayQueueItem>) {
         Log.d(getTag(), "openPlaylistAppendDialog(playlist = $playlist)")
-        // TODO: open later
-//        PlaylistAppendDialog.fromPlayQueueItems(playlist)
-//            .show(supportFragmentManager, getTag())
+        PlaylistAppendDialog.fromPlayQueueItems(playlist)
+            .show(supportFragmentManager, getTag())
     }
 
     ////////////////////////////////////////////////////////////////////////////
