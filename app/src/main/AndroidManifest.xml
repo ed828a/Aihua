@@ -49,12 +49,17 @@
         <activity
             android:name=".report.ErrorActivity"
             android:theme="@style/DarkTheme.YouTube" />
+        <activity android:name=".player.playerUI.MainVideoPlayer" />
+        <activity android:name=".player.playerUI.PopupVideoPlayerActivity" />
+        <activity android:name=".player.playerUI.BackgroundPlayerActivity" />
 
         <receiver android:name="androidx.media.session.MediaButtonReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
+        <service android:name=".player.playerUI.BackgroundPlayer" />
+        <service android:name=".player.playerUI.PopupVideoPlayer" />
     </application>
 
 </manifest>
