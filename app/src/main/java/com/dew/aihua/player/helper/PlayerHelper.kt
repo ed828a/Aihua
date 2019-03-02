@@ -9,6 +9,9 @@ import com.dew.aihua.R
 import com.dew.aihua.player.helper.PlayerHelper.MinimizeMode.Companion.MINIMIZE_ON_EXIT_MODE_BACKGROUND
 import com.dew.aihua.player.helper.PlayerHelper.MinimizeMode.Companion.MINIMIZE_ON_EXIT_MODE_NONE
 import com.dew.aihua.player.helper.PlayerHelper.MinimizeMode.Companion.MINIMIZE_ON_EXIT_MODE_POPUP
+import com.dew.aihua.player.model.PlayQueueItem
+import com.dew.aihua.player.playqueque.queque.PlayQueue
+import com.dew.aihua.player.playqueque.queque.SinglePlayQueue
 import com.google.android.exoplayer2.SeekParameters
 import com.google.android.exoplayer2.text.CaptionStyleCompat
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection

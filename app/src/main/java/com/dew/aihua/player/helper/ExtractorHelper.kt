@@ -6,10 +6,12 @@ import android.os.Handler
 import android.util.Log
 import android.widget.Toast
 import com.dew.aihua.R
+import com.dew.aihua.player.helper.Constants.NO_SERVICE_ID
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
 import com.dew.aihua.report.UserAction
 import com.dew.aihua.ui.activity.MainActivity
+import com.dew.aihua.ui.activity.ReCaptchaActivity
 import io.reactivex.Maybe
 import io.reactivex.Single
 import org.schabi.newpipe.extractor.Info
@@ -25,6 +27,7 @@ import org.schabi.newpipe.extractor.search.SearchInfo
 import org.schabi.newpipe.extractor.services.youtube.extractors.YoutubeStreamExtractor
 import org.schabi.newpipe.extractor.stream.StreamInfo
 import java.io.IOException
+import java.io.InterruptedIOException
 
 /**
  *  Created by Edward on 3/2/2019.
@@ -157,7 +160,6 @@ object ExtractorHelper {
                                       url: String,
                                       loadFromNetwork: Single<I>
     ): Single<I> {
-//        var loadFromNetwork = loadFromNetwork
         checkServiceId(serviceId)
         val loadFromNetwork1 = loadFromNetwork.doOnSuccess { info -> InfoCache.putInfo(serviceId, url, info) }
 

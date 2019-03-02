@@ -1,5 +1,6 @@
 package com.dew.aihua.player.model
 
+import com.dew.aihua.player.helper.ExtractorHelper
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.schabi.newpipe.extractor.stream.StreamInfo
@@ -11,31 +12,17 @@ import java.io.Serializable
 /**
  *  Created by Edward on 3/2/2019.
  */
-class PlayQueueItem(name: String?,
-                    url: String?,
-                    val serviceId: Int,
-                    val duration: Long,
-                    thumbnailUrl: String?,
-                    uploader: String?,
-                    val streamType: StreamType
+data class PlayQueueItem(val title: String = EMPTY_STRING,
+                         val url: String = EMPTY_STRING,
+                         val serviceId: Int,
+                         val duration: Long,
+                         val thumbnailUrl: String = EMPTY_STRING,
+                         val uploader: String = EMPTY_STRING,
+                         val streamType: StreamType
 ) : Serializable {
 
-    val title: String
-    val url: String
-    val thumbnailUrl: String
-    val uploader: String
-    var recoveryPosition: Long = 0
+    var recoveryPosition: Long = RECOVERY_UNSET
         internal set
-
-    init {
-        this.title = name ?: EMPTY_STRING
-        this.url = url ?: EMPTY_STRING
-        this.thumbnailUrl = thumbnailUrl ?: EMPTY_STRING
-        this.uploader = uploader ?: EMPTY_STRING
-
-        this.recoveryPosition = RECOVERY_UNSET
-    }
-
 
     var isAutoQueued: Boolean = false
 
@@ -59,8 +46,7 @@ class PlayQueueItem(name: String?,
     internal constructor(item: StreamInfoItem) : this(
         item.name, item.url, item.serviceId, item.duration,
         item.thumbnailUrl, item.uploaderName, item.streamType
-    ) {
-    }
+    )
 
     companion object {
         const val RECOVERY_UNSET = java.lang.Long.MIN_VALUE
