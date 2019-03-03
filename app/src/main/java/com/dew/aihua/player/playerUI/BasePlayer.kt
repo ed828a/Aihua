@@ -127,7 +127,8 @@ abstract class BasePlayer(protected val context: Context) : Player.EventListener
     private val progressReactor: Disposable
         get() = Observable.interval(PROGRESS_LOOP_INTERVAL_MILLIS.toLong(), TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ _ -> triggerProgressUpdate() },
+            .subscribe(
+                { triggerProgressUpdate() },
                 { error -> Log.e(TAG, "Progress update failure: ", error) })
 
     private val isCurrentWindowValid: Boolean
@@ -151,6 +152,7 @@ abstract class BasePlayer(protected val context: Context) : Player.EventListener
     /** Checks if the current playback is a livestream AND is playing at or beyond the live edge  */
     val isLiveEdge: Boolean
         get() {
+            Log.d(TAG, "isLiveEdge: Thread = ${Thread.currentThread().name}")
             if (simpleExoPlayer == null || !isLive) return false
 
             val currentTimeline = simpleExoPlayer!!.currentTimeline
@@ -169,8 +171,10 @@ abstract class BasePlayer(protected val context: Context) : Player.EventListener
 
     private val isLive: Boolean
         get() {
+            Log.d(TAG, "isLive: Thread = ${Thread.currentThread().name}")
             if (simpleExoPlayer == null) return false
             try {
+
                 return simpleExoPlayer!!.isCurrentWindowDynamic
             } catch (ignored: IndexOutOfBoundsException) {
                 // Why would this even happen =(
@@ -691,6 +695,7 @@ abstract class BasePlayer(protected val context: Context) : Player.EventListener
     override fun isApproachingPlaybackEdge(timeToEndMillis: Long): Boolean {
         // If live, then not near playback edge
         // If not playing, then not approaching playback edge
+        Log.d(TAG, "isApproachingPlaybackEdge() called with isLive, thread = ${Thread.currentThread().name}")
         if (simpleExoPlayer == null || isLive || !isPlaying) return false
 
         val currentPositionMillis = simpleExoPlayer!!.currentPosition

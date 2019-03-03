@@ -543,7 +543,8 @@ abstract class VideoPlayer(val TAG: String,
             playbackSeekBar!!.secondaryProgress = (playbackSeekBar!!.max * (bufferPercent.toFloat() / 100)).toInt()
         }
         if (bufferPercent % 20 == 0) { //Limit log
-            Log.d(TAG, "updateProgress() called with: isVisible = $isControlsVisible, currentProgress = [$currentProgress], duration = [$duration], bufferPercent = [$bufferPercent]")
+            Log.d(TAG, "onUpdateProgress() called with: isVisible = $isControlsVisible, currentProgress = [$currentProgress], duration = [$duration], bufferPercent = [$bufferPercent]")
+            Log.d(TAG, "onUpdateProgress(): thread = ${Thread.currentThread().name}")
         }
         playbackLiveSync!!.isClickable = !isLiveEdge
     }

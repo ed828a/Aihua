@@ -114,7 +114,12 @@ class MediaSourceManager private constructor(
 
     private val edgeIntervalSignal: Observable<Long>
         get() = Observable.interval(progressUpdateIntervalMillis, TimeUnit.MILLISECONDS)
-            .filter { playbackListener.isApproachingPlaybackEdge(playbackNearEndGapMillis) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .filter {
+                // this reason to move to main thread is isApproachingPlaybackEdge will access simpleExoPlayer
+                playbackListener.isApproachingPlaybackEdge(playbackNearEndGapMillis)
+            }
+            .observeOn(Schedulers.computation())
 
     private val nearEndIntervalSignal: Observable<Long> = edgeIntervalSignal
 

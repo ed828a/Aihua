@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dew.aihua.R
 import com.dew.aihua.player.playerUI.BasePlayer.Companion.STATE_PLAYING
 import com.dew.aihua.player.playerUI.VideoPlayer.Companion.DEFAULT_CONTROLS_DURATION
@@ -874,6 +875,7 @@ class MainVideoPlayer : AppCompatActivity(), StateSaver.WriteRead, PlaybackParam
                 isLongClickable = true
                 clearOnScrollListeners()
                 addOnScrollListener(queueScrollListener)
+                layoutManager = LinearLayoutManager(this@MainVideoPlayer)
             }
 
             itemTouchHelper = ItemTouchHelper(itemTouchCallback)

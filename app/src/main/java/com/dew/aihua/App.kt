@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit
 class App: Application() {
     private var refWatcher: RefWatcher? = null
 
-    protected open val downloader: PageDownloader
+    private val downloader: PageDownloader
         get() = if (BuildConfig.DEBUG){
     PageDownloader.init(
                                 OkHttpClient.Builder()
@@ -57,7 +57,7 @@ class App: Application() {
     PageDownloader.init(null)
 }
 
-    protected open val isDisposedRxExceptionsReported: Boolean
+    private val isDisposedRxExceptionsReported: Boolean
         get() = if (BuildConfig.DEBUG){
             PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean(getString(R.string.allow_disposed_exceptions_key), false)

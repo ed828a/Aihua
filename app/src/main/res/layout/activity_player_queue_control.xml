@@ -33,6 +33,7 @@
         android:layout_below="@id/appbar"
         android:layout_above="@id/center"
         android:scrollbars="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/play_queue_item"/>
 
     <RelativeLayout
