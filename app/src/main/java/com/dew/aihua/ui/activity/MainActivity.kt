@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.preference.PreferenceManager
 import com.dew.aihua.R
@@ -33,6 +34,9 @@ import com.google.android.material.navigation.NavigationView
 import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.StreamingService
 import org.schabi.newpipe.extractor.exceptions.ExtractionException
+
+
+
 
 class MainActivity : AppCompatActivity(){
 
@@ -298,6 +302,12 @@ class MainActivity : AppCompatActivity(){
             Log.d(TAG, "main page has changed, recreating main fragment...")
             sharedPreferences.edit().putBoolean(Constants.KEY_MAIN_PAGE_CHANGE, false).apply()
             NavigationHelper.openMainActivity(this)
+        }
+
+        with(window){
+            clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            statusBarColor = ContextCompat.getColor(themedContext, R.color.dark_aihua_dark_color)
         }
     }
 

@@ -74,7 +74,7 @@
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/dark_youtube_primary_color</item>
+        <item name="colorPrimary">@color/dark_aihua_primary_color</item>
         <item name="colorPrimaryDark">@color/dark_youtube_dark_color</item>
         <item name="colorAccent">@color/dark_youtube_accent_color</item>
         <item name="android:windowBackground">@color/dark_background_color</item>

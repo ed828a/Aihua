@@ -467,12 +467,12 @@
 				android:textSize="@dimen/video_item_detail_next_text_size"
 				tools:ignore="RtlHardcoded" />
 
-			<LinearLayout
+			<androidx.recyclerview.widget.RecyclerView
 				android:id="@+id/detail_related_streams_view"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
 				android:layout_marginTop="2dp"
-				android:orientation="vertical"
+				app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 				tools:minHeight="50dp" />
 
 			<ImageButton

@@ -34,8 +34,9 @@
             android:text="@string/fragment_whats_new"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="15sp"
-            android:textStyle="bold"
             tools:ignore="RtlHardcoded"/>
+            <!--android:textStyle="bold"-->
+
     </LinearLayout>
 
     <RelativeLayout
@@ -66,8 +67,9 @@
             android:text="@string/import_export_title"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="15sp"
-            android:textStyle="bold"
             tools:ignore="RtlHardcoded"/>
+            <!--android:textStyle="bold"-->
+
 
         <ImageView
             android:id="@+id/import_export_expand_icon"

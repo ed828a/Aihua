@@ -56,6 +56,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.toolbar_layout.view.*
+import org.schabi.newpipe.extractor.InfoItem
 import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.exceptions.ContentNotAvailableException
 import org.schabi.newpipe.extractor.exceptions.ParsingException
@@ -190,6 +191,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         }
 
     private lateinit var infoListAdapter: InfoListAdapter
+    private var spanCount: Int = 0
 
     ///////////////////////////////////////////////////////////////////////////
     // Fragment's Lifecycle
@@ -618,7 +620,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         val resources = activity!!.resources
         var width = resources.getDimensionPixelSize(R.dimen.video_item_grid_thumbnail_image_width)
         width += (24 * resources.displayMetrics.density).toInt()
-        val spanCount = Math.floor(resources.displayMetrics.widthPixels / width.toDouble()).toInt()
+        spanCount = Math.floor(resources.displayMetrics.widthPixels / width.toDouble()).toInt()
         val layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, spanCount)
         layoutManager.spanSizeLookup = infoListAdapter.getSpanSizeLookup(spanCount)
         return layoutManager
@@ -629,14 +631,21 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         relatedStreamsView?.adapter = infoListAdapter
         infoListAdapter.setGridItemVariants(isGridLayout)
         relatedStreamsView?.layoutManager = if (isGridLayout) getGridLayoutManager() else getListLayoutManager()
-//        relatedStreamsView?.visibility = View.VISIBLE
-        val relatedStreams = info.relatedStreams
+
+        val relatedStreams: MutableList<InfoItem> = arrayListOf()
+            relatedStreams.addAll(info.relatedStreams)
         Log.d(TAG, "initRelatedVideos(): relatedStreams.size = ${relatedStreams.size}")
+
+        if (spanCount != 0) {
+            val rest = (relatedStreams.size) % spanCount
+            if (rest > 0) {
+                for (i in 1..rest) {
+                    relatedStreams.removeAt(relatedStreams.size - i)
+                }
+            }
+        }
         infoListAdapter.clearStreamItemList()
         infoListAdapter.addInfoItemList(relatedStreams)
-
-//        infoListAdapter.notifyDataSetChanged()
-
 
         /*
         if (relatedStreamsView!!.childCount > 0) relatedStreamsView!!.removeAllViews()
