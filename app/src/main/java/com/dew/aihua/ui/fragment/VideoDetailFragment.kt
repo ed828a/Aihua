@@ -25,11 +25,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.RecyclerView
 import com.dew.aihua.R
 import com.dew.aihua.download.adapter.StreamItemAdapter
 import com.dew.aihua.download.ui.dialog.DownloadDialog
 import com.dew.aihua.infolist.adapter.InfoItemBuilder
 import com.dew.aihua.infolist.adapter.InfoItemDialog
+import com.dew.aihua.infolist.adapter.InfoListAdapter
 import com.dew.aihua.local.dialog.PlaylistAppendDialog
 import com.dew.aihua.local.history.HistoryRecordManager
 import com.dew.aihua.player.helper.*
@@ -65,7 +67,8 @@ import java.util.*
  *  Created by Edward on 3/2/2019.
  */
 
-class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener, View.OnLongClickListener {
+class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
+    SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener, View.OnLongClickListener {
 
     private lateinit var infoItemBuilder: InfoItemBuilder
 
@@ -134,7 +137,8 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
 
     private var nextStreamTitle: TextView? = null
     private var relatedStreamRootLayout: LinearLayout? = null
-    private var relatedStreamsView: LinearLayout? = null
+    //    private var relatedStreamsView: LinearLayout? = null
+    private var relatedStreamsView: RecyclerView? = null
     private var relatedStreamExpandButton: ImageButton? = null
 
     private val onControlsTouchListener: View.OnTouchListener
@@ -185,6 +189,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
             return separator
         }
 
+    private lateinit var infoListAdapter: InfoListAdapter
 
     ///////////////////////////////////////////////////////////////////////////
     // Fragment's Lifecycle
@@ -198,6 +203,25 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
             .getBoolean(getString(R.string.show_next_video_key), true)
         PreferenceManager.getDefaultSharedPreferences(activity)
             .registerOnSharedPreferenceChangeListener(this)
+
+        infoListAdapter = InfoListAdapter(activity!!)
+        infoListAdapter.setOnStreamSelectedListener(object : OnClickGesture<StreamInfoItem>() {
+            override fun selected(selectedItem: StreamInfoItem) {
+//                onStreamSelected(selectedItem)
+                NavigationHelper.openVideoDetailFragment(
+                    getFM(),
+                    selectedItem.serviceId,
+                    selectedItem.url,
+                    selectedItem.name
+                )
+
+            }
+
+            override fun held(selectedItem: StreamInfoItem) {
+                showStreamDialog(selectedItem)
+            }
+        })
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -269,7 +293,8 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
             getString(R.string.default_video_format_key),
             getString(R.string.default_resolution_key),
             getString(R.string.show_higher_resolutions_key),
-            getString(R.string.use_external_video_player_key) -> updateFlags = updateFlags or RESOLUTIONS_MENU_UPDATE_FLAG
+            getString(R.string.use_external_video_player_key) -> updateFlags =
+                updateFlags or RESOLUTIONS_MENU_UPDATE_FLAG
 
             getString(R.string.show_play_with_kodi_key) -> updateFlags = updateFlags or TOOLBAR_ITEMS_UPDATE_FLAG
         }
@@ -327,7 +352,11 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
                 PlaylistAppendDialog.fromStreamInfo(currentInfo!!)
                     .show(fragmentManager!!, TAG)
             }
-            R.id.detail_controls_download -> if (PermissionHelper.checkStoragePermissions(activity!!, PermissionHelper.DOWNLOAD_DIALOG_REQUEST_CODE)) {
+            R.id.detail_controls_download -> if (PermissionHelper.checkStoragePermissions(
+                    activity!!,
+                    PermissionHelper.DOWNLOAD_DIALOG_REQUEST_CODE
+                )
+            ) {
                 this.openDownloadDialog()
             }
             R.id.detail_uploader_root_layout -> if (TextUtils.isEmpty(currentInfo!!.uploaderUrl)) {
@@ -339,7 +368,8 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
                         fragmentManager,
                         currentInfo!!.serviceId,
                         currentInfo!!.uploaderUrl,
-                        currentInfo!!.uploaderName)
+                        currentInfo!!.uploaderName
+                    )
                 } catch (e: Exception) {
                     val context = getActivity()
                     context?.let {
@@ -401,18 +431,25 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
         val initialCount = INITIAL_RELATED_VIDEOS + nextCount
 
         if (relatedStreamsView!!.childCount > initialCount) {
-            relatedStreamsView!!.removeViews(initialCount,
-                relatedStreamsView!!.childCount - initialCount)
+            relatedStreamsView!!.removeViews(
+                initialCount,
+                relatedStreamsView!!.childCount - initialCount
+            )
 
             activity?.let {
                 relatedStreamExpandButton!!.setImageDrawable(
                     ContextCompat.getDrawable(
-                        it as Context, ThemeHelper.resolveResourceIdFromAttr(activity!!, R.attr.expand)))
+                        it as Context, ThemeHelper.resolveResourceIdFromAttr(activity!!, R.attr.expand)
+                    )
+                )
             }
 
         } else {
 
-            Log.d(TAG, "toggleExpandRelatedVideos() called with: info = [$info], getTabFrom = [$INITIAL_RELATED_VIDEOS]")
+            Log.d(
+                TAG,
+                "toggleExpandRelatedVideos() called with: info = [$info], getTabFrom = [$INITIAL_RELATED_VIDEOS]"
+            )
             for (i in INITIAL_RELATED_VIDEOS until info.relatedStreams.size) {
                 val item = info.relatedStreams[i]
                 //Log.d(TAG, "i = " + i);
@@ -420,8 +457,11 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
             }
             activity?.let {
                 relatedStreamExpandButton!!.setImageDrawable(
-                    ContextCompat.getDrawable(it as Context,
-                        ThemeHelper.resolveResourceIdFromAttr(activity!!, R.attr.collapse)))
+                    ContextCompat.getDrawable(
+                        it as Context,
+                        ThemeHelper.resolveResourceIdFromAttr(activity!!, R.attr.collapse)
+                    )
+                )
             }
         }
     }
@@ -518,7 +558,12 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
         val context = context
         if (context == null || context.resources == null || getActivity() == null) return
 
-        val commands = arrayOf(context.resources.getString(R.string.enqueue_on_background), context.resources.getString(R.string.enqueue_on_popup), context.resources.getString(R.string.append_playlist), context.resources.getString(R.string.share))
+        val commands = arrayOf(
+            context.resources.getString(R.string.enqueue_on_background),
+            context.resources.getString(R.string.enqueue_on_popup),
+            context.resources.getString(R.string.append_playlist),
+            context.resources.getString(R.string.share)
+        )
 
         val actions = DialogInterface.OnClickListener { _, which: Int ->
             when (which) {
@@ -544,23 +589,56 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
             val onFailListener = object : SimpleImageLoadingListener() {
                 override fun onLoadingFailed(imageUri: String?, view: View?, failReason: FailReason) {
                     imageUri?.let {
-                        showSnackBarError(failReason.cause, UserAction.LOAD_IMAGE,
-                            infoServiceName, imageUri, R.string.could_not_load_thumbnails)
+                        showSnackBarError(
+                            failReason.cause, UserAction.LOAD_IMAGE,
+                            infoServiceName, imageUri, R.string.could_not_load_thumbnails
+                        )
                     }
                 }
             }
 
-            BaseFragment.imageLoader.displayImage(info.thumbnailUrl, thumbnailImageView,
-                ImageDisplayConstants.DISPLAY_THUMBNAIL_OPTIONS, onFailListener)
+            BaseFragment.imageLoader.displayImage(
+                info.thumbnailUrl, thumbnailImageView,
+                ImageDisplayConstants.DISPLAY_THUMBNAIL_OPTIONS, onFailListener
+            )
         }
 
         if (!TextUtils.isEmpty(info.uploaderAvatarUrl)) {
-            BaseFragment.imageLoader.displayImage(info.uploaderAvatarUrl, uploaderThumb,
-                ImageDisplayConstants.DISPLAY_AVATAR_OPTIONS)
+            BaseFragment.imageLoader.displayImage(
+                info.uploaderAvatarUrl, uploaderThumb,
+                ImageDisplayConstants.DISPLAY_AVATAR_OPTIONS
+            )
         }
     }
 
+    private fun getListLayoutManager(): androidx.recyclerview.widget.RecyclerView.LayoutManager =
+        androidx.recyclerview.widget.LinearLayoutManager(activity)
+
+    private fun getGridLayoutManager(): androidx.recyclerview.widget.RecyclerView.LayoutManager {
+        val resources = activity!!.resources
+        var width = resources.getDimensionPixelSize(R.dimen.video_item_grid_thumbnail_image_width)
+        width += (24 * resources.displayMetrics.density).toInt()
+        val spanCount = Math.floor(resources.displayMetrics.widthPixels / width.toDouble()).toInt()
+        val layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, spanCount)
+        layoutManager.spanSizeLookup = infoListAdapter.getSpanSizeLookup(spanCount)
+        return layoutManager
+    }
+
     private fun initRelatedVideos(info: StreamInfo) {
+
+        relatedStreamsView?.adapter = infoListAdapter
+        infoListAdapter.setGridItemVariants(isGridLayout)
+        relatedStreamsView?.layoutManager = if (isGridLayout) getGridLayoutManager() else getListLayoutManager()
+//        relatedStreamsView?.visibility = View.VISIBLE
+        val relatedStreams = info.relatedStreams
+        Log.d(TAG, "initRelatedVideos(): relatedStreams.size = ${relatedStreams.size}")
+        infoListAdapter.clearStreamItemList()
+        infoListAdapter.addInfoItemList(relatedStreams)
+
+//        infoListAdapter.notifyDataSetChanged()
+
+
+        /*
         if (relatedStreamsView!!.childCount > 0) relatedStreamsView!!.removeAllViews()
 
         if (info.nextVideo != null && showRelatedStreams) {
@@ -599,6 +677,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
             if (info.nextVideo == null) setRelatedStreamsVisibility(View.GONE)
             relatedStreamExpandButton!!.visibility = View.GONE
         }
+        */
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -627,8 +706,10 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
     private fun updateMenuItemVisibility() {
 
         // show kodi if set in settings
-        menu!!.findItem(R.id.action_play_with_kodi).isVisible = PreferenceManager.getDefaultSharedPreferences(activity).getBoolean(
-            activity!!.getString(R.string.show_play_with_kodi_key), false)
+        menu!!.findItem(R.id.action_play_with_kodi).isVisible =
+            PreferenceManager.getDefaultSharedPreferences(activity).getBoolean(
+                activity!!.getString(R.string.show_play_with_kodi_key), false
+            )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -653,8 +734,11 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
             }
             R.id.action_play_with_kodi -> {
                 try {
-                    NavigationHelper.playWithKore(activity, Uri.parse(
-                        url?.replace("https", "http")))
+                    NavigationHelper.playWithKore(
+                        activity, Uri.parse(
+                            url?.replace("https", "http")
+                        )
+                    )
                 } catch (e: Exception) {
                     Log.i(TAG, "Failed to start kore", e)
                     showInstallKoreDialog(activity!!)
@@ -676,10 +760,15 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
         val isExternalPlayerEnabled = PreferenceManager.getDefaultSharedPreferences(activity)
             .getBoolean(activity!!.getString(R.string.use_external_video_player_key), false)
 
-        sortedVideoStreams = ListHelper.getSortedStreamVideosList(activity!!, info.videoStreams, info.videoOnlyStreams, false)
+        sortedVideoStreams =
+            ListHelper.getSortedStreamVideosList(activity!!, info.videoStreams, info.videoOnlyStreams, false)
         selectedVideoStreamIndex = ListHelper.getDefaultResolutionIndex(activity!!, sortedVideoStreams!!)
 
-        val streamsAdapter = StreamItemAdapter(activity!!, StreamItemAdapter.StreamSizeWrapper(sortedVideoStreams!!), isExternalPlayerEnabled)
+        val streamsAdapter = StreamItemAdapter(
+            activity!!,
+            StreamItemAdapter.StreamSizeWrapper(sortedVideoStreams!!),
+            isExternalPlayerEnabled
+        )
         toolbarSpinner!!.adapter = streamsAdapter
         toolbarSpinner!!.setSelection(selectedVideoStreamIndex)
         toolbarSpinner!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -699,7 +788,10 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
         Log.d(TAG, "pushToStack() called with: serviceId = [$serviceId], videoUrl = [$videoUrl], name = [$name]")
 
         if (stack.size > 0 && stack.peek().serviceId == serviceId && stack.peek().url == videoUrl) {
-            Log.d(TAG, "pushToStack() called with: serviceId == peek.serviceId = [$serviceId], videoUrl == peek.getUrl = [$videoUrl]")
+            Log.d(
+                TAG,
+                "pushToStack() called with: serviceId == peek.serviceId = [$serviceId], videoUrl == peek.getUrl = [$videoUrl]"
+            )
         } else {
             Log.d(TAG, "pushToStack() when no stackItem has equal serviceId and videoUrl")
             stack.push(StackItem(serviceId, videoUrl, name))
@@ -752,8 +844,12 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
         pushToStack(serviceId, url!!, name)
         showLoading()
 
-        Log.d(TAG, "prepareAndHandleInfo() called parallaxScrollRootView.getScrollY(): ${parallaxScrollRootView!!.scrollY}")
-        val greaterThanThreshold = parallaxScrollRootView!!.scrollY > (resources.displayMetrics.heightPixels * .1f).toInt()
+        Log.d(
+            TAG,
+            "prepareAndHandleInfo() called parallaxScrollRootView.getScrollY(): ${parallaxScrollRootView!!.scrollY}"
+        )
+        val greaterThanThreshold =
+            parallaxScrollRootView!!.scrollY > (resources.displayMetrics.heightPixels * .1f).toInt()
 
         if (scrollToTop) parallaxScrollRootView!!.smoothScrollTo(0, 0)
         val durationInt = if (greaterThanThreshold) 250 else 0
@@ -803,7 +899,8 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
     ///////////////////////////////////////////////////////////////////////////
 
     private fun openBackgroundPlayer(append: Boolean) {
-        val audioStream = currentInfo!!.audioStreams[ListHelper.getDefaultAudioFormat(activity!!, currentInfo!!.audioStreams)]
+        val audioStream =
+            currentInfo!!.audioStreams[ListHelper.getDefaultAudioFormat(activity!!, currentInfo!!.audioStreams)]
 
         val useExternalAudioPlayer = PreferenceManager.getDefaultSharedPreferences(activity)
             .getBoolean(activity!!.getString(R.string.use_external_audio_player_key), false)
@@ -836,15 +933,20 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
     private fun openVideoPlayer() {
         context?.sendBroadcast(Intent(ACTION_CLOSE))
         val selectedVideoStream = selectedVideoStream
-        val useExternalPlayer = PreferenceManager.getDefaultSharedPreferences(activity)
-            .getBoolean(this.getString(R.string.use_external_video_player_key), false)
 
-        if (useExternalPlayer && selectedVideoStream != null) {
-            startOnExternalPlayer(activity!!, currentInfo!!, selectedVideoStream)
-        } else {
-            openNormalPlayer(selectedVideoStream)
-        }
+        openNormalPlayer(selectedVideoStream)
+
+        // below are for extended functions
+//        val useExternalPlayer = PreferenceManager.getDefaultSharedPreferences(activity)
+//            .getBoolean(this.getString(R.string.use_external_video_player_key), false)
+//
+//        if (useExternalPlayer && selectedVideoStream != null) {
+//            startOnExternalPlayer(activity!!, currentInfo!!, selectedVideoStream)
+//        } else {
+//            openNormalPlayer(selectedVideoStream)
+//        }
     }
+
     private fun openNormalBackgroundPlayer(append: Boolean) {
         val itemQueue = SinglePlayQueue(currentInfo!!)
         if (append) {
@@ -857,10 +959,12 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
     private fun openNormalPlayer(selectedVideoStream: VideoStream?) {
         // using ExoPlayer
         val playQueue = SinglePlayQueue(currentInfo!!)
-        val intent: Intent = NavigationHelper.getPlayerIntent(activity!!,
+        val intent: Intent = NavigationHelper.getPlayerIntent(
+            activity!!,
             MainVideoPlayer::class.java,
             playQueue,
-            selectedVideoStream!!.getResolution())
+            selectedVideoStream!!.getResolution()
+        )
 
         startActivity(intent)
     }
@@ -873,19 +977,22 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
         this.autoPlayEnabled = autoplay
     }
 
-    private fun startOnExternalPlayer(context: Context,
-                                      info: StreamInfo,
-                                      selectedStream: Stream
+    private fun startOnExternalPlayer(
+        context: Context,
+        info: StreamInfo,
+        selectedStream: Stream
     ) {
         if (currentInfo == null) return
-        NavigationHelper.playOnExternalPlayer(context, currentInfo!!.name,
-            currentInfo!!.uploaderName, selectedStream)
+        NavigationHelper.playOnExternalPlayer(
+            context, currentInfo!!.name,
+            currentInfo!!.uploaderName, selectedStream
+        )
 
         // store this info as a history viewed item.
         val recordManager = HistoryRecordManager(requireContext())
         compositeDisposable.add(recordManager.onViewed(info).onErrorComplete()
             .subscribe(
-                {/* successful */ },
+                { /* successful */ },
                 { error -> Log.e(TAG, "Register view failure: ", error) }
             ))
     }
@@ -924,11 +1031,14 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
         thumbnailImageView!!.minimumHeight = height
     }
 
-    private fun showContentWithAnimation(duration: Long,
-                                         delay: Long,
+    private fun showContentWithAnimation(
+        duration: Long,
+        delay: Long,
 //                                         @android.support.annotation.FloatRange(from = 0.0, to = 1.0)
-                                         translationPercent: Float) {
-        val translationY = (resources.displayMetrics.heightPixels * if (translationPercent > 0.0f) translationPercent else .06f).toInt()
+        translationPercent: Float
+    ) {
+        val translationY =
+            (resources.displayMetrics.heightPixels * if (translationPercent > 0.0f) translationPercent else .06f).toInt()
 
         contentRootLayoutHiding!!.animate().setListener(null).cancel()
         contentRootLayoutHiding!!.alpha = 0f
@@ -1089,13 +1199,23 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
         when {
             result.duration > 0 -> {
                 detailDurationView!!.text = Localization.getDurationString(result.duration)
-                detailDurationView!!.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.duration_background_color))
+                detailDurationView!!.setBackgroundColor(
+                    ContextCompat.getColor(
+                        activity!!,
+                        R.color.duration_background_color
+                    )
+                )
                 animateView(detailDurationView!!, true, 100)
             }
 
             result.streamType == StreamType.LIVE_STREAM -> {
                 detailDurationView!!.setText(R.string.duration_live)
-                detailDurationView!!.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.live_duration_background_color))
+                detailDurationView!!.setBackgroundColor(
+                    ContextCompat.getColor(
+                        activity!!,
+                        R.color.live_duration_background_color
+                    )
+                )
                 animateView(detailDurationView!!, true, 100)
             }
 
@@ -1129,11 +1249,13 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
         setTitleToUrl(result.serviceId, result.originalUrl, result.name)
 
         if (!result.errors.isEmpty()) {
-            showSnackBarError(result.errors,
+            showSnackBarError(
+                result.errors,
                 UserAction.REQUESTED_STREAM,
                 NewPipe.getNameOfService(result.serviceId),
                 result.url,
-                0)
+                0
+            )
         }
 
         when (result.streamType) {
@@ -1179,9 +1301,11 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
 
             downloadDialog.show(activity!!.supportFragmentManager, "downloadDialog")
         } catch (e: Exception) {
-            Toast.makeText(activity,
+            Toast.makeText(
+                activity,
                 R.string.could_not_setup_download_menu,
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_LONG
+            ).show()
             e.printStackTrace()
         }
 
@@ -1206,11 +1330,13 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable, Shar
                     else -> R.string.general_error
                 }
 
-                onUnrecoverableError(exception,
+                onUnrecoverableError(
+                    exception,
                     UserAction.REQUESTED_STREAM,
                     NewPipe.getNameOfService(serviceId),
                     url!!,
-                    errorId)
+                    errorId
+                )
             }
         }
 

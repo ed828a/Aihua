@@ -25,7 +25,7 @@ class UpdateSettingsFragment : BasePreferenceFragment() {
         findPreference(updateToggleKey).onPreferenceChangeListener = updatePreferenceChange
     }
 
-    override fun onCreatePreferences(savedInstanceState: Bundle, rootKey: String) {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.update_settings)
     }
 }

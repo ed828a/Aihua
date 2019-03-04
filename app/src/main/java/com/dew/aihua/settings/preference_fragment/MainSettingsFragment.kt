@@ -14,9 +14,12 @@ class MainSettingsFragment : BasePreferenceFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.main_settings)
 
-        if (!DEBUG) {
+        if (!DEBUG) { // this condition need to set debug-able in release section of build.gradle to false.
             val debug = findPreference(getString(R.string.debug_pref_screen_key))
             preferenceScreen.removePreference(debug)
+
+            val update = findPreference(getString(R.string.update_app_key))
+            preferenceScreen.removePreference(update)
         }
     }
 

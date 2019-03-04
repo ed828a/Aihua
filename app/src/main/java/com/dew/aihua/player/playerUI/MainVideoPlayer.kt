@@ -77,6 +77,8 @@ class MainVideoPlayer : AppCompatActivity(), StateSaver.WriteRead, PlaybackParam
                 ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
         }
 
+    private var firstStart = true
+
     ///////////////////////////////////////////////////////////////////////////
     // Activity LifeCycle
     ///////////////////////////////////////////////////////////////////////////
@@ -113,6 +115,7 @@ class MainVideoPlayer : AppCompatActivity(), StateSaver.WriteRead, PlaybackParam
             Toast.makeText(this, R.string.general_error, Toast.LENGTH_SHORT).show()
             finish()
         }
+
     }
 
     override fun onRestoreInstanceState(bundle: Bundle) {
@@ -135,13 +138,15 @@ class MainVideoPlayer : AppCompatActivity(), StateSaver.WriteRead, PlaybackParam
         super.onResume()
 
         // start playing on Landscape
-        isLandscape = true
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-
-        if (globalScreenOrientationLocked()) {
-            val lastOrientationWasLandscape =
-                defaultPreferences!!.getBoolean(getString(R.string.last_orientation_landscape_key), false)
-            isLandscape = lastOrientationWasLandscape
+        if (firstStart){
+            isLandscape = true
+//            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+        } else {
+            if (globalScreenOrientationLocked()) {
+                val lastOrientationWasLandscape =
+                    defaultPreferences!!.getBoolean(getString(R.string.last_orientation_landscape_key), false)
+                isLandscape = lastOrientationWasLandscape
+            }
         }
 
         val lastResizeMode =

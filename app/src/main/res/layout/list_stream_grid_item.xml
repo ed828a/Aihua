@@ -66,4 +66,5 @@
 		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:textSize="@dimen/video_item_search_uploader_text_size"
 		tools:text="Uploader"/>
+
 </RelativeLayout>

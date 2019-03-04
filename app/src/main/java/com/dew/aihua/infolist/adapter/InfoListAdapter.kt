@@ -1,15 +1,12 @@
 package com.dew.aihua.infolist.adapter
 
 import android.app.Activity
-import android.content.Context
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import com.dew.aihua.infolist.holder.*
 import com.dew.aihua.player.playqueque.holder.FallbackViewHolder
 import com.dew.aihua.util.OnClickGesture
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.ui.PlayerView
 import org.schabi.newpipe.extractor.InfoItem
 import org.schabi.newpipe.extractor.channel.ChannelInfoItem
 import org.schabi.newpipe.extractor.playlist.PlaylistInfoItem
@@ -28,12 +25,6 @@ class InfoListAdapter(activity: Activity) : androidx.recyclerview.widget.Recycle
     private var showFooter = false
     private var header: View? = null
     private var footer: View? = null
-
-    // for surface view for playing video
-    private var videoSurfaceView: PlayerView? = null
-    private var player: SimpleExoPlayer? = null
-    private val appContext: Context = activity.applicationContext
-
 
     fun setOnStreamSelectedListener(listener: OnClickGesture<StreamInfoItem>) {
         infoItemBuilder.onStreamSelectedListener = listener
@@ -236,9 +227,5 @@ class InfoListAdapter(activity: Activity) : androidx.recyclerview.widget.Recycle
         private const val PLAYLIST_HOLDER_TYPE = 0x301
         private const val GRID_PLAYLIST_HOLDER_TYPE = 0x302
 
-        const val MIN_BUFFER_DURATION = 5000
-        const val MAX_BUFFER_DURATION = 15000
-        const val MIN_PLAYBACK_START_BUFFER = 1500
-        const val MIN_PLAYBACK_RESUME_BUFFER = 5000
     }
 }
