@@ -9,6 +9,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.Html
 import android.text.Html.FROM_HTML_MODE_LEGACY
 import android.text.Spanned
@@ -55,7 +56,6 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.toolbar_layout.view.*
 import org.schabi.newpipe.extractor.InfoItem
 import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.exceptions.ContentNotAvailableException
@@ -190,14 +190,16 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
             return separator
         }
 
-    private lateinit var infoListAdapter: InfoListAdapter
+    private var infoListAdapter: InfoListAdapter? = null
     private var spanCount: Int = 0
+    private val relatedStreams: LinkedList<InfoItem> = LinkedList()
 
     ///////////////////////////////////////////////////////////////////////////
     // Fragment's Lifecycle
     ///////////////////////////////////////////////////////////////////////////
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(TAG, "onCreate() called")
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
@@ -206,42 +208,30 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         PreferenceManager.getDefaultSharedPreferences(activity)
             .registerOnSharedPreferenceChangeListener(this)
 
-        infoListAdapter = InfoListAdapter(activity!!)
-        infoListAdapter.setOnStreamSelectedListener(object : OnClickGesture<StreamInfoItem>() {
-            override fun selected(selectedItem: StreamInfoItem) {
-//                onStreamSelected(selectedItem)
-                NavigationHelper.openVideoDetailFragment(
-                    getFM(),
-                    selectedItem.serviceId,
-                    selectedItem.url,
-                    selectedItem.name
-                )
-
-            }
-
-            override fun held(selectedItem: StreamInfoItem) {
-                showStreamDialog(selectedItem)
-            }
-        })
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        Log.d(TAG, "onCreateView() called")
+
         return inflater.inflate(R.layout.fragment_video_detail, container, false)
     }
 
     override fun onPause() {
+        Log.d(TAG, "onPause() called")
+
         super.onPause()
         if (currentWorker != null) currentWorker!!.dispose()
     }
 
     override fun onResume() {
+        Log.d(TAG, "onResume() called")
         super.onResume()
 
         if (updateFlags != 0) {
             if (!isLoading.get() && currentInfo != null) {
                 if (updateFlags and RELATED_STREAMS_UPDATE_FLAG != 0) initRelatedVideos(currentInfo!!)
                 if (updateFlags and RESOLUTIONS_MENU_UPDATE_FLAG != 0) setupActionBar(currentInfo!!)
+
             }
 
             if (updateFlags and TOOLBAR_ITEMS_UPDATE_FLAG != 0 && menu != null) {
@@ -257,6 +247,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
     }
 
     override fun onDestroy() {
+        Log.d(TAG, "onDestroy() called")
         super.onDestroy()
         PreferenceManager.getDefaultSharedPreferences(activity)
             .unregisterOnSharedPreferenceChangeListener(this)
@@ -270,6 +261,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         Log.d(TAG, "onDestroyView() called")
         toolbarSpinner?.onItemSelectedListener = null
         toolbarSpinner?.adapter = null
+
         super.onDestroyView()
     }
 
@@ -303,6 +295,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
+        Log.d(TAG, "onSaveInstanceState() called")
         super.onSaveInstanceState(outState)
 
         // Check if the next video label and video is visible,
@@ -317,20 +310,20 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         }
 
         outState.putSerializable(STACK_KEY, stack)
+
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        Log.d(TAG, "onRestoreInstanceState() called")
         super.onRestoreInstanceState(savedInstanceState)
 
         wasRelatedStreamsExpanded = savedInstanceState.getBoolean(WAS_RELATED_EXPANDED_KEY, false)
         var serializable = savedInstanceState.getSerializable(INFO_KEY)
         if (serializable is StreamInfo) {
-
             currentInfo = serializable
             url?.let { url ->
                 InfoCache.putInfo(serviceId, url, currentInfo!!)
             }
-
         }
 
         serializable = savedInstanceState.getSerializable(STACK_KEY)
@@ -339,6 +332,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
             @Suppress("UNCHECKED_CAST")
             stack.addAll(serializable as Collection<StackItem>)
         }
+
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -390,7 +384,6 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
                 }
             }
             R.id.detail_title_root_layout -> toggleTitleAndDescription()
-            R.id.detail_related_streams_expand -> toggleExpandRelatedVideos(currentInfo)
         }
     }
 
@@ -421,49 +414,6 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
                 videoTitleTextView!!.maxLines = 10
                 videoDescriptionRootLayout!!.visibility = View.VISIBLE
                 videoTitleToggleArrow!!.setImageResource(R.drawable.arrow_up)
-            }
-        }
-    }
-
-    private fun toggleExpandRelatedVideos(info: StreamInfo?) {
-        Log.d(TAG, "toggleExpandRelatedVideos() called with: info = [$info]")
-        if (!showRelatedStreams) return
-
-        val nextCount = if (info!!.nextVideo != null) 2 else 0
-        val initialCount = INITIAL_RELATED_VIDEOS + nextCount
-
-        if (relatedStreamsView!!.childCount > initialCount) {
-            relatedStreamsView!!.removeViews(
-                initialCount,
-                relatedStreamsView!!.childCount - initialCount
-            )
-
-            activity?.let {
-                relatedStreamExpandButton!!.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        it as Context, ThemeHelper.resolveResourceIdFromAttr(activity!!, R.attr.expand)
-                    )
-                )
-            }
-
-        } else {
-
-            Log.d(
-                TAG,
-                "toggleExpandRelatedVideos() called with: info = [$info], getTabFrom = [$INITIAL_RELATED_VIDEOS]"
-            )
-            for (i in INITIAL_RELATED_VIDEOS until info.relatedStreams.size) {
-                val item = info.relatedStreams[i]
-                //Log.d(TAG, "i = " + i);
-                relatedStreamsView!!.addView(infoItemBuilder.buildView(relatedStreamsView!!, item))
-            }
-            activity?.let {
-                relatedStreamExpandButton!!.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        it as Context,
-                        ThemeHelper.resolveResourceIdFromAttr(activity!!, R.attr.collapse)
-                    )
-                )
             }
         }
     }
@@ -517,6 +467,12 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         relatedStreamRootLayout = rootView.findViewById(R.id.detail_related_streams_root_layout)
         nextStreamTitle = rootView.findViewById(R.id.detail_next_stream_title)
         relatedStreamsView = rootView.findViewById(R.id.detail_related_streams_view)
+        // setup recyclerView
+        Log.d(TAG, "initViews() called")
+        infoListAdapter = InfoListAdapter(activity!!)
+        relatedStreamsView?.adapter = infoListAdapter
+        infoListAdapter?.setGridItemVariants(isGridLayout)
+        relatedStreamsView?.layoutManager = if (isGridLayout) getGridLayoutManager() else getListLayoutManager()
 
         relatedStreamExpandButton = rootView.findViewById(R.id.detail_related_streams_expand)
 
@@ -554,6 +510,22 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         detailControlsPopup!!.setOnLongClickListener(this)
         detailControlsBackground!!.setOnTouchListener(onControlsTouchListener)
         detailControlsPopup!!.setOnTouchListener(onControlsTouchListener)
+
+        infoListAdapter?.setOnStreamSelectedListener(object : OnClickGesture<StreamInfoItem>() {
+            override fun selected(selectedItem: StreamInfoItem) {
+//                onStreamSelected(selectedItem)
+                NavigationHelper.openVideoDetailFragment(
+                    getFM(),
+                    selectedItem.serviceId,
+                    selectedItem.url,
+                    selectedItem.name
+                )
+            }
+
+            override fun held(selectedItem: StreamInfoItem) {
+                showStreamDialog(selectedItem)
+            }
+        })
     }
 
     private fun showStreamDialog(item: StreamInfoItem) {
@@ -622,18 +594,13 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         width += (24 * resources.displayMetrics.density).toInt()
         spanCount = Math.floor(resources.displayMetrics.widthPixels / width.toDouble()).toInt()
         val layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, spanCount)
-        layoutManager.spanSizeLookup = infoListAdapter.getSpanSizeLookup(spanCount)
+        layoutManager.spanSizeLookup = infoListAdapter!!.getSpanSizeLookup(spanCount)
         return layoutManager
     }
 
     private fun initRelatedVideos(info: StreamInfo) {
-
-        relatedStreamsView?.adapter = infoListAdapter
-        infoListAdapter.setGridItemVariants(isGridLayout)
-        relatedStreamsView?.layoutManager = if (isGridLayout) getGridLayoutManager() else getListLayoutManager()
-
-        val relatedStreams: MutableList<InfoItem> = arrayListOf()
-            relatedStreams.addAll(info.relatedStreams)
+        relatedStreams.clear()
+        relatedStreams.addAll(info.relatedStreams)
         Log.d(TAG, "initRelatedVideos(): relatedStreams.size = ${relatedStreams.size}")
 
         if (spanCount != 0) {
@@ -644,49 +611,13 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
                 }
             }
         }
-        infoListAdapter.clearStreamItemList()
-        infoListAdapter.addInfoItemList(relatedStreams)
 
-        /*
-        if (relatedStreamsView!!.childCount > 0) relatedStreamsView!!.removeAllViews()
+        Log.d(TAG, "initRelatedVideos(): After trimming, relatedStreams.size = ${relatedStreams.size}")
 
-        if (info.nextVideo != null && showRelatedStreams) {
-            nextStreamTitle!!.visibility = View.VISIBLE
-            relatedStreamsView!!.addView(
-                infoItemBuilder.buildView(relatedStreamsView!!, info.nextVideo))
-            relatedStreamsView!!.addView(separatorView)
-            setRelatedStreamsVisibility(View.VISIBLE)
-        } else {
-            nextStreamTitle!!.visibility = View.GONE
-            setRelatedStreamsVisibility(View.GONE)
-        }
+        infoListAdapter?.clearStreamItemList()
+        infoListAdapter?.addInfoItemList(relatedStreams)
 
-        Log.d(TAG, "initRelatedVideos(): info = $info")
-        if (info.relatedStreams != null && !info.relatedStreams.isEmpty() && showRelatedStreams) {
-            //long first = System.nanoTime(), each;
-            val initialSize = if (info.relatedStreams.size >= INITIAL_RELATED_VIDEOS)
-                INITIAL_RELATED_VIDEOS
-            else
-                info.relatedStreams.size
-            for (i in 0 until initialSize) {
-                val item = info.relatedStreams[i]
-                //each = System.nanoTime();
-                relatedStreamsView!!.addView(infoItemBuilder.buildView(relatedStreamsView!!, item))
-                //if (DEBUG) Log.d(TAG, "each took " + ((System.nanoTime() - each) / 1000000L) + "ms");
-            }
-            //if (DEBUG) Log.d(TAG, "Total time " + ((System.nanoTime() - first) / 1000000L) + "ms");
 
-            setRelatedStreamsVisibility(View.VISIBLE)
-            relatedStreamExpandButton!!.visibility = View.VISIBLE
-
-            relatedStreamExpandButton!!.setImageDrawable(
-                ContextCompat.getDrawable(
-                    activity!!, ThemeHelper.resolveResourceIdFromAttr(activity!!, R.attr.expand)))
-        } else {
-            if (info.nextVideo == null) setRelatedStreamsVisibility(View.GONE)
-            relatedStreamExpandButton!!.visibility = View.GONE
-        }
-        */
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -699,7 +630,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         this.menu = menu
 
         // CAUTION set item properties programmatically otherwise it would not be accepted by
-        // appcompat itemsInflater.inflate(R.menu.videoitem_detail, menu);
+        // appcompat itemsInflater.inflate(R.menu.video_item_detail, menu);
 
         inflater.inflate(R.menu.video_detail_menu, menu)
 
@@ -1153,6 +1084,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
     }
 
     override fun handleResult(result: StreamInfo) {
+        Log.d(TAG, "handleResult() called: result = $result")
         super.handleResult(result)
 
         setInitialData(result.serviceId, result.originalUrl, result.name)
@@ -1249,10 +1181,6 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         setupActionBar(result)
         initThumbnailViews(result)
         initRelatedVideos(result)
-        if (wasRelatedStreamsExpanded) {
-            toggleExpandRelatedVideos(currentInfo)
-            wasRelatedStreamsExpanded = false
-        }
 
         setTitleToUrl(result.serviceId, result.url, result.name)
         setTitleToUrl(result.serviceId, result.originalUrl, result.name)

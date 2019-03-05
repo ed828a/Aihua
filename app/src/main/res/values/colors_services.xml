@@ -8,7 +8,7 @@
 
 
     <color name="dark_aihua_primary_color">#212121</color>
-    <color name="dark_aihua_dark_color">#222222</color>
+    <color name="dark_aihua_dark_color">#000000</color>
     <color name="dark_youtube_primary_color">#CD322E</color>
     <color name="dark_youtube_dark_color">#992722</color>
     <color name="dark_youtube_accent_color">#FFFFFF</color>

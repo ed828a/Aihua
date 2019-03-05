@@ -65,11 +65,11 @@
                     android:layout_gravity="center"
                     android:textColor="@android:color/white"
                     android:textSize="20sp"
-                    android:textStyle="bold"
                     android:text="@string/hold_to_append"
                     android:visibility="gone"
                     tools:ignore="RtlHardcoded"
                     tools:visibility="visible"/>
+                <!--android:textStyle="bold"-->
 
                 <TextView
                     android:id="@+id/detail_duration_view"
@@ -90,11 +90,11 @@
                     android:textAllCaps="true"
                     android:textColor="@android:color/white"
                     android:textSize="12sp"
-                    android:textStyle="bold"
                     android:visibility="gone"
                     tools:ignore="RtlHardcoded"
                     tools:text="12:38"
                     tools:visibility="visible"/>
+                <!--android:textStyle="bold"-->
             </FrameLayout>
 
             <!-- CONTENT -->
@@ -211,7 +211,7 @@
                                 android:layout_marginLeft="15dp"
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:textSize="@dimen/video_item_detail_uploader_text_size"
-                                android:textStyle="bold"
+
                                 android:ellipsize="marquee"
                                 android:fadingEdge="horizontal"
                                 android:marqueeRepeatLimit="marquee_forever"
@@ -219,6 +219,7 @@
                                 android:singleLine="true"
                                 tools:ignore="RtlHardcoded"
                                 tools:text="Uploader"/>
+                            <!--android:textStyle="bold"-->
 
                             <!--<Button
                                 android:id="@+id/detail_uploader_subscribe"
@@ -314,10 +315,10 @@
                                 android:text="@string/disabled"
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:textSize="@dimen/video_item_detail_likes_text_size"
-                                android:textStyle="bold"
                                 android:visibility="gone"
                                 tools:ignore="RtlHardcoded"
                                 tools:visibility="visible"/>
+                            <!--android:textStyle="bold"-->
                         </RelativeLayout>
                     </RelativeLayout>
 
@@ -424,8 +425,8 @@
                             android:layout_marginRight="12dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textSize="@dimen/video_item_detail_upload_date_text_size"
-                            android:textStyle="bold"
                             tools:text="Published on Oct 2, 2009"/>
+                        <!--android:textStyle="bold"-->
 
                         <TextView
                             android:id="@+id/detail_description_view"
