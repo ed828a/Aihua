@@ -4,8 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.dew.aihua.R
@@ -32,6 +34,16 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_holder, MainSettingsFragment())
                 .commit()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        with(window){
+            clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            statusBarColor = ContextCompat.getColor(themedContext, R.color.dark_aihua_dark_color)
         }
     }
 

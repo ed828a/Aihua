@@ -8,10 +8,9 @@ import java.util.*
  *  Created by Edward on 3/2/2019.
  */
 @Entity(tableName = SearchHistoryEntry.TABLE_NAME, indices = [Index(value = [SEARCH])])
-class SearchHistoryEntry(@field:ColumnInfo(name = CREATION_DATE)
-                         var creationDate: Date?, @field:ColumnInfo(name = SERVICE_ID)
-                         var serviceId: Int, @field:ColumnInfo(name = SEARCH)
-                         var search: String?) {
+class SearchHistoryEntry(@field:ColumnInfo(name = CREATION_DATE) var creationDate: Date?,
+                         @field:ColumnInfo(name = SERVICE_ID) var serviceId: Int,
+                         @field:ColumnInfo(name = SEARCH) var search: String?) {
 
     @ColumnInfo(name = ID)
     @PrimaryKey(autoGenerate = true)

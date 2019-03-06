@@ -64,7 +64,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
 
-        const val DATABASE_NAME = "newpipe.db"
+        const val DATABASE_NAME = "aihua.db"
 
         // make this class a singleton
         @Volatile

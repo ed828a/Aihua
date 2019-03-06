@@ -19,6 +19,7 @@ import com.dew.aihua.player.playerUI.BasePlayer.Companion.PLAYBACK_QUALITY
 import com.dew.aihua.player.playerUI.BasePlayer.Companion.PLAY_QUEUE_KEY
 import com.dew.aihua.player.playqueque.queque.PlayQueue
 import com.dew.aihua.settings.SettingsActivity
+import com.dew.aihua.settings.tabs.ChooseTabsFragment
 import com.dew.aihua.ui.activity.MainActivity
 import com.dew.aihua.ui.fragment.*
 import com.nostra13.universalimageloader.core.ImageLoader
@@ -315,6 +316,15 @@ object NavigationHelper {
                 .commit()
     }
 
+    fun openChooseTabsFragment(fragmentManager: androidx.fragment.app.FragmentManager?) {
+        if (fragmentManager != null)
+            defaultTransaction(fragmentManager)
+                .replace(R.id.fragment_holder, ChooseTabsFragment())
+                .addToBackStack(null)
+                .commit()
+    }
+
+
     fun openSubscriptionFragment(fragmentManager: androidx.fragment.app.FragmentManager?) {
         if (fragmentManager != null)
             defaultTransaction(fragmentManager)
@@ -333,7 +343,7 @@ object NavigationHelper {
     }
 
     fun openLocalPlaylistFragment(fragmentManager: androidx.fragment.app.FragmentManager?, playlistId: Long, name: String?) {
-        var name1 = name ?: ""
+        val name1 = name ?: ""
         if (fragmentManager != null)
             defaultTransaction(fragmentManager)
                 .replace(R.id.fragment_holder, LocalPlaylistFragment.getInstance(playlistId, name1))

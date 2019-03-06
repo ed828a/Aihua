@@ -193,7 +193,6 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:padding="6dp"
-                            android:layout_toLeftOf="@id/details_panel"
                             android:layout_toStartOf="@id/details_panel">
 
                             <de.hdodenhof.circleimageview.CircleImageView
@@ -240,7 +239,6 @@
                             android:id="@+id/details_panel"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
                             android:paddingLeft="6dp"
                             android:paddingRight="6dp">
@@ -478,26 +476,6 @@
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             tools:minHeight="50dp"/>
 
-                        <!--<LinearLayout-->
-                            <!--android:id="@+id/detail_related_streams_view"-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="match_parent"-->
-                            <!--android:layout_marginTop="2dp"-->
-                            <!--android:orientation="vertical"-->
-                            <!--tools:minHeight="50dp"/>-->
-
-                        <ImageButton
-                            android:id="@+id/detail_related_streams_expand"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingBottom="10dp"
-                            android:paddingTop="4dp"
-                            android:src="?attr/expand"
-                            android:textAlignment="center"
-                            android:textAllCaps="true"
-                            android:visibility="gone"
-                            tools:ignore="ContentDescription"/>
                     </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>

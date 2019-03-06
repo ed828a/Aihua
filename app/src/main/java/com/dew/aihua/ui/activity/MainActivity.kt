@@ -31,6 +31,8 @@ import com.dew.aihua.util.KioskTranslator
 import com.dew.aihua.util.NavigationHelper
 import com.dew.aihua.util.StateSaver
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.drawer_layout.*
+import kotlinx.android.synthetic.main.drawer_layout.view.*
 import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.StreamingService
 import org.schabi.newpipe.extractor.exceptions.ExtractionException
@@ -46,7 +48,7 @@ class MainActivity : AppCompatActivity(){
     private var headerServiceView: TextView? = null
 
     private var servicesShown = false
-    private var serviceArrow: ImageView? = null
+//    private var serviceArrow: ImageView? = null
 
     ///////////////////////////////////////////////////////////////////////////
     // Activity's LifeCycle
@@ -79,6 +81,8 @@ class MainActivity : AppCompatActivity(){
         } catch (e: Exception) {
             ErrorActivity.reportUiError(this, e)
         }
+
+
 
     }
 
@@ -126,9 +130,9 @@ class MainActivity : AppCompatActivity(){
             }
 
             override fun onDrawerClosed(drawerView: View) {
-                if (servicesShown) {
-                    toggleServices()
-                }
+//                if (servicesShown) {
+//                    toggleServices()
+//                }
                 if (lastService != ServiceHelper.getSelectedServiceId(this@MainActivity)) {
                     Handler(Looper.getMainLooper()).post { this@MainActivity.recreate() }
                 }
@@ -197,10 +201,22 @@ class MainActivity : AppCompatActivity(){
         val navigationView = findViewById<NavigationView>(R.id.navigation)
         val hView = navigationView.getHeaderView(0)
 
-        serviceArrow = hView.findViewById(R.id.drawer_arrow)
+//        serviceArrow = hView.findViewById(R.id.drawer_arrow)
         headerServiceView = hView.findViewById(R.id.drawer_header_service_view)
-        val action = hView.findViewById<View>(R.id.drawer_header_action_button)
-        action.setOnClickListener { toggleServices() }
+//        val action = hView.findViewById<View>(R.id.drawer_header_action_button)
+//        action.setOnClickListener { toggleServices() }
+        settingsNavigation.setOnClickListener {
+            NavigationHelper.openSettings(this)
+        }
+
+        settingsAddTabNavigation.setOnClickListener {
+            NavigationHelper.openChooseTabsFragment(supportFragmentManager)
+        }
+
+        historyTabNavigation.setOnClickListener {
+            NavigationHelper.openStatisticFragment(supportFragmentManager)
+        }
+
     }
 
     private fun toggleServices() {
@@ -223,7 +239,7 @@ class MainActivity : AppCompatActivity(){
     }
 
     private fun showServices() {
-        serviceArrow!!.setImageResource(R.drawable.ic_arrow_up_white)
+//        serviceArrow!!.setImageResource(R.drawable.ic_arrow_up_white)
 
         for (s in NewPipe.getServices()) {
             val title = s.serviceInfo.name + if (ServiceHelper.isBeta(s)) " (beta)" else ""
@@ -237,7 +253,7 @@ class MainActivity : AppCompatActivity(){
 
     @Throws(ExtractionException::class)
     private fun showTabs() {
-        serviceArrow!!.setImageResource(R.drawable.ic_arrow_down_white)
+//        serviceArrow!!.setImageResource(R.drawable.ic_arrow_down_white)
 
         //Tabs
         val currentServiceId = ServiceHelper.getSelectedServiceId(this)

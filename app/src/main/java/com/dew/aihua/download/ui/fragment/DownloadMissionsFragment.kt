@@ -118,7 +118,7 @@ class DownloadMissionsFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (mDeleteDownloadManager != null) {
-            mDeleteDisposable = mDeleteDownloadManager!!.undoObservable.subscribe { mission ->
+            mDeleteDisposable = mDeleteDownloadManager!!.undoObservable.subscribe {
                 mAdapter?.let {
                     it.updateItemList()
                     it.notifyDataSetChanged()

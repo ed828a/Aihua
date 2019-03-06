@@ -72,7 +72,7 @@ class ErrorActivity : AppCompatActivity() {
         addGuruMeditaion()
         currentTimeStamp = getCurrentTimeStamp()
 
-        errorReportButton.setOnClickListener { v: View ->
+        errorReportButton.setOnClickListener {
             val target = Intent(Intent.ACTION_SENDTO)
             target.setData(Uri.parse("mailto:$ERROR_EMAIL_ADDRESS"))
                 .putExtra(Intent.EXTRA_SUBJECT, ERROR_EMAIL_SUBJECT)

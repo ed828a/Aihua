@@ -11,11 +11,23 @@ import java.util.*
 /**
  *  Created by Edward on 3/2/2019.
  */
-@Entity(tableName = STREAM_HISTORY_TABLE, primaryKeys = [JOIN_STREAM_ID, STREAM_ACCESS_DATE], indices = [Index(value = [JOIN_STREAM_ID])], foreignKeys = [ForeignKey(entity = StreamEntity::class, parentColumns = [StreamEntity.STREAM_ID], childColumns = [JOIN_STREAM_ID], onDelete = CASCADE, onUpdate = CASCADE)])// No need to index for timestamp as they will almost always be unique
-class StreamHistoryEntity(@field:ColumnInfo(name = JOIN_STREAM_ID)
-                          var streamUid: Long, @field:ColumnInfo(name = STREAM_ACCESS_DATE)
-                          var accessDate: Date, @field:ColumnInfo(name = STREAM_REPEAT_COUNT)
-                          var repeatCount: Long) {
+@Entity(
+    tableName = STREAM_HISTORY_TABLE,
+    primaryKeys = [JOIN_STREAM_ID, STREAM_ACCESS_DATE],
+    indices = [Index(value = [JOIN_STREAM_ID])],
+    foreignKeys = [ForeignKey(
+        entity = StreamEntity::class,
+        parentColumns = [StreamEntity.STREAM_ID],
+        childColumns = [JOIN_STREAM_ID],
+        onDelete = CASCADE,
+        onUpdate = CASCADE
+    )]
+)// No need to index for timestamp as they will almost always be unique
+class StreamHistoryEntity(
+    @field:ColumnInfo(name = JOIN_STREAM_ID) var streamUid: Long,
+    @field:ColumnInfo(name = STREAM_ACCESS_DATE) var accessDate: Date,
+    @field:ColumnInfo(name = STREAM_REPEAT_COUNT) var repeatCount: Long
+) {
 
     @Ignore
     constructor(streamUid: Long, accessDate: Date) : this(streamUid, accessDate, 1)

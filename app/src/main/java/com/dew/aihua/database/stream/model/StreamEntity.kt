@@ -17,15 +17,15 @@ import java.io.Serializable
  */
 
 @Entity(tableName = STREAM_TABLE, indices = [Index(value = [STREAM_SERVICE_ID, STREAM_URL], unique = true)])
-class StreamEntity(serviceId: Int, @field:ColumnInfo(name = STREAM_TITLE)
-var title: String?, @field:ColumnInfo(name = STREAM_URL)
-                   var url: String?,
-                   @field:ColumnInfo(name = STREAM_TYPE)
-                   var streamType: StreamType?, @field:ColumnInfo(name = STREAM_THUMBNAIL_URL)
-                   var thumbnailUrl: String?, @field:ColumnInfo(name = STREAM_UPLOADER)
-                   var uploader: String?,
-                   @field:ColumnInfo(name = STREAM_DURATION)
-                   var duration: Long?) : Serializable {
+class StreamEntity(
+    serviceId: Int,
+    @field:ColumnInfo(name = STREAM_TITLE) var title: String?,
+    @field:ColumnInfo(name = STREAM_URL) var url: String?,
+    @field:ColumnInfo(name = STREAM_TYPE) var streamType: StreamType?,
+    @field:ColumnInfo(name = STREAM_THUMBNAIL_URL) var thumbnailUrl: String?,
+    @field:ColumnInfo(name = STREAM_UPLOADER) var uploader: String?,
+    @field:ColumnInfo(name = STREAM_DURATION) var duration: Long?
+) : Serializable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = STREAM_ID)
@@ -39,16 +39,22 @@ var title: String?, @field:ColumnInfo(name = STREAM_URL)
     }
 
     @Ignore
-    constructor(item: StreamInfoItem) : this(item.serviceId, item.name, item.url, item.streamType, item.thumbnailUrl,
-        item.uploaderName, item.duration)
+    constructor(item: StreamInfoItem) : this(
+        item.serviceId, item.name, item.url, item.streamType, item.thumbnailUrl,
+        item.uploaderName, item.duration
+    )
 
     @Ignore
-    constructor(info: StreamInfo) : this(info.serviceId, info.name, info.url, info.streamType, info.thumbnailUrl,
-        info.uploaderName, info.duration)
+    constructor(info: StreamInfo) : this(
+        info.serviceId, info.name, info.url, info.streamType, info.thumbnailUrl,
+        info.uploaderName, info.duration
+    )
 
     @Ignore
-    constructor(item: PlayQueueItem) : this(item.serviceId, item.title, item.url, item.streamType,
-        item.thumbnailUrl, item.uploader, item.duration)
+    constructor(item: PlayQueueItem) : this(
+        item.serviceId, item.title, item.url, item.streamType,
+        item.thumbnailUrl, item.uploader, item.duration
+    )
 
     companion object {
 

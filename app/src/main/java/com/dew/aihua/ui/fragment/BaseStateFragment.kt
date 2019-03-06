@@ -91,7 +91,7 @@ abstract class BaseStateFragment<I> : BaseFragment(), ViewContract<I> {
         val d = RxView.clicks(errorButtonRetry)
             .debounce(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { o -> onRetryButtonClicked() }
+            .subscribe { onRetryButtonClicked() }
 
         compositeDisposable.add(d)
     }

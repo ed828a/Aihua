@@ -77,7 +77,6 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
 
     private var autoPlayEnabled: Boolean = false
     private var showRelatedStreams: Boolean = false
-    private var wasRelatedStreamsExpanded = false
 
     @State
     @JvmField
@@ -138,9 +137,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
 
     private var nextStreamTitle: TextView? = null
     private var relatedStreamRootLayout: LinearLayout? = null
-    //    private var relatedStreamsView: LinearLayout? = null
     private var relatedStreamsView: RecyclerView? = null
-    private var relatedStreamExpandButton: ImageButton? = null
 
     private val onControlsTouchListener: View.OnTouchListener
         get() = View.OnTouchListener { _, motionEvent: MotionEvent ->
@@ -298,13 +295,6 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         Log.d(TAG, "onSaveInstanceState() called")
         super.onSaveInstanceState(outState)
 
-        // Check if the next video label and video is visible,
-        // if it is, include the two elements in the next check
-        val nextCount = if (currentInfo != null && currentInfo!!.nextVideo != null) 2 else 0
-        if (relatedStreamsView != null && relatedStreamsView!!.childCount > INITIAL_RELATED_VIDEOS + nextCount) {
-            outState.putSerializable(WAS_RELATED_EXPANDED_KEY, true)
-        }
-
         if (!isLoading.get() && currentInfo != null && isVisible) {
             outState.putSerializable(INFO_KEY, currentInfo)
         }
@@ -317,7 +307,6 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         Log.d(TAG, "onRestoreInstanceState() called")
         super.onRestoreInstanceState(savedInstanceState)
 
-        wasRelatedStreamsExpanded = savedInstanceState.getBoolean(WAS_RELATED_EXPANDED_KEY, false)
         var serializable = savedInstanceState.getSerializable(INFO_KEY)
         if (serializable is StreamInfo) {
             currentInfo = serializable
@@ -474,8 +463,6 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         infoListAdapter?.setGridItemVariants(isGridLayout)
         relatedStreamsView?.layoutManager = if (isGridLayout) getGridLayoutManager() else getListLayoutManager()
 
-        relatedStreamExpandButton = rootView.findViewById(R.id.detail_related_streams_expand)
-
         infoItemBuilder = InfoItemBuilder(activity!!)
         setHeightThumbnail()
     }
@@ -502,7 +489,6 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         detailControlsAddToPlaylist!!.setOnClickListener(this)
         detailControlsDownload!!.setOnClickListener(this)
         detailControlsDownload!!.setOnLongClickListener(this)
-        relatedStreamExpandButton!!.setOnClickListener(this)
 
         detailControlsBackground!!.isLongClickable = true
         detailControlsPopup!!.isLongClickable = true
@@ -1325,7 +1311,6 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
 
         private const val INFO_KEY = "info_key"
         private const val STACK_KEY = "stack_key"
-        private const val WAS_RELATED_EXPANDED_KEY = "was_related_expanded_key"
 
         private fun showInstallKoreDialog(context: Context) {
             AlertDialog.Builder(context)
