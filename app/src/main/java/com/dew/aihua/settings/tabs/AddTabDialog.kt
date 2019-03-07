@@ -40,7 +40,7 @@ class AddTabDialog(context: Context,
                                  @field:DrawableRes
                                  val itemIcon: Int) {
 
-        internal constructor(context: Context, tab: Tab) : this(tab.tabId, tab.getTabName(context), tab.getTabIconRes(context)) {}
+        internal constructor(context: Context, tab: Tab) : this(tab.tabId, tab.getTabName(context), tab.getTabIconRes(context))
     }
 
     private class DialogListAdapter(context: Context, private val items: Array<ChooseTabListItem>) : BaseAdapter() {

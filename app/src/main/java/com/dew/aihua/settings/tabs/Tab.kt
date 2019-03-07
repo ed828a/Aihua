@@ -203,8 +203,6 @@ abstract class Tab(jsonObject: JsonObject? = null) {
             @Throws(ExtractionException::class)
             get() = KioskFragment.getInstance(kioskServiceId, kioskId!!)
 
-//        constructor() : this(-1, "<no-id>") {}
-
         constructor(kioskServiceId: Int = NO_SERVICE_ID, kioskId: String = "<no-id>") {
             this.kioskServiceId = kioskServiceId
             this.kioskId = kioskId
@@ -361,7 +359,3 @@ abstract class Tab(jsonObject: JsonObject? = null) {
         }
     }
 }
-
-/**
- *  Created by Edward on 3/2/2019.
- */

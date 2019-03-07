@@ -27,19 +27,19 @@ class SelectKioskFragment : androidx.fragment.app.DialogFragment() {
     var recyclerView: androidx.recyclerview.widget.RecyclerView? = null
     var selectKioskAdapter: SelectKioskAdapter? = null
 
-    private var onSelectedLisener: OnSelectedLisener? = null
+    private var onSelectedListener: OnSelectedListener? = null
     private var onCancelListener: OnCancelListener? = null
 
     ///////////////////////////////////////////////////////////////////////////
     // Interfaces
     ///////////////////////////////////////////////////////////////////////////
 
-    interface OnSelectedLisener {
+    interface OnSelectedListener {
         fun onKioskSelected(serviceId: Int, kioskId: String, kioskName: String)
     }
 
-    fun setOnSelectedLisener(listener: OnSelectedLisener) {
-        onSelectedLisener = listener
+    fun setOnSelectedListener(listener: OnSelectedListener) {
+        onSelectedListener = listener
     }
 
     interface OnCancelListener {
@@ -72,14 +72,15 @@ class SelectKioskFragment : androidx.fragment.app.DialogFragment() {
     override fun onCancel(dialogInterface: DialogInterface) {
         super.onCancel(dialogInterface)
         if (onCancelListener !=
-            null) {
+            null
+        ) {
             onCancelListener!!.onCancel()
         }
     }
 
     private fun clickedItem(entry: SelectKioskAdapter.Entry) {
-        if (onSelectedLisener != null) {
-            onSelectedLisener!!.onKioskSelected(entry.serviceId, entry.kioskId, entry.kioskName)
+        if (onSelectedListener != null) {
+            onSelectedListener!!.onKioskSelected(entry.serviceId, entry.kioskId, entry.kioskName)
         }
         dismiss()
     }
@@ -89,28 +90,37 @@ class SelectKioskFragment : androidx.fragment.app.DialogFragment() {
 
         private val kioskList = Vector<Entry>()
 
-        inner class Entry(internal val icon: Int, internal val serviceId: Int, internal val kioskId: String, internal val kioskName: String)
+        inner class Entry(
+            internal val icon: Int,
+            internal val serviceId: Int,
+            internal val kioskId: String,
+            internal val kioskName: String
+        )
 
         init {
             Log.d(TAG, "NewPipe.getServices() = ${NewPipe.getServices()}")
             for (service in NewPipe.getServices()) {
                 Log.d(TAG, "service.kioskList.availableKiosks = ${service.kioskList.availableKiosks}")
 
-                if (service.serviceId != ServiceList.YouTube.serviceId && service.serviceId != ServiceList.SoundCloud.serviceId) {
+//                if (service.serviceId != ServiceList.YouTube.serviceId && service.serviceId != ServiceList.SoundCloud.serviceId) {
+                if (service.serviceId != ServiceList.YouTube.serviceId) {
                     Log.e(TAG, "there is wrong Service: ${service.serviceId}")
                     continue
                 }
 
                 for (kioskId in service.kioskList.availableKiosks) {
-                    val name = String.format(getString(R.string.service_kiosk_string),
+                    val name = String.format(
+                        getString(R.string.service_kiosk_string),
                         service.serviceInfo.name,
-                        KioskTranslator.getTranslatedKioskName(kioskId, context!!))
+                        KioskTranslator.getTranslatedKioskName(kioskId, context!!)
+                    )
 
                     val kioskEntry = Entry(
                         ServiceHelper.getIcon(service.serviceId),
                         service.serviceId,
                         kioskId,
-                        name)
+                        name
+                    )
 
                     kioskList.add(kioskEntry)
                 }
@@ -144,14 +154,16 @@ class SelectKioskFragment : androidx.fragment.app.DialogFragment() {
 
     private fun onError(e: Throwable) {
         val activity = activity
-        activity?.let {fragmentActivity ->
-            ErrorActivity.reportError(fragmentActivity, e,
+        activity?.let { fragmentActivity ->
+            ErrorActivity.reportError(
+                fragmentActivity, e,
                 fragmentActivity.javaClass, null,
                 ErrorInfo.make(
                     UserAction.UI_ERROR,
-                    "none", "", R.string.app_ui_crash))
+                    "none", "", R.string.app_ui_crash
+                )
+            )
         }
-
     }
 
     companion object {

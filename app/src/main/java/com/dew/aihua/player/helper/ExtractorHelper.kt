@@ -47,6 +47,7 @@ object ExtractorHelper {
                   contentFilter: List<String>,
                   sortFilter: String
     ): Single<SearchInfo> {
+        Log.d(TAG, "searchFor(): serviceId = $serviceId, searchString = $searchString")
         checkServiceId(serviceId)
         val searchQueryHandler = NewPipe.getService(serviceId)
             .searchQHFactory

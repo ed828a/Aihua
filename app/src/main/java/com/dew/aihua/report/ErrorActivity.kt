@@ -82,7 +82,8 @@ class ErrorActivity : AppCompatActivity() {
         }
 
         // normal bug report
-        Log.d(TAG, "errorInfo = ${resources.getString(errorInfo.message)}")
+        Log.d(TAG, "errorInfo = ${errorInfo.message}")
+//        Log.d(TAG, "errorInfo = ${resources.getString(errorInfo.message)}")
         if (errorInfo.message != 0) {
             errorMessageView.text = resources.getString(errorInfo.message)
         } else {

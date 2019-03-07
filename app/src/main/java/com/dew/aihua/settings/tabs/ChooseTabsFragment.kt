@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,15 +15,17 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.dew.aihua.R
+import com.dew.aihua.player.helper.ServiceHelper
 import com.dew.aihua.player.helper.ThemeHelper
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
 import com.dew.aihua.report.UserAction
 import com.dew.aihua.settings.dialog_fragment.SelectChannelFragment
-import com.dew.aihua.settings.dialog_fragment.SelectKioskFragment
 import com.dew.aihua.settings.tabs.Tab.Companion.getTypeFrom
+import com.dew.aihua.util.KioskTranslator
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.schabi.newpipe.extractor.NewPipe
+import org.schabi.newpipe.extractor.ServiceList
 import java.util.*
 
 /**
@@ -81,6 +84,7 @@ class ChooseTabsFragment : androidx.fragment.app.Fragment() {
     ///////////////////////////////////////////////////////////////////////////
     companion object {
         private const val MENU_ITEM_RESTORE_ID = 123456
+        private const val TAG = "ChooseTabsFragment"
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -171,14 +175,16 @@ class ChooseTabsFragment : androidx.fragment.app.Fragment() {
 
         when (type) {
             Tab.Type.KIOSK -> {
-                val selectFragment = SelectKioskFragment()
-                selectFragment.setOnSelectedLisener(object : SelectKioskFragment.OnSelectedLisener {
-                    override fun onKioskSelected(serviceId: Int, kioskId: String, kioskName: String) {
-                        addTab(Tab.KioskTab(serviceId, kioskId))
-                    }
-                })
-
-                selectFragment.show(requireFragmentManager(), "select_kiosk")
+//                val selectFragment = SelectKioskFragment()
+//                selectFragment.setOnSelectedListener(object : SelectKioskFragment.OnSelectedListener {
+//                    override fun onKioskSelected(serviceId: Int, kioskId: String, kioskName: String) {
+//                        addTab(Tab.KioskTab(serviceId, kioskId))
+//                    }
+//                })
+//
+//                selectFragment.show(requireFragmentManager(), "select_kiosk")
+                val context = requireContext()
+                addTrendingKioskTab(context)
                 return
             }
             Tab.Type.CHANNEL -> {
@@ -235,6 +241,45 @@ class ChooseTabsFragment : androidx.fragment.app.Fragment() {
         return returnList.toTypedArray()
     }
 
+    private fun addTrendingKioskTab(context: Context) {
+        val kioskList = Vector<KioskEntry>()
+
+        Log.d(TAG, "NewPipe.getServices() = ${NewPipe.getServices()}")
+        for (service in NewPipe.getServices()) {
+            Log.d(TAG, "service.kioskList.availableKiosks = ${service.kioskList.availableKiosks}")
+
+            if (service.serviceId != ServiceList.YouTube.serviceId) {
+                Log.e(TAG, "there is wrong Service: ${service.serviceId}")
+                continue
+            }
+
+            for (kioskId in service.kioskList.availableKiosks) {
+                val name = String.format(
+                    context.getString(R.string.service_kiosk_string),
+                    service.serviceInfo.name,
+                    KioskTranslator.getTranslatedKioskName(kioskId, context)
+                )
+
+                val kioskEntry = KioskEntry(
+                    ServiceHelper.getIcon(service.serviceId),
+                    service.serviceId,
+                    kioskId,
+                    name
+                )
+
+                kioskList.add(kioskEntry)
+            }
+        }
+
+        kioskList.forEach { entry ->
+            val tab = Tab.KioskTab(entry.serviceId, entry.kioskId)
+            if (!tabList.contains(tab)){
+                addTab(tab)
+            } else {
+                Toast.makeText(context, "Trending Tab is already there.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     // List Handling

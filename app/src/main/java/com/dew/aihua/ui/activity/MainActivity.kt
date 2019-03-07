@@ -219,37 +219,37 @@ class MainActivity : AppCompatActivity(){
 
     }
 
-    private fun toggleServices() {
-        servicesShown = !servicesShown
+//    private fun toggleServices() {
+//        servicesShown = !servicesShown
+//
+//        drawerItems!!.menu.removeGroup(R.id.menu_services_group)
+//        drawerItems!!.menu.removeGroup(R.id.menu_tabs_group)
+//        drawerItems!!.menu.removeGroup(R.id.menu_options_about_group)
+//
+//        if (servicesShown) {
+//            showServices()
+//        } else {
+//            try {
+//                showTabs()
+//            } catch (e: Exception) {
+//                ErrorActivity.reportUiError(this, e)
+//            }
+//
+//        }
+//    }
 
-        drawerItems!!.menu.removeGroup(R.id.menu_services_group)
-        drawerItems!!.menu.removeGroup(R.id.menu_tabs_group)
-        drawerItems!!.menu.removeGroup(R.id.menu_options_about_group)
-
-        if (servicesShown) {
-            showServices()
-        } else {
-            try {
-                showTabs()
-            } catch (e: Exception) {
-                ErrorActivity.reportUiError(this, e)
-            }
-
-        }
-    }
-
-    private fun showServices() {
+//    private fun showServices() {
 //        serviceArrow!!.setImageResource(R.drawable.ic_arrow_up_white)
 
-        for (s in NewPipe.getServices()) {
-            val title = s.serviceInfo.name + if (ServiceHelper.isBeta(s)) " (beta)" else ""
-
-            drawerItems!!.menu
-                .add(R.id.menu_services_group, s.serviceId, ORDER, title)
-                .setIcon(ServiceHelper.getIcon(s.serviceId))
-        }
-        drawerItems!!.menu.getItem(ServiceHelper.getSelectedServiceId(this)).isChecked = true
-    }
+//        for (s in NewPipe.getServices()) {
+//            val title = s.serviceInfo.name + if (ServiceHelper.isBeta(s)) " (beta)" else ""
+//
+//            drawerItems!!.menu
+//                .add(R.id.menu_services_group, s.serviceId, ORDER, title)
+//                .setIcon(ServiceHelper.getIcon(s.serviceId))
+//        }
+//        drawerItems!!.menu.getItem(ServiceHelper.getSelectedServiceId(this)).isChecked = true
+//    }
 
     @Throws(ExtractionException::class)
     private fun showTabs() {
