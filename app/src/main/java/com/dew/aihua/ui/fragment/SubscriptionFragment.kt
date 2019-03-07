@@ -42,6 +42,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.schabi.newpipe.extractor.InfoItem
 import org.schabi.newpipe.extractor.NewPipe
+import org.schabi.newpipe.extractor.ServiceList
 import org.schabi.newpipe.extractor.channel.ChannelInfoItem
 import org.schabi.newpipe.extractor.exceptions.ExtractionException
 import java.io.File
@@ -127,17 +128,6 @@ class SubscriptionFragment : BaseStateFragment<List<SubscriptionEntity>>(), Shar
             override fun onComplete() {}
         }
 
-//    private val isGridLayout: Boolean
-//        get() {
-//            val listMode = PreferenceManager.getDefaultSharedPreferences(activity).getString(getString(R.string.list_view_mode_key), getString(R.string.list_view_mode_value))
-//            return if ("auto" == listMode) {
-//                val configuration = resources.configuration
-//                configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && configuration.isLayoutSizeAtLeast(
-//                    Configuration.SCREENLAYOUT_SIZE_LARGE)
-//            } else {
-//                "grid" == listMode
-//            }
-//        }
 
     ///////////////////////////////////////////////////////////////////////////
     // Fragment LifeCycle
@@ -270,6 +260,8 @@ class SubscriptionFragment : BaseStateFragment<List<SubscriptionEntity>>(), Shar
 
                 val supportedSources = subscriptionExtractor.supportedSources
                 if (supportedSources.isEmpty()) continue
+
+                if (service.serviceId == ServiceList.SoundCloud.serviceId) continue
 
                 val itemView = addItemView(serviceName, ServiceHelper.getIcon(service.serviceId), listHolder)
                 val iconView = itemView.findViewById<ImageView>(android.R.id.icon1)

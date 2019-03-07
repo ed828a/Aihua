@@ -130,9 +130,6 @@ class MainActivity : AppCompatActivity(){
             }
 
             override fun onDrawerClosed(drawerView: View) {
-//                if (servicesShown) {
-//                    toggleServices()
-//                }
                 if (lastService != ServiceHelper.getSelectedServiceId(this@MainActivity)) {
                     Handler(Looper.getMainLooper()).post { this@MainActivity.recreate() }
                 }
@@ -190,21 +187,12 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
-    private fun optionsAboutSelected(item: MenuItem) {
-        when (item.itemId) {
-            ITEM_ID_SETTINGS -> NavigationHelper.openSettings(this)
-            ITEM_ID_ABOUT -> {}
-        }
-    }
-
     private fun setupDrawerHeader() {
         val navigationView = findViewById<NavigationView>(R.id.navigation)
         val hView = navigationView.getHeaderView(0)
 
-//        serviceArrow = hView.findViewById(R.id.drawer_arrow)
         headerServiceView = hView.findViewById(R.id.drawer_header_service_view)
-//        val action = hView.findViewById<View>(R.id.drawer_header_action_button)
-//        action.setOnClickListener { toggleServices() }
+
         settingsNavigation.setOnClickListener {
             NavigationHelper.openSettings(this)
         }
@@ -218,38 +206,6 @@ class MainActivity : AppCompatActivity(){
         }
 
     }
-
-//    private fun toggleServices() {
-//        servicesShown = !servicesShown
-//
-//        drawerItems!!.menu.removeGroup(R.id.menu_services_group)
-//        drawerItems!!.menu.removeGroup(R.id.menu_tabs_group)
-//        drawerItems!!.menu.removeGroup(R.id.menu_options_about_group)
-//
-//        if (servicesShown) {
-//            showServices()
-//        } else {
-//            try {
-//                showTabs()
-//            } catch (e: Exception) {
-//                ErrorActivity.reportUiError(this, e)
-//            }
-//
-//        }
-//    }
-
-//    private fun showServices() {
-//        serviceArrow!!.setImageResource(R.drawable.ic_arrow_up_white)
-
-//        for (s in NewPipe.getServices()) {
-//            val title = s.serviceInfo.name + if (ServiceHelper.isBeta(s)) " (beta)" else ""
-//
-//            drawerItems!!.menu
-//                .add(R.id.menu_services_group, s.serviceId, ORDER, title)
-//                .setIcon(ServiceHelper.getIcon(s.serviceId))
-//        }
-//        drawerItems!!.menu.getItem(ServiceHelper.getSelectedServiceId(this)).isChecked = true
-//    }
 
     @Throws(ExtractionException::class)
     private fun showTabs() {

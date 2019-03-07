@@ -15,6 +15,8 @@
         <item name="colorAccent">@color/light_youtube_accent_color</item>
         <item name="android:windowBackground">@color/light_background_color</item>
         <item name="windowBackground">@color/light_background_color</item>
+        <item name="aihua_primary_color">@color/light_background_color</item>
+
 
         <item name="thumbs_up">@drawable/ic_thumb_up_black_24dp</item>
         <item name="thumbs_down">@drawable/ic_thumb_down_black_24dp</item>
@@ -58,6 +60,10 @@
         <item name="ic_delete">@drawable/ic_delete_black_24dp</item>
         <item name="ic_settings_update">@drawable/ic_settings_update_black</item>
 
+        <item name="ic_settings">@drawable/ic_settings_black_24dp</item>
+        <item name="ic_add_tabs">@drawable/ic_add_tabs_black</item>
+        <item name="ic_history">@drawable/ic_history_black_24dp</item>
+
         <item name="separator_color">@color/light_separator_color</item>
         <item name="contrast_background_color">@color/light_contrast_background_color</item>
         <item name="checked_selector_drawable">@drawable/light_checked_selector</item>
@@ -79,6 +85,7 @@
         <item name="colorAccent">@color/dark_youtube_accent_color</item>
         <item name="android:windowBackground">@color/dark_background_color</item>
         <item name="windowBackground">@color/dark_background_color</item>
+        <item name="aihua_primary_color">@color/dark_aihua_primary_color</item>
 
         <item name="thumbs_up">@drawable/ic_thumb_up_white_24dp</item>
         <item name="thumbs_down">@drawable/ic_thumb_down_white_24dp</item>
@@ -118,7 +125,9 @@
         <item name="ic_restore_defaults">@drawable/ic_settings_backup_restore_white_24dp</item>
         <item name="ic_blank_page">@drawable/ic_blank_page_white_24dp</item>
         <item name="ic_settings_update">@drawable/ic_settings_update_white</item>
-
+        <item name="ic_settings">@drawable/ic_settings_white_24dp</item>
+        <item name="ic_add_tabs">@drawable/ic_add_tabs_white</item>
+        <item name="ic_history">@drawable/ic_history_white_24dp</item>
 
         <item name="separator_color">@color/dark_separator_color</item>
         <item name="contrast_background_color">@color/dark_contrast_background_color</item>
@@ -138,9 +147,12 @@
     <style name="BlackTheme" parent="DarkTheme">
         <item name="android:windowBackground">@color/black_background_color</item>
         <item name="windowBackground">@color/black_background_color</item>
+        <item name="aihua_primary_color">@color/black_background_color</item>
+        <item name="colorPrimary">@color/black_background_color</item>
 
         <item name="separator_color">@color/black_separator_color</item>
         <item name="contrast_background_color">@color/black_contrast_background_color</item>
+
     </style>
 
     <style name="BlackTheme.Switchable">
