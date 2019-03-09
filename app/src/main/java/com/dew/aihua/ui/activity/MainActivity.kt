@@ -1,5 +1,6 @@
 package com.dew.aihua.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -74,15 +75,12 @@ class MainActivity : AppCompatActivity(){
             initFragments()
         }
 
-
         setSupportActionBar(findViewById(R.id.toolbar))
         try {
             setupDrawer()
         } catch (e: Exception) {
             ErrorActivity.reportUiError(this, e)
         }
-
-
 
     }
 
@@ -246,6 +244,7 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
+    @SuppressLint("RtlHardcoded")
     override fun onResume() {
         super.onResume()
 

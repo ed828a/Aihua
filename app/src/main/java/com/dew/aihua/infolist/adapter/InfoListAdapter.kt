@@ -143,7 +143,8 @@ class InfoListAdapter(activity: Activity) : androidx.recyclerview.widget.Recycle
             return FOOTER_TYPE
         }
         val item = itemsList[position]
-        return when (item.infoType) {
+
+        val viewType = when (item.infoType) {
             InfoItem.InfoType.STREAM -> when {
                 useGridVariant -> GRID_STREAM_HOLDER_TYPE
                 useMiniVariant -> MINI_STREAM_HOLDER_TYPE
@@ -164,6 +165,8 @@ class InfoListAdapter(activity: Activity) : androidx.recyclerview.widget.Recycle
                 -1
             }
         }
+        Log.d(TAG, "getItemViewType($pos): viewType = $viewType")
+        return viewType
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {

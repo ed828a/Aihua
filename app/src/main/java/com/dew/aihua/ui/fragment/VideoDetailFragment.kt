@@ -1246,12 +1246,18 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
 
             is ContentNotAvailableException -> showError(getString(R.string.content_not_available), false)
 
+            is ParsingException -> {
+                Toast.makeText(activity, getString(R.string.parsing_error), Toast.LENGTH_SHORT).show()
+                NavigationHelper.openMainActivity(activity!!)
+            }
+
+            is YoutubeStreamExtractor.DecryptException -> {
+                Toast.makeText(activity, getString(R.string.youtube_signature_decryption_error), Toast.LENGTH_SHORT).show()
+                NavigationHelper.openMainActivity(activity!!)
+            }
+
             else -> {
-                val errorId = when (exception) {
-                    is YoutubeStreamExtractor.DecryptException -> R.string.youtube_signature_decryption_error
-                    is ParsingException -> R.string.parsing_error
-                    else -> R.string.general_error
-                }
+                val errorId = R.string.general_error
 
                 onUnrecoverableError(
                     exception,

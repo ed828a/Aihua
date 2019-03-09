@@ -98,7 +98,6 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
     private val suggestionPublisher = PublishSubject.create<String>()
     private var searchDisposable: Disposable? = null
     private var suggestionDisposable: Disposable? = null
-//    private val disposables = CompositeDisposable()
 
     private lateinit var suggestionListAdapter: SuggestionListAdapter
     private lateinit var historyRecordManager: HistoryRecordManager
@@ -146,7 +145,6 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        val preferences = PreferenceManager.getDefaultSharedPreferences(activity)
         isSuggestionsEnabled = preferences.getBoolean(getString(R.string.show_search_suggestions_key), true)
         contentCountry =
             preferences.getString(getString(R.string.content_country_key), getString(R.string.default_country_value))
@@ -655,7 +653,7 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
                 return
             }
         } catch (e: Exception) {
-            // Exception occurred, it's not a url
+            // Exception occurred, it's not a url -- Of course, because searchString is just earch text.
             Log.d(TAG, "Exception occurred, because searchString is not a url")
         }
 
@@ -685,12 +683,7 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
         super.startLoading(forceLoad)
         compositeDisposable.clear()
         if (searchDisposable != null && !searchDisposable!!.isDisposed) searchDisposable!!.dispose()
-        searchDisposable = ExtractorHelper.searchFor(
-            serviceId,
-            searchString!!,
-            Arrays.asList(*contentFilter),
-            sortFilter!!
-        )
+        searchDisposable = ExtractorHelper.searchFor(serviceId, searchString!!, Arrays.asList(*contentFilter), sortFilter!!)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnEvent { _, _ -> isLoading.set(false) }
