@@ -457,11 +457,11 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         nextStreamTitle = rootView.findViewById(R.id.detail_next_stream_title)
         relatedStreamsView = rootView.findViewById(R.id.detail_related_streams_view)
         // setup recyclerView
-        Log.d(TAG, "initViews() called")
         infoListAdapter = InfoListAdapter(activity!!)
         relatedStreamsView?.adapter = infoListAdapter
         infoListAdapter?.setGridItemVariants(isGridLayout)
         relatedStreamsView?.layoutManager = if (isGridLayout) getGridLayoutManager() else getListLayoutManager()
+        Log.d(TAG, "initViews() called, isGridLayout = $isGridLayout, relatedStreamsView = $relatedStreamsView")
 
         infoItemBuilder = InfoItemBuilder(activity!!)
         setHeightThumbnail()
@@ -578,7 +578,13 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         val resources = activity!!.resources
         var width = resources.getDimensionPixelSize(R.dimen.video_item_grid_thumbnail_image_width)
         width += (24 * resources.displayMetrics.density).toInt()
-        spanCount = Math.floor(resources.displayMetrics.widthPixels / width.toDouble()).toInt()
+        spanCount = if (videoTitleToggleArrow == null && // it's table
+            resources.displayMetrics.widthPixels > resources.displayMetrics.heightPixels){ // Landscape
+            Math.floor(resources.displayMetrics.widthPixels / 8 * 3 / width.toDouble()).toInt()
+        } else {
+            Math.floor(resources.displayMetrics.widthPixels / width.toDouble()).toInt()
+        }
+
         val layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, spanCount)
         layoutManager.spanSizeLookup = infoListAdapter!!.getSpanSizeLookup(spanCount)
         return layoutManager
@@ -1055,11 +1061,11 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
             videoTitleToggleArrow!!.setImageResource(R.drawable.arrow_down)
             videoTitleToggleArrow!!.visibility = View.GONE
         } else {    // for tablet
-            val related = relatedStreamRootLayout!!.parent as View
+//            val related = relatedStreamRootLayout!!.parent as View
             //don`t need to hide it if related streams are disabled
-            if (related.visibility == View.VISIBLE) {
-                related.visibility = View.INVISIBLE
-            }
+//            if (related.visibility == View.VISIBLE) {
+//                related.visibility = View.INVISIBLE
+//            }
         }
         videoTitleRoot!!.isClickable = false
 

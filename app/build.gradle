@@ -18,8 +18,8 @@ android {
         applicationId "com.dew.aihua"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -30,9 +30,9 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-//            shrinkResources true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            debuggable true
+//            debuggable true
             signingConfig signingConfigs.develop
         }
         debug {
