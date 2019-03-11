@@ -68,8 +68,11 @@ import java.util.*
  *  Created by Edward on 3/2/2019.
  */
 
-class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
-    SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener, View.OnLongClickListener {
+class VideoDetailFragment : BaseStateFragment<StreamInfo>(),
+    BackPressable,
+    SharedPreferences.OnSharedPreferenceChangeListener,
+    View.OnClickListener,
+    View.OnLongClickListener {
 
     private lateinit var infoItemBuilder: InfoItemBuilder
 
@@ -284,8 +287,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
             getString(R.string.default_video_format_key),
             getString(R.string.default_resolution_key),
             getString(R.string.show_higher_resolutions_key),
-            getString(R.string.use_external_video_player_key) -> updateFlags =
-                updateFlags or RESOLUTIONS_MENU_UPDATE_FLAG
+            getString(R.string.use_external_video_player_key) -> updateFlags = updateFlags or RESOLUTIONS_MENU_UPDATE_FLAG
 
             getString(R.string.show_play_with_kodi_key) -> updateFlags = updateFlags or TOOLBAR_ITEMS_UPDATE_FLAG
         }
@@ -862,15 +864,6 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
 
         openNormalPlayer(selectedVideoStream)
 
-        // below are for extended functions
-//        val useExternalPlayer = PreferenceManager.getDefaultSharedPreferences(activity)
-//            .getBoolean(this.getString(R.string.use_external_video_player_key), false)
-//
-//        if (useExternalPlayer && selectedVideoStream != null) {
-//            startOnExternalPlayer(activity!!, currentInfo!!, selectedVideoStream)
-//        } else {
-//            openNormalPlayer(selectedVideoStream)
-//        }
     }
 
     private fun openNormalBackgroundPlayer(append: Boolean) {
@@ -957,6 +950,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(), BackPressable,
         thumbnailImageView!!.minimumHeight = height
     }
 
+    // Property Animation
     private fun showContentWithAnimation(
         duration: Long,
         delay: Long,

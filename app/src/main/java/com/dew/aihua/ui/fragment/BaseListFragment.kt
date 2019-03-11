@@ -16,6 +16,7 @@ import com.dew.aihua.infolist.adapter.InfoItemDialog
 import com.dew.aihua.infolist.adapter.InfoListAdapter
 import com.dew.aihua.local.dialog.PlaylistAppendDialog
 import com.dew.aihua.player.helper.AnimationUtils.animateView
+import com.dew.aihua.player.helper.ExtractorHelper
 import com.dew.aihua.player.playqueque.queque.SinglePlayQueue
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.ui.contract.ListViewContract
@@ -23,9 +24,12 @@ import com.dew.aihua.ui.contract.OnScrollBelowItemsListener
 import com.dew.aihua.util.NavigationHelper
 import com.dew.aihua.util.OnClickGesture
 import com.dew.aihua.util.StateSaver
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.schabi.newpipe.extractor.InfoItem
 import org.schabi.newpipe.extractor.channel.ChannelInfoItem
 import org.schabi.newpipe.extractor.playlist.PlaylistInfoItem
+import org.schabi.newpipe.extractor.stream.StreamInfo
 import org.schabi.newpipe.extractor.stream.StreamInfoItem
 import java.util.*
 
@@ -68,23 +72,6 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
         return layoutManager
     }
 
-
-//    private val isGridLayout: Boolean
-//        get() {
-//            val listMode = PreferenceManager.getDefaultSharedPreferences(activity).getString(getString(R.string.list_view_mode_key), getString(R.string.list_view_mode_value))
-//
-//            return when (listMode){
-//                "list" -> {
-//                    val configuration = resources.configuration
-//                    configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-//                            configuration.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE)
-//                }
-//
-//                "auto",
-//                "grid"-> true
-//                else -> false
-//            }
-//        }
 
     ///////////////////////////////////////////////////////////////////////////
     // LifeCycle
@@ -231,7 +218,26 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
         onItemSelected(selectedItem)
         // no last parameter: true before
 //        context?.sendBroadcast(Intent(PopupVideoPlayer.ACTION_CLOSE))
+        // Todo: inset directly play and store the related-videos list.
         NavigationHelper.openVideoDetailFragment(getFM(), selectedItem.serviceId, selectedItem.url, selectedItem.name)
+    }
+
+    private fun directlyPlayAndStoreRelatedVideos(selectedItem: StreamInfoItem){
+        var currentInfo: StreamInfo? = null
+        val d = ExtractorHelper.getStreamInfo(selectedItem.serviceId, selectedItem.url, false)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { result ->
+                    isLoading.set(false)
+                    currentInfo = result
+//                    showContentWithAnimation(120, 0, 0f)
+//                    handleResult(result)
+                },
+                { throwable: Throwable ->
+                    isLoading.set(false)
+                    onError(throwable)
+                })
     }
 
     protected fun onScrollToBottom() {
