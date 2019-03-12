@@ -349,7 +349,6 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(),
             R.id.detail_uploader_root_layout -> if (TextUtils.isEmpty(currentInfo!!.uploaderUrl)) {
                 Log.w(TAG, "Can't open channel because we got no channel URL")
             } else {
-                // Todo: this also can fix opening Channel in Channel issue
                 try {
                     NavigationHelper.openChannelFragment(
                         fragmentManager,
@@ -1209,7 +1208,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(),
         }
 
         val related = relatedStreamRootLayout!!.parent
-        if (related is ScrollView) {
+        if (related is ScrollView) { // tablet
             related.scrollTo(0, 0)
         }
     }

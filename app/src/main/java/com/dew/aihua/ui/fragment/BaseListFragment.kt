@@ -99,6 +99,8 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
     override fun onResume() {
         super.onResume()
 
+        hideLoading()
+
         if (updateFlags != FLAG_NO_UPDATE) {
             if (updateFlags and LIST_MODE_UPDATE_FLAG != FLAG_NO_UPDATE) {
                 val useGrid = isGridLayout
@@ -154,6 +156,7 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
 
     protected open fun onItemSelected(selectedItem: InfoItem) {
         Log.d(TAG, "onItemSelected() called with: selectedItem = [$selectedItem]")
+        showLoading()
     }
 
     override fun initListeners() {
@@ -215,29 +218,13 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
 
     private fun onStreamSelected(selectedItem: StreamInfoItem) {
         Log.d(TAG, "onStreamSelected() called: autoPlay = true")
-        onItemSelected(selectedItem)
+//        onItemSelected(selectedItem)
         // no last parameter: true before
 //        context?.sendBroadcast(Intent(PopupVideoPlayer.ACTION_CLOSE))
-        // Todo: inset directly play and store the related-videos list.
-        NavigationHelper.openVideoDetailFragment(getFM(), selectedItem.serviceId, selectedItem.url, selectedItem.name)
-    }
-
-    private fun directlyPlayAndStoreRelatedVideos(selectedItem: StreamInfoItem){
-        var currentInfo: StreamInfo? = null
-        val d = ExtractorHelper.getStreamInfo(selectedItem.serviceId, selectedItem.url, false)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { result ->
-                    isLoading.set(false)
-                    currentInfo = result
-//                    showContentWithAnimation(120, 0, 0f)
-//                    handleResult(result)
-                },
-                { throwable: Throwable ->
-                    isLoading.set(false)
-                    onError(throwable)
-                })
+        // Todo: insert directly play and store the related-videos list.
+        showLoading()
+        NavigationHelper.openAnchorPlayer(activity!!, selectedItem)
+//        NavigationHelper.openVideoDetailFragment(getFM(), selectedItem.serviceId, selectedItem.url, selectedItem.name)
     }
 
     protected fun onScrollToBottom() {
@@ -302,7 +289,7 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
 
     override fun showLoading() {
         super.showLoading()
-        // animateView(itemsList, false, 400);
+         animateView(itemsList!!, false, 400)
     }
 
     override fun hideLoading() {

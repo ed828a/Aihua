@@ -22,8 +22,8 @@ class KioskFragment : BaseListInfoFragment<KioskInfo>() {
 
     @State
     @JvmField
-    protected var kioskId = ""
-    protected lateinit var kioskTranslatedName: String
+    var kioskId = ""
+    private lateinit var kioskTranslatedName: String
 
     ///////////////////////////////////////////////////////////////////////////
     // LifeCycle

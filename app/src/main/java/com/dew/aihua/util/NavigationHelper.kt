@@ -28,6 +28,7 @@ import org.schabi.newpipe.extractor.StreamingService
 import org.schabi.newpipe.extractor.exceptions.ExtractionException
 import org.schabi.newpipe.extractor.stream.Stream
 import org.schabi.newpipe.extractor.stream.StreamInfo
+import org.schabi.newpipe.extractor.stream.StreamInfoItem
 import java.util.ArrayList
 
 /**
@@ -274,6 +275,12 @@ object NavigationHelper {
             .replace(R.id.fragment_holder, instance)
             .addToBackStack(null)
             .commit()
+    }
+
+    fun openAnchorPlayer(context: Context, selectedItem: StreamInfoItem){
+        Log.d(TAG, "openAnchorPlayer() with selectedItem = $selectedItem")
+        val playerProxy = PlayerProxy(context)
+        playerProxy.directlyPlayVideoAnchorPlayer(selectedItem)
     }
 
     fun openChannelFragment(fragmentManager: androidx.fragment.app.FragmentManager?,
