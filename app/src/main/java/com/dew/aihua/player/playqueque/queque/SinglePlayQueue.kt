@@ -13,10 +13,11 @@ class SinglePlayQueue : PlayQueue {
 
     constructor(info: StreamInfo) : super(0, listOf<PlayQueueItem>(PlayQueueItem(info)))
 
-    constructor(items: List<StreamInfoItem>, index: Int) : super(index,
-        playQueueItemsOf(items)
-    )
+    constructor(items: List<StreamInfoItem>, index: Int) : super(index, playQueueItemsOf(items))
 
+    override val isComplete: Boolean = true
+
+    override fun fetch() {}
 
     companion object {
         fun playQueueItemsOf(items: List<StreamInfoItem>): List<PlayQueueItem> {
@@ -28,7 +29,5 @@ class SinglePlayQueue : PlayQueue {
         }
     }
 
-    override val isComplete: Boolean = true
 
-    override fun fetch() {}
 }
