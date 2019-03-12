@@ -233,8 +233,8 @@ open class LocalPlaylistFragment : BaseLocalListFragment<List<PlaylistStreamEntr
             override fun selected(selectedItem: LocalItem) {
                 if (selectedItem is PlaylistStreamEntry) {
                     context?.applicationContext?.sendBroadcast(Intent(ACTION_CLOSE))
-                    NavigationHelper.openVideoDetailFragment(fragmentManager,
-                        selectedItem.serviceId, selectedItem.url, selectedItem.title)
+                    NavigationHelper.openAnchorPlayer(activity!!, selectedItem.serviceId, selectedItem.url, selectedItem.title)
+//                    NavigationHelper.openVideoDetailFragment(fragmentManager, selectedItem.serviceId, selectedItem.url, selectedItem.title)
                 }
             }
 

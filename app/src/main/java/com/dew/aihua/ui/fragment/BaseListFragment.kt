@@ -222,9 +222,13 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
         // no last parameter: true before
 //        context?.sendBroadcast(Intent(PopupVideoPlayer.ACTION_CLOSE))
         // Todo: insert directly play and store the related-videos list.
-        showLoading()
-        NavigationHelper.openAnchorPlayer(activity!!, selectedItem)
+        if (selectedItem.url != null && selectedItem.name != null) {
+            showLoading()
+            NavigationHelper.openAnchorPlayer(activity!!, selectedItem.serviceId, selectedItem.url, selectedItem.name)
 //        NavigationHelper.openVideoDetailFragment(getFM(), selectedItem.serviceId, selectedItem.url, selectedItem.name)
+        } else {
+            Log.d(TAG, "onStreamSelected() Error: selectedItem.url = ${selectedItem.url}, selectedItem.name = ${selectedItem.name} ")
+        }
     }
 
     protected fun onScrollToBottom() {

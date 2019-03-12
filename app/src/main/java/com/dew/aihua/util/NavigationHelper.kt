@@ -21,6 +21,7 @@ import com.dew.aihua.player.playqueque.queque.PlayQueue
 import com.dew.aihua.settings.SettingsActivity
 import com.dew.aihua.settings.tabs.ChooseTabsFragment
 import com.dew.aihua.ui.activity.MainActivity
+import com.dew.aihua.ui.adapter.PlayerProxy
 import com.dew.aihua.ui.fragment.*
 import com.nostra13.universalimageloader.core.ImageLoader
 import org.schabi.newpipe.extractor.NewPipe
@@ -28,7 +29,6 @@ import org.schabi.newpipe.extractor.StreamingService
 import org.schabi.newpipe.extractor.exceptions.ExtractionException
 import org.schabi.newpipe.extractor.stream.Stream
 import org.schabi.newpipe.extractor.stream.StreamInfo
-import org.schabi.newpipe.extractor.stream.StreamInfoItem
 import java.util.ArrayList
 
 /**
@@ -277,10 +277,10 @@ object NavigationHelper {
             .commit()
     }
 
-    fun openAnchorPlayer(context: Context, selectedItem: StreamInfoItem){
-        Log.d(TAG, "openAnchorPlayer() with selectedItem = $selectedItem")
+    fun openAnchorPlayer(context: Context, serviceId: Int, url: String, name: String){
+        Log.d(TAG, "openAnchorPlayer(): url = $url, name = $name")
         val playerProxy = PlayerProxy(context)
-        playerProxy.directlyPlayVideoAnchorPlayer(selectedItem)
+        playerProxy.directlyPlayVideoAnchorPlayer(serviceId, url, name)
     }
 
     fun openChannelFragment(fragmentManager: androidx.fragment.app.FragmentManager?,

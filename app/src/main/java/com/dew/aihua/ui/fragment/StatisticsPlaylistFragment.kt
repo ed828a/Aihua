@@ -139,10 +139,10 @@ class StatisticsPlaylistFragment : BaseLocalListFragment<List<StreamStatisticsEn
             override fun selected(selectedItem: LocalItem) {
                 if (selectedItem is StreamStatisticsEntry) {
                     context?.applicationContext?.sendBroadcast(Intent(ACTION_CLOSE))
-                    NavigationHelper.openVideoDetailFragment(getFM(),
-                        selectedItem.serviceId,
-                        selectedItem.url,
-                        selectedItem.title)
+
+                    NavigationHelper.openAnchorPlayer(activity!!, selectedItem.serviceId, selectedItem.url, selectedItem.title)
+
+//                    NavigationHelper.openVideoDetailFragment(getFM(), selectedItem.serviceId, selectedItem.url, selectedItem.title)
                 }
             }
 

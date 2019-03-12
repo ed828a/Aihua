@@ -717,7 +717,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(),
         stack.clear()
     }
 
-    private fun pushToStack(serviceId: Int, videoUrl: String, name: String?) {
+    private fun pushToStack(serviceId: Int, videoUrl: String, name: String) {
         Log.d(TAG, "pushToStack() called with: serviceId = [$serviceId], videoUrl = [$videoUrl], name = [$name]")
 
         if (stack.size > 0 && stack.peek().serviceId == serviceId && stack.peek().url == videoUrl) {
@@ -751,7 +751,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(),
         // Get stack item getTabFrom the new top
         val peek = stack.peek()
 
-        selectAndLoadVideo(peek.serviceId, peek.url, if (!TextUtils.isEmpty(peek.title)) peek.title!! else "")
+        selectAndLoadVideo(peek.serviceId, peek.url, if (!TextUtils.isEmpty(peek.title)) peek.title else "")
         return true
     }
 
@@ -774,7 +774,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(),
         Log.d(TAG, "prepareAndHandleInfo() called with: info = [$info], scrollToTop = [$scrollToTop]")
 
         setInitialData(info.serviceId, info.originalUrl, info.name)
-        pushToStack(serviceId, url!!, name)
+        pushToStack(serviceId, url!!, name!!)
         showLoading()
 
         Log.d(
@@ -799,7 +799,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(),
 
     private fun prepareAndLoadInfo() {
         parallaxScrollRootView!!.smoothScrollTo(0, 0)
-        pushToStack(serviceId, url!!, name)
+        pushToStack(serviceId, url!!, name!!)
         startLoading(false)
     }
 
@@ -1073,7 +1073,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(),
         super.handleResult(result)
 
         setInitialData(result.serviceId, result.originalUrl, result.name)
-        pushToStack(serviceId, url!!, name)
+        pushToStack(serviceId, url!!, name!!)
 
         animateView(thumbnailPlayButton!!, true, 200)
         videoTitleTextView!!.text = name

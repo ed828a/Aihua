@@ -239,10 +239,10 @@ object ListHelper {
      * no results.
      *
      * @param audioStreams list the audio streams
-     * @return index of the audio with the highest average bitrate of the default format
+     * @return index of the audio with the highest average bitrate of the default mediaFormat
      */
-    internal fun getHighestQualityAudioIndex(format: MediaFormat?, audioStreams: List<AudioStream>?): Int {
-        var format = format
+    internal fun getHighestQualityAudioIndex(mediaFormat: MediaFormat?, audioStreams: List<AudioStream>?): Int {
+        var format = mediaFormat
         var result = -1
         if (audioStreams != null) {
             while (result == -1) {

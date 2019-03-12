@@ -1,4 +1,4 @@
-package com.dew.aihua.ui.fragment
+package com.dew.aihua.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -210,6 +210,7 @@ class PlayerProxy(val context: Context) {
     }
 
     private fun showStreamDialog(item: StreamInfoItem) {
+        Log.d(TAG, "showStreamDialog(): item = $item")
         val context = context
 //        if (context == null || context.resources == null || getActivity() == null) return
 
@@ -257,7 +258,7 @@ class PlayerProxy(val context: Context) {
 
     }
 
-    private fun pushToStack(serviceId: Int, videoUrl: String, name: String?) {
+    private fun pushToStack(serviceId: Int, videoUrl: String, name: String) {
         Log.d(TAG, "pushToStack() called with: serviceId = [$serviceId], videoUrl = [$videoUrl], name = [$name]")
 
         if (stack.size > 0 && stack.peek().serviceId == serviceId && stack.peek().url == videoUrl) {
@@ -291,7 +292,7 @@ class PlayerProxy(val context: Context) {
         // Get stack item getTabFrom the new top
         val peek = stack.peek()
 
-        selectAndLoadVideo(peek.serviceId, peek.url, if (!TextUtils.isEmpty(peek.title)) peek.title!! else "")
+        selectAndLoadVideo(peek.serviceId, peek.url, if (!TextUtils.isEmpty(peek.title)) peek.title else "")
         return true
     }
 
@@ -314,7 +315,8 @@ class PlayerProxy(val context: Context) {
         Log.d(TAG, "prepareAndHandleInfo() called with: info = [$info], scrollToTop = [$scrollToTop]")
 
         setInitialData(info.serviceId, info.originalUrl, info.name)
-        pushToStack(serviceId, url!!, name)
+
+        pushToStack(info.serviceId, info.originalUrl, info.name)
 
         handleResult(info)
     }
@@ -327,7 +329,7 @@ class PlayerProxy(val context: Context) {
 
     fun startLoading(forceLoad: Boolean) {
 
-        pushToStack(serviceId, url!!, name)
+        pushToStack(serviceId, url!!, name!!)
 
         currentInfo = null
         currentWorker?.dispose()
@@ -427,7 +429,7 @@ class PlayerProxy(val context: Context) {
         Log.d(TAG, "handleResult() called: result = $result")
 
         setInitialData(result.serviceId, result.originalUrl, result.name)
-        pushToStack(serviceId, url!!, name)
+        pushToStack(result.serviceId, result.originalUrl, result.name)
 
 //        setupActionBar(result)
         sortedVideoStreams = ListHelper.getSortedStreamVideosList(
@@ -474,7 +476,11 @@ class PlayerProxy(val context: Context) {
             }
 
             is YoutubeStreamExtractor.DecryptException -> {
-                Toast.makeText(context, context.getString(R.string.youtube_signature_decryption_error), Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.youtube_signature_decryption_error),
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
 
@@ -486,43 +492,50 @@ class PlayerProxy(val context: Context) {
         return true
     }
 
-
     fun directlyPlayVideoAnchorPlayer(selectedItem: StreamInfoItem) {
-        setInitialData(selectedItem.serviceId, selectedItem.url, selectedItem.name)
-        pushToStack(selectedItem.serviceId, selectedItem.url, selectedItem.name)
+        if (selectedItem.url != null && selectedItem.name != null)
+            directlyPlayVideoAnchorPlayer(selectedItem.serviceId, selectedItem.url, selectedItem.name)
+        else {
+            Log.d(TAG, "directlyPlayVideoAnchorPlayer() Error: url = ${selectedItem.url}, name = ${selectedItem.name}")
+        }
+    }
+
+    fun directlyPlayVideoAnchorPlayer(serviceId: Int, url: String, name: String) {
+        setInitialData(serviceId, url, name)
+        pushToStack(serviceId, url, name)
         currentInfo = null
         currentWorker?.dispose()
 
         val errorMessage = arrayListOf<Throwable>()
-        url?.let { url ->
-            currentWorker = ExtractorHelper.getStreamInfo(selectedItem.serviceId, selectedItem.url, false)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
-                .flatMap { result: StreamInfo ->
-                    isLoading.set(false)
-                    currentInfo = result
-                    errorMessage.addAll(result.errors)
-                    Single.fromCallable {
-                        Log.d(TAG, "directlyPlayVideoAnchorPlayer(): Single.fromCallable called")
-                        handleResult(result)
-                    }
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {noError ->
-                        Log.d(TAG, "directlyPlayVideoAnchorPlayer(): ready to play video with noError = $noError")
-                        if (noError){
-                            openVideoPlayer()
-                        } else {
-                            Log.d(TAG, "Result Error: $errorMessage, UserAction.REQUESTED_STREAM, result.url = $url")
-                        }
 
-                    },
-                    { throwable: Throwable ->
-                        isLoading.set(false)
-                        onError(throwable)
-                    })
-        }
+        currentWorker = ExtractorHelper.getStreamInfo(serviceId, url, false)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
+            .flatMap { result: StreamInfo ->
+                isLoading.set(false)
+                currentInfo = result
+                errorMessage.addAll(result.errors)
+                Single.fromCallable {
+                    Log.d(TAG, "directlyPlayVideoAnchorPlayer(): Single.fromCallable called")
+                    handleResult(result)
+                }
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { noError ->
+                    Log.d(TAG, "directlyPlayVideoAnchorPlayer(): ready to play video with noError = $noError")
+                    if (noError) {
+                        openVideoPlayer()
+                    } else {
+                        Log.d(TAG, "Result Error: $errorMessage, UserAction.REQUESTED_STREAM, result.url = $url")
+                    }
+
+                },
+                { throwable: Throwable ->
+                    isLoading.set(false)
+                    onError(throwable)
+                })
+
     }
 
     companion object {

@@ -455,13 +455,14 @@ class MainActivity : AppCompatActivity(){
 
             when {
                 intent!!.hasExtra(Constants.KEY_LINK_TYPE) -> {
-                    val url = intent.getStringExtra(Constants.KEY_URL)
-                    val serviceId = intent.getIntExtra(Constants.KEY_SERVICE_ID, 0)
-                    val title = intent.getStringExtra(Constants.KEY_TITLE)
+                    val url: String = intent.getStringExtra(Constants.KEY_URL)
+                    val serviceId: Int = intent.getIntExtra(Constants.KEY_SERVICE_ID, 0)
+                    val title: String = intent.getStringExtra(Constants.KEY_TITLE)
                     when (intent.getSerializableExtra(Constants.KEY_LINK_TYPE) as StreamingService.LinkType) {
                         StreamingService.LinkType.STREAM -> {
-                            val autoPlay = intent.getBooleanExtra(VideoDetailFragment.AUTO_PLAY, false)
-                            NavigationHelper.openVideoDetailFragment(supportFragmentManager, serviceId, url, title, autoPlay)
+                            NavigationHelper.openAnchorPlayer(this, serviceId, url, title)
+//                            val autoPlay = intent.getBooleanExtra(VideoDetailFragment.AUTO_PLAY, false)
+//                            NavigationHelper.openVideoDetailFragment(supportFragmentManager, serviceId, url, title, autoPlay)
                         }
 
                         StreamingService.LinkType.CHANNEL -> {
