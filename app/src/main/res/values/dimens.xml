@@ -15,6 +15,8 @@
     <!-- 16 / 9 ratio-->
     <dimen name="video_item_grid_thumbnail_image_width">164dp</dimen>
     <dimen name="video_item_grid_thumbnail_image_height">92dp</dimen>
+    <dimen name="large_video_item_grid_thumbnail_image_width">392dp</dimen>
+
     <!-- Calculated: 2*video_item_search_padding + video_item_search_thumbnail_image_height -->
     <dimen name="video_item_search_height">148dp</dimen>
     <!-- Paddings & Margins -->

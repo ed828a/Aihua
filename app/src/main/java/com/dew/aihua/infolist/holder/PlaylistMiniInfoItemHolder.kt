@@ -1,11 +1,18 @@
 package com.dew.aihua.infolist.holder
 
+import android.text.TextUtils
+import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.dew.aihua.R
 import com.dew.aihua.infolist.adapter.InfoItemBuilder
 import com.dew.aihua.player.helper.ImageDisplayConstants
+import com.dew.aihua.report.ErrorActivity
+import com.dew.aihua.util.NavigationHelper
+import de.hdodenhof.circleimageview.CircleImageView
 import org.schabi.newpipe.extractor.InfoItem
 import org.schabi.newpipe.extractor.playlist.PlaylistInfoItem
 
@@ -17,6 +24,8 @@ open class PlaylistMiniInfoItemHolder(infoItemBuilder: InfoItemBuilder, layoutId
     val itemTitleView: TextView = itemView.findViewById(R.id.itemTitleView)
     val itemUploaderView: TextView = itemView.findViewById(R.id.itemUploaderView)
     val itemStreamCountView: TextView = itemView.findViewById(R.id.itemStreamCountView)
+    val itemUploaderThumbnail: CircleImageView = itemView.findViewById(R.id.detail_uploader_thumbnail_view)
+
 
     constructor(infoItemBuilder: InfoItemBuilder, parent: ViewGroup) : this(infoItemBuilder, R.layout.list_playlist_mini_item, parent)
 
@@ -27,15 +36,22 @@ open class PlaylistMiniInfoItemHolder(infoItemBuilder: InfoItemBuilder, layoutId
         itemStreamCountView.text = infoItem.streamCount.toString()
         itemUploaderView.text = infoItem.uploaderName
 
+        if (!TextUtils.isEmpty(infoItem.thumbnailUrl) ) {
+            itemBuilder.imageLoader.displayImage(
+                infoItem.thumbnailUrl, itemUploaderThumbnail,
+                ImageDisplayConstants.DISPLAY_AVATAR_OPTIONS
+            )
+        }
+
         itemBuilder.imageLoader
             .displayImage(infoItem.thumbnailUrl, itemThumbnailView, ImageDisplayConstants.DISPLAY_THUMBNAIL_OPTIONS)
 
-        itemView.setOnClickListener {_ ->
+        itemView.setOnClickListener {
             itemBuilder.onPlaylistSelectedListener?.selected(infoItem)
         }
 
         itemView.isLongClickable = true
-        itemView.setOnLongClickListener { _ ->
+        itemView.setOnLongClickListener {
             itemBuilder.onPlaylistSelectedListener?.held(infoItem)
             true
         }

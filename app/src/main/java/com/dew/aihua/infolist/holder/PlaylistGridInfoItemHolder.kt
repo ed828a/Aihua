@@ -7,4 +7,4 @@ import com.dew.aihua.infolist.adapter.InfoItemBuilder
 /**
  *  Created by Edward on 3/2/2019.
  */
-class PlaylistGridInfoItemHolder(infoItemBuilder: InfoItemBuilder, parent: ViewGroup) : PlaylistMiniInfoItemHolder(infoItemBuilder, R.layout.list_playlist_grid_item, parent)
+class PlaylistGridInfoItemHolder(infoItemBuilder: InfoItemBuilder, parent: ViewGroup) : PlaylistMiniInfoItemHolder(infoItemBuilder, R.layout.list_playlist_grid_item_cardview, parent)

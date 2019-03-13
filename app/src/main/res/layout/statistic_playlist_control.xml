@@ -34,8 +34,9 @@
             android:text="@string/title_most_played"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="15sp"
-            android:textStyle="bold"
             tools:ignore="RtlHardcoded"/>
+        <!--android:textStyle="bold"-->
+
     </RelativeLayout>
 
     <include layout="@layout/playlist_control" />

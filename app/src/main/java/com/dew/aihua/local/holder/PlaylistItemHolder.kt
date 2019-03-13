@@ -6,6 +6,7 @@ import android.widget.TextView
 import com.dew.aihua.R
 import com.dew.aihua.database.LocalItem
 import com.dew.aihua.local.adapter.LocalItemBuilder
+import de.hdodenhof.circleimageview.CircleImageView
 import java.text.DateFormat
 
 /**
@@ -20,16 +21,17 @@ abstract class PlaylistItemHolder(infoItemBuilder: LocalItemBuilder,
     val itemTitleView: TextView = itemView.findViewById(R.id.itemTitleView)
     val itemUploaderView: TextView = itemView.findViewById(R.id.itemUploaderView)
     val itemStreamCountView: TextView = itemView.findViewById(R.id.itemStreamCountView)
+    val itemUploaderThumbnail: CircleImageView = itemView.findViewById(R.id.detail_uploader_thumbnail_view)
 
     constructor(infoItemBuilder: LocalItemBuilder, parent: ViewGroup) : this(infoItemBuilder, R.layout.list_playlist_item, parent)
 
     override fun updateFromItem(item: LocalItem, dateFormat: DateFormat) {
-        itemView.setOnClickListener { _ ->
+        itemView.setOnClickListener {
             itemBuilder.onItemSelectedListener?.selected(item)
         }
 
         itemView.isLongClickable = true
-        itemView.setOnLongClickListener { _ ->
+        itemView.setOnLongClickListener {
             itemBuilder.onItemSelectedListener?.held(item)
             true
         }

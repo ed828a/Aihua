@@ -189,8 +189,13 @@ open class LocalPlaylistFragment : BaseLocalListFragment<List<PlaylistStreamEntr
         return inflater.inflate(R.layout.fragment_playlist, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+        hideLoading()
+    }
+
     ///////////////////////////////////////////////////////////////////////////
-    // Fragment Lifecycle - Views
+    // Fragment initialization - Views
     ///////////////////////////////////////////////////////////////////////////
 
     override fun setTitle(title: String) {
@@ -232,6 +237,7 @@ open class LocalPlaylistFragment : BaseLocalListFragment<List<PlaylistStreamEntr
         itemListAdapter?.setSelectedListener(object : OnClickGesture<LocalItem>() {
             override fun selected(selectedItem: LocalItem) {
                 if (selectedItem is PlaylistStreamEntry) {
+                    showLoading()
                     context?.applicationContext?.sendBroadcast(Intent(ACTION_CLOSE))
                     NavigationHelper.openAnchorPlayer(activity!!, selectedItem.serviceId, selectedItem.url, selectedItem.title)
 //                    NavigationHelper.openVideoDetailFragment(fragmentManager, selectedItem.serviceId, selectedItem.url, selectedItem.title)

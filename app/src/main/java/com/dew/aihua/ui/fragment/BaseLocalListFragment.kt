@@ -16,10 +16,10 @@ import com.dew.aihua.ui.contract.ListViewContract
  *  Created by Edward on 3/2/2019.
  *
  * This fragment is design to be used with persistent data such as
- * [org.schabi.newpipe.database.LocalItem], and does not cache the data contained
+ * .database.LocalItem, and does not cache the data contained
  * in the list adapter to avoid extra writes when the it exits or re-enters its lifecycle.
  *
- * This fragment destroys its adapter and views when [Fragment.onDestroyView] is
+ * This fragment destroys its adapter and views when Fragment.onDestroyView is
  * called and is memory efficient when in backstack.
  */
 abstract class BaseLocalListFragment<I, N> : BaseStateFragment<I>(), ListViewContract<I, N>, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -45,8 +45,21 @@ abstract class BaseLocalListFragment<I, N> : BaseStateFragment<I>(), ListViewCon
 
     private fun getGridLayoutManager(): androidx.recyclerview.widget.RecyclerView.LayoutManager {
         val resources = activity!!.resources
-        var width = resources.getDimensionPixelSize(R.dimen.video_item_grid_thumbnail_image_width)
-        width += (24 * resources.displayMetrics.density).toInt()
+//        var width = resources.getDimensionPixelSize(R.dimen.video_item_grid_thumbnail_image_width)
+//        width += (24 * resources.displayMetrics.density).toInt()
+
+        val width = if (resources.displayMetrics.widthPixels > resources.displayMetrics.heightPixels) {
+            if (resources.getBoolean(R.bool.isTablet))
+                resources.displayMetrics.widthPixels / 3
+            else
+                resources.displayMetrics.widthPixels / 2
+        } else {
+            if (resources.getBoolean(R.bool.isTablet))
+                resources.displayMetrics.widthPixels / 2
+            else
+                resources.displayMetrics.widthPixels
+        }
+
         val spanCount = Math.floor(resources.displayMetrics.widthPixels / width.toDouble()).toInt()
         val layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, spanCount)
         layoutManager.spanSizeLookup = itemListAdapter!!.getSpanSizeLookup(spanCount)
@@ -55,24 +68,6 @@ abstract class BaseLocalListFragment<I, N> : BaseStateFragment<I>(), ListViewCon
 
     private fun getListLayoutManager(): androidx.recyclerview.widget.RecyclerView.LayoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
 
-    /**
-     * when screen size is big enough and Landscaped, it's grid layout. or listMode is set to grid.
-     */
-//    protected fun isGridLayout(): Boolean {
-//        val listMode = PreferenceManager.getDefaultSharedPreferences(activity).getString(getString(R.string.list_view_mode_key), getString(R.string.list_view_mode_value))
-//
-//        return when (listMode){
-//            "list" -> {
-//                val configuration = resources.configuration
-//                configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-//                        configuration.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE)
-//            }
-//
-//            "auto",
-//            "grid"-> true
-//            else -> false
-//        }
-//    }
 
     ///////////////////////////////////////////////////////////////////////////
     // Lifecycle - Creation

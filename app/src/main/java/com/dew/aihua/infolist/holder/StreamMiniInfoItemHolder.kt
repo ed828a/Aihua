@@ -51,13 +51,13 @@ open class StreamMiniInfoItemHolder(infoItemBuilder: InfoItemBuilder, layoutId: 
         itemUploaderView.text = infoItem.uploaderName
 
         if (infoItem is StreamInfo && !TextUtils.isEmpty(infoItem.uploaderAvatarUrl)) {
-            ImageLoader.getInstance().displayImage(
+            itemBuilder.imageLoader.displayImage(
                 infoItem.uploaderAvatarUrl, itemUploaderThumbnail,
                 ImageDisplayConstants.DISPLAY_AVATAR_OPTIONS
             )
         } else {
             if (!TextUtils.isEmpty(infoItem.thumbnailUrl)) {
-                ImageLoader.getInstance().displayImage(
+                itemBuilder.imageLoader.displayImage(
                     infoItem.thumbnailUrl, itemUploaderThumbnail,
                     ImageDisplayConstants.DISPLAY_AVATAR_OPTIONS
                 )

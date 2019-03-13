@@ -710,7 +710,7 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
     }
 
     override fun hasMoreItems(): Boolean {
-        // TODO: No way to tell if search has more items in this moment
+        // TODO: No way to tell if search has more items in the moment
         return true
     }
 

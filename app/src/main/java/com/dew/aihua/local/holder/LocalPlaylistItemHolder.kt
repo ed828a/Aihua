@@ -1,5 +1,6 @@
 package com.dew.aihua.local.holder
 
+import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import com.dew.aihua.local.adapter.LocalItemBuilder
@@ -14,7 +15,7 @@ import java.text.DateFormat
 
 open class LocalPlaylistItemHolder : PlaylistItemHolder {
 
-    constructor(infoItemBuilder: LocalItemBuilder, parent: ViewGroup) : super(infoItemBuilder, parent) {}
+    constructor(infoItemBuilder: LocalItemBuilder, parent: ViewGroup) : super(infoItemBuilder, parent)
 
     internal constructor(infoItemBuilder: LocalItemBuilder, layoutId: Int, parent: ViewGroup) : super(infoItemBuilder, layoutId, parent) {}
 
@@ -27,6 +28,13 @@ open class LocalPlaylistItemHolder : PlaylistItemHolder {
 
         itemBuilder.displayImage(item.thumbnailUrl, itemThumbnailView,
             ImageDisplayConstants.DISPLAY_PLAYLIST_OPTIONS)
+
+        if (!TextUtils.isEmpty(item.thumbnailUrl)) {
+            itemBuilder.displayImage(
+                item.thumbnailUrl, itemUploaderThumbnail,
+                ImageDisplayConstants.DISPLAY_AVATAR_OPTIONS
+            )
+        }
 
         super.updateFromItem(item, dateFormat)
     }

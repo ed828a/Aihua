@@ -117,7 +117,7 @@ class PlaylistAppendDialog : PlaylistDialog() {
 
         val d = manager.appendToPlaylist(playlist.uid, streams)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { _ -> successToast.show() }
+            .subscribe { successToast.show() }
 
         compositeDisposable.add(d)
         dialog?.dismiss()

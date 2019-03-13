@@ -1,5 +1,6 @@
 package com.dew.aihua.local.holder
 
+import android.text.TextUtils
 import android.view.ViewGroup
 import com.dew.aihua.database.LocalItem
 import com.dew.aihua.database.playlist.model.PlaylistRemoteEntity
@@ -28,6 +29,13 @@ open class RemotePlaylistItemHolder : PlaylistItemHolder {
 
         itemBuilder.displayImage(item.thumbnailUrl!!, itemThumbnailView,
             ImageDisplayConstants.DISPLAY_PLAYLIST_OPTIONS)
+
+//        if (!TextUtils.isEmpty(item.thumbnailUrl) && itemUploaderThumbnail != null) {
+//            itemBuilder.displayImage(
+//                item.thumbnailUrl!!, itemUploaderThumbnail,
+//                ImageDisplayConstants.DISPLAY_AVATAR_OPTIONS
+//            )
+//        }
 
         super.updateFromItem(item, dateFormat)
     }

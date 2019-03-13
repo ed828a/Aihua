@@ -4,6 +4,7 @@ package com.dew.aihua.ui.fragment
 import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -16,7 +17,6 @@ import com.dew.aihua.infolist.adapter.InfoItemDialog
 import com.dew.aihua.infolist.adapter.InfoListAdapter
 import com.dew.aihua.local.dialog.PlaylistAppendDialog
 import com.dew.aihua.player.helper.AnimationUtils.animateView
-import com.dew.aihua.player.helper.ExtractorHelper
 import com.dew.aihua.player.playqueque.queque.SinglePlayQueue
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.ui.contract.ListViewContract
@@ -24,19 +24,18 @@ import com.dew.aihua.ui.contract.OnScrollBelowItemsListener
 import com.dew.aihua.util.NavigationHelper
 import com.dew.aihua.util.OnClickGesture
 import com.dew.aihua.util.StateSaver
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import org.schabi.newpipe.extractor.InfoItem
 import org.schabi.newpipe.extractor.channel.ChannelInfoItem
 import org.schabi.newpipe.extractor.playlist.PlaylistInfoItem
-import org.schabi.newpipe.extractor.stream.StreamInfo
 import org.schabi.newpipe.extractor.stream.StreamInfoItem
 import java.util.*
+
 
 /**
  *  Created by Edward on 3/2/2019.
  */
-abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract<I, N>, StateSaver.WriteRead, SharedPreferences.OnSharedPreferenceChangeListener {
+abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract<I, N>, StateSaver.WriteRead,
+    SharedPreferences.OnSharedPreferenceChangeListener {
 
     ///////////////////////////////////////////////////////////////////////////
     // Views
@@ -58,20 +57,34 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
 
     protected open fun getListHeader(): View? = null
 
-    protected open fun getListFooter(): View = activity!!.layoutInflater.inflate(R.layout.pignate_footer, itemsList, false)
+    protected open fun getListFooter(): View =
+        activity!!.layoutInflater.inflate(R.layout.pignate_footer, itemsList, false)
 
-    private fun getListLayoutManager(): androidx.recyclerview.widget.RecyclerView.LayoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+    private fun getListLayoutManager(): androidx.recyclerview.widget.RecyclerView.LayoutManager =
+        androidx.recyclerview.widget.LinearLayoutManager(activity)
 
     private fun getGridLayoutManager(): androidx.recyclerview.widget.RecyclerView.LayoutManager {
         val resources = activity!!.resources
 //        var width = resources.getDimensionPixelSize(R.dimen.video_item_grid_thumbnail_image_width)
 //        width += (24 * resources.displayMetrics.density).toInt()
 
-        val width = if(resources.displayMetrics.widthPixels > resources.displayMetrics.heightPixels ){
-            resources.displayMetrics.widthPixels / 2
+//        val width = if (resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK == Configuration.SCREENLAYOUT_SIZE_XLARGE){
+//            resources.getDimensionPixelSize(R.dimen.large_video_item_grid_thumbnail_image_width) + (24 * resources.displayMetrics.density).toInt()
+//        } else {
+        val width = if (resources.displayMetrics.widthPixels > resources.displayMetrics.heightPixels) {
+            if (resources.getBoolean(R.bool.isTablet))
+                resources.displayMetrics.widthPixels / 3
+            else
+                resources.displayMetrics.widthPixels / 2
         } else {
-            resources.displayMetrics.widthPixels
+            if (resources.getBoolean(R.bool.isTablet))
+                resources.displayMetrics.widthPixels / 2
+            else
+                resources.displayMetrics.widthPixels
         }
+//        }
+        Log.d(TAG, "resources.displayMetrics.widthPixels = ${resources.displayMetrics.widthPixels}")
+
         val spanCount = Math.floor(resources.displayMetrics.widthPixels / width.toDouble()).toInt()
         val layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, spanCount)
         layoutManager.spanSizeLookup = infoListAdapter!!.getSpanSizeLookup(spanCount)
@@ -181,10 +194,12 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
             override fun selected(selectedItem: ChannelInfoItem) {
                 try {
                     onItemSelected(selectedItem)
-                    NavigationHelper.openChannelFragment(getFM(),
+                    NavigationHelper.openChannelFragment(
+                        getFM(),
                         selectedItem.serviceId,
                         selectedItem.url,
-                        selectedItem.name)
+                        selectedItem.name
+                    )
                 } catch (e: Exception) {
                     val context = getActivity()
                     context?.let {
@@ -199,13 +214,15 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
             override fun selected(selectedItem: PlaylistInfoItem) {
                 try {
                     onItemSelected(selectedItem)
-                    NavigationHelper.openPlaylistFragment(getFM(),
+                    NavigationHelper.openPlaylistFragment(
+                        getFM(),
                         selectedItem.serviceId,
                         selectedItem.url,
-                        selectedItem.name)
+                        selectedItem.name
+                    )
                 } catch (e: Exception) {
                     val context = getActivity()
-                    context?.let{
+                    context?.let {
                         ErrorActivity.reportUiError(it as AppCompatActivity, e)
                     }
 
@@ -233,7 +250,10 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
             NavigationHelper.openAnchorPlayer(activity!!, selectedItem.serviceId, selectedItem.url, selectedItem.name)
 //        NavigationHelper.openVideoDetailFragment(getFM(), selectedItem.serviceId, selectedItem.url, selectedItem.name)
         } else {
-            Log.d(TAG, "onStreamSelected() Error: selectedItem.url = ${selectedItem.url}, selectedItem.name = ${selectedItem.name} ")
+            Log.d(
+                TAG,
+                "onStreamSelected() Error: selectedItem.url = ${selectedItem.url}, selectedItem.name = ${selectedItem.name} "
+            )
         }
     }
 
@@ -248,7 +268,12 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
         val activity = getActivity()
         if (context == null || context.resources == null || getActivity() == null) return
 
-        val commands = arrayOf(context.resources.getString(R.string.enqueue_on_background), context.resources.getString(R.string.enqueue_on_popup), context.resources.getString(R.string.append_playlist), context.resources.getString(R.string.share))
+        val commands = arrayOf(
+            context.resources.getString(R.string.enqueue_on_background),
+            context.resources.getString(R.string.enqueue_on_popup),
+            context.resources.getString(R.string.append_playlist),
+            context.resources.getString(R.string.share)
+        )
 
         val actions = DialogInterface.OnClickListener { _, which ->
             when (which) {
@@ -299,7 +324,7 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
 
     override fun showLoading() {
         super.showLoading()
-         animateView(itemsList!!, false, 400)
+        animateView(itemsList!!, false, 400)
     }
 
     override fun hideLoading() {

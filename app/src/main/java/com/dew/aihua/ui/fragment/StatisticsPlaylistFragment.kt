@@ -65,7 +65,7 @@ class StatisticsPlaylistFragment : BaseLocalListFragment<List<StreamStatisticsEn
     }
 
     private fun processResult(results: List<StreamStatisticsEntry>): List<StreamStatisticsEntry>? {
-        val convertList: MutableList<StreamStatisticsEntry> = arrayListOf()
+        val convertList: MutableList<StreamStatisticsEntry> = arrayListOf<StreamStatisticsEntry>()
         convertList.addAll(results)
         when (sortMode) {
             StatisticSortMode.LAST_PLAYED -> {
@@ -139,7 +139,7 @@ class StatisticsPlaylistFragment : BaseLocalListFragment<List<StreamStatisticsEn
             override fun selected(selectedItem: LocalItem) {
                 if (selectedItem is StreamStatisticsEntry) {
                     context?.applicationContext?.sendBroadcast(Intent(ACTION_CLOSE))
-
+                    showLoading()
                     NavigationHelper.openAnchorPlayer(activity!!, selectedItem.serviceId, selectedItem.url, selectedItem.title)
 
 //                    NavigationHelper.openVideoDetailFragment(getFM(), selectedItem.serviceId, selectedItem.url, selectedItem.title)
@@ -168,6 +168,11 @@ class StatisticsPlaylistFragment : BaseLocalListFragment<List<StreamStatisticsEn
     ///////////////////////////////////////////////////////////////////////////
     // Fragment LifeCycle - Destruction
     ///////////////////////////////////////////////////////////////////////////
+
+    override fun onResume() {
+        super.onResume()
+        hideLoading()
+    }
 
     override fun onPause() {
         super.onPause()

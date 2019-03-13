@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/cardview_padding"
     android:backgroundTint="@android:color/black"
-    android:orientation="vertical"
     app:cardElevation="8dp"
     app:cardCornerRadius="8dp">
 
@@ -14,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/itemRoot"
+        android:layout_gravity="center"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ImageView

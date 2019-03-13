@@ -8,4 +8,4 @@ import com.dew.aihua.local.adapter.LocalItemBuilder
  *  Created by Edward on 3/2/2019.
  */
 class LocalStatisticStreamGridItemHolder(infoItemBuilder: LocalItemBuilder, parent: ViewGroup)
-    : LocalStatisticStreamItemHolder(infoItemBuilder, R.layout.list_stream_grid_item, parent)
+    : LocalStatisticStreamItemHolder(infoItemBuilder, R.layout.list_stream_grid_item_cardview, parent)
