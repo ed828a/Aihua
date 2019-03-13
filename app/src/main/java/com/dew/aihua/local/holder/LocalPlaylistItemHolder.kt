@@ -17,7 +17,7 @@ open class LocalPlaylistItemHolder : PlaylistItemHolder {
 
     constructor(infoItemBuilder: LocalItemBuilder, parent: ViewGroup) : super(infoItemBuilder, parent)
 
-    internal constructor(infoItemBuilder: LocalItemBuilder, layoutId: Int, parent: ViewGroup) : super(infoItemBuilder, layoutId, parent) {}
+    internal constructor(infoItemBuilder: LocalItemBuilder, layoutId: Int, parent: ViewGroup) : super(infoItemBuilder, layoutId, parent)
 
     override fun updateFromItem(item: LocalItem, dateFormat: DateFormat) {
         if (item !is PlaylistMetadataEntry) return
@@ -29,7 +29,7 @@ open class LocalPlaylistItemHolder : PlaylistItemHolder {
         itemBuilder.displayImage(item.thumbnailUrl, itemThumbnailView,
             ImageDisplayConstants.DISPLAY_PLAYLIST_OPTIONS)
 
-        if (!TextUtils.isEmpty(item.thumbnailUrl)) {
+        if (!TextUtils.isEmpty(item.thumbnailUrl) && itemUploaderThumbnail != null) {
             itemBuilder.displayImage(
                 item.thumbnailUrl, itemUploaderThumbnail,
                 ImageDisplayConstants.DISPLAY_AVATAR_OPTIONS
