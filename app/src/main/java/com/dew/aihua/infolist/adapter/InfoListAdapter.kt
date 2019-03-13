@@ -126,13 +126,13 @@ class InfoListAdapter(activity: Activity) : androidx.recyclerview.widget.Recycle
         if (header != null) count++
         if (footer != null && showFooter) count++
 
-        Log.d(TAG, "getItemCount() called, count = $count, infoItemList.size() = ${itemsList.size}, header = $header, footer = $footer, showFooter = $showFooter")
+//        Log.d(TAG, "getItemCount() called, count = $count, infoItemList.size() = ${itemsList.size}, header = $header, footer = $footer, showFooter = $showFooter")
         return count
     }
 
     override fun getItemViewType(pos: Int): Int {
         var position = pos
-        Log.d(TAG, "getItemViewType() called with: pos = [$position]")
+//        Log.d(TAG, "getItemViewType() called with: pos = [$position]")
 
         if (header != null && position == 0) {
             return HEADER_TYPE
@@ -165,7 +165,7 @@ class InfoListAdapter(activity: Activity) : androidx.recyclerview.widget.Recycle
                 -1
             }
         }
-        Log.d(TAG, "getItemViewType($pos): viewType = $viewType")
+//        Log.d(TAG, "getItemViewType($pos): viewType = $viewType")
         return viewType
     }
 

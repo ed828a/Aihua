@@ -210,4 +210,7 @@ class MainFragment : BaseFragment(), TabLayout.OnTabSelectedListener {
                 .commitNowAllowingStateLoss()
         }
     }
+    companion object {
+        private val TAG = MainFragment::class.java.simpleName
+    }
 }

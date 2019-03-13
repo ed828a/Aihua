@@ -185,4 +185,8 @@ abstract class BaseListInfoFragment<I : ListInfo<*>> : BaseListFragment<I, ListE
         this.url = url
         this.name = if (!TextUtils.isEmpty(name)) name else ""
     }
+
+    companion object {
+        private const val TAG = "BaseListInfoFragment"
+    }
 }

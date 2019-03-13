@@ -20,7 +20,7 @@ import icepick.State
 
 abstract class BaseFragment : androidx.fragment.app.Fragment() {
 
-    protected val TAG = this::class.java.simpleName + "@" + Integer.toHexString(Companion.hashCode())
+    private val TAG = this::class.java.simpleName + "@" + Integer.toHexString(Companion.hashCode())
 
     protected var activity: AppCompatActivity? = null
 

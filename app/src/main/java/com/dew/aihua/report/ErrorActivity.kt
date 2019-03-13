@@ -213,7 +213,7 @@ class ErrorActivity : AppCompatActivity() {
             if (rootView != null) {
                 Snackbar.make(rootView, R.string.error_snackbar_message, 3 * 1000)
                     .setActionTextColor(Color.YELLOW)
-                    .setAction(R.string.error_snackbar_action) { v -> startErrorActivity(returnActivity, context, errorInfo, el) }.show()
+                    .setAction(R.string.error_snackbar_action) { startErrorActivity(returnActivity, context, errorInfo, el) }.show()
             } else {
                 startErrorActivity(returnActivity, context, errorInfo, el)
             }

@@ -380,6 +380,7 @@ class PlaylistFragment : BaseListInfoFragment<PlaylistInfo>() {
     }
 
     companion object {
+        private val TAG = PlaylistFragment::class.java.simpleName
 
         fun getInstance(serviceId: Int, url: String, name: String): PlaylistFragment {
             val instance = PlaylistFragment()

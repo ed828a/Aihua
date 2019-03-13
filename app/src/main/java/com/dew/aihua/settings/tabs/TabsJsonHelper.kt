@@ -23,7 +23,7 @@ object TabsJsonHelper {
         Arrays.asList(
             Tab.KioskTab(ServiceList.YouTube.serviceId, "Trending"),
             Tab.Type.SUBSCRIPTIONS.tab,
-            Tab.Type.BOOKMARKS.tab
+            Tab.Type.HISTORY.tab
         )
     )
 

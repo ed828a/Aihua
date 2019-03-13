@@ -372,7 +372,7 @@ class MainActivity : AppCompatActivity(){
         val fragment = supportFragmentManager.findFragmentById(R.id.fragment_holder)
         if (fragment !is VideoDetailFragment) {
 //            findViewById<View>(R.id.toolbar).findViewById<View>(R.id.toolbarSpinner).visibility = View.GONE
-            findViewById<View>(R.id.toolbar).findViewById<Spinner>(R.id.toolbar_spinner).visibility = View.GONE
+            findViewById<View>(R.id.toolbar).findViewById<View>(R.id.toolbar_spinner).visibility = View.GONE
         }
 
         if (fragment !is SearchFragment) {

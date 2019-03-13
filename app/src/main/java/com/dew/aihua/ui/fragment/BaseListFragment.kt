@@ -362,6 +362,7 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
     }
 
     companion object {
+        private const val TAG = "BaseListFragment"
         private const val FLAG_NO_UPDATE = 0
         private const val LIST_MODE_UPDATE_FLAG = 0x32
     }

@@ -526,6 +526,7 @@ open class LocalPlaylistFragment : BaseLocalListFragment<List<PlaylistStreamEntr
     }
 
     companion object {
+        private val TAG = LocalPlaylistFragment::class.java.simpleName
 
         // Save the list 10 seconds after the last change occurred
         private const val SAVE_DEBOUNCE_MILLIS: Long = 10000

@@ -206,7 +206,9 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
 
         if (suggestionDisposable == null || suggestionDisposable!!.isDisposed) initSuggestionObserver()
 
-        if (TextUtils.isEmpty(searchString) || wasSearchFocused) {
+        if (TextUtils.isEmpty(searchString)
+//            || wasSearchFocused
+        ) {
             showKeyboardSearch()
             showSuggestionsPanel()
         } else {
@@ -293,7 +295,7 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
             search(searchText, arrayOf(), "")
         } else {
             searchEditText.setText("")
-            showKeyboardSearch()
+//            showKeyboardSearch()
             animateView(errorPanelRoot, false, 200)
         }
     }
@@ -397,10 +399,10 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
         }
 
         searchEditText.setOnFocusChangeListener { v: View, hasFocus: Boolean ->
-            Log.d(TAG, "searchEditText.onFocusChange(): v = [$v], hasFocus = [$hasFocus]")
-            if (isSuggestionsEnabled && hasFocus && errorPanelRoot.visibility != View.VISIBLE) {
-                showSuggestionsPanel()
-            }
+            Log.d(TAG, "searchEditText.onFocusChange(): hasFocus = [$hasFocus], v = [$v]")
+//            if (isSuggestionsEnabled && hasFocus && errorPanelRoot.visibility != View.VISIBLE) {
+//                showSuggestionsPanel()
+//            }
         }
 
         suggestionListAdapter.setListener(object : SuggestionListAdapter.OnSuggestionItemSelected {
@@ -438,6 +440,9 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
             Log.d(TAG, "searchEditText.onEditorAction() : v = [$v], actionId = [$actionId], event = [$event]")
 
             if (event != null && (event.keyCode == KeyEvent.KEYCODE_ENTER || event.action == EditorInfo.IME_ACTION_SEARCH)) {
+                Log.d(TAG, "searchEditText.onEditorAction() : event.keyCode = ${event.keyCode}, event.action = ${event.action} ")
+                hideSuggestionsPanel()
+                hideKeyboardSearch()
                 search(searchEditText.text.toString(), arrayOf(), "")
                 return@setOnEditorActionListener true
             }
@@ -854,7 +859,7 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
     }
 
     companion object {
-
+        private const val TAG = "SearchFragment"
         ///////////////////////////////////////////////////////////////////////////
         // Search
         ///////////////////////////////////////////////////////////////////////////

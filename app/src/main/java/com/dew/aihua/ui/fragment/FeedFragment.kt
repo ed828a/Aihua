@@ -413,6 +413,8 @@ class FeedFragment : BaseListFragment<List<SubscriptionEntity>, Void>() {
     }
 
     companion object {
+        private val TAG = FeedFragment::class.java.simpleName
+
         private const val OFF_SCREEN_ITEMS_COUNT = 3
         private const val MIN_ITEMS_INITIAL_LOAD = 8
         private var FEED_LOAD_COUNT = MIN_ITEMS_INITIAL_LOAD

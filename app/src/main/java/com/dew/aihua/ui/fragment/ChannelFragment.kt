@@ -420,6 +420,7 @@ class ChannelFragment : BaseListInfoFragment<ChannelInfo>() {
     }
 
     companion object {
+        private val TAG = ChannelFragment::class.java.simpleName
 
         fun getInstance(serviceId: Int, url: String, name: String): ChannelFragment {
             val instance = ChannelFragment()

@@ -201,6 +201,8 @@ class SubscriptionsImportFragment : BaseFragment() {
     }
 
     companion object {
+        private val TAG = SubscriptionsImportFragment::class.java.simpleName
+
         private const val REQUEST_IMPORT_FILE_CODE = 666
 
         fun getInstance(serviceId: Int): SubscriptionsImportFragment {

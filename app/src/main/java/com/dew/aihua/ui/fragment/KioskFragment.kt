@@ -120,6 +120,7 @@ class KioskFragment : BaseListInfoFragment<KioskInfo>() {
     }
 
     companion object {
+        private val TAG = KioskFragment::class.java.simpleName
 
         @Throws(ExtractionException::class)
         @JvmOverloads

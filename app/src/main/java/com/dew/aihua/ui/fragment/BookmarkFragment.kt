@@ -258,4 +258,8 @@ class BookmarkFragment : BaseLocalListFragment<List<PlaylistLocalItem>, Void>() 
 
         return items
     }
+
+    companion object {
+        private val TAG = BookmarkFragment::class.java.simpleName
+    }
 }

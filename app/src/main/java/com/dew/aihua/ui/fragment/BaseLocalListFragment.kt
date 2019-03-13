@@ -212,6 +212,7 @@ abstract class BaseLocalListFragment<I, N> : BaseStateFragment<I>(), ListViewCon
     }
 
     companion object {
+        private val TAG = BaseLocalListFragment::class.java.simpleName
         const val FLAG_NO_UPDATE = 0
         private const val LIST_MODE_UPDATE_FLAG = 0x32
     }

@@ -271,4 +271,8 @@ abstract class BaseStateFragment<I> : BaseFragment(), ViewContract<I> {
                 else -> false
             }
         }
+
+    companion object {
+        private val TAG = BaseStateFragment::class.java.simpleName
+    }
 }

@@ -150,8 +150,16 @@ open class StreamMiniInfoItemHolder(infoItemBuilder: InfoItemBuilder, layoutId: 
 
 
     private fun enableLongClick(item: StreamInfoItem) {
-        itemView.isLongClickable = true
-        itemView.setOnLongClickListener {
+//        itemView.isLongClickable = true
+//        itemView.setOnLongClickListener {
+//            if (itemBuilder.onStreamSelectedListener != null) {
+//                itemBuilder.onStreamSelectedListener?.held(item)
+//            }
+//            true
+//        }
+
+        itemThumbnailView.isLongClickable = true
+        itemThumbnailView.setOnLongClickListener {
             if (itemBuilder.onStreamSelectedListener != null) {
                 itemBuilder.onStreamSelectedListener?.held(item)
             }
@@ -160,8 +168,10 @@ open class StreamMiniInfoItemHolder(infoItemBuilder: InfoItemBuilder, layoutId: 
     }
 
     private fun disableLongClick() {
-        itemView.isLongClickable = false
-        itemView.setOnLongClickListener(null)
+//        itemView.isLongClickable = false
+//        itemView.setOnLongClickListener(null)
+        itemThumbnailView.isLongClickable = false
+        itemThumbnailView.setOnLongClickListener(null)
     }
 
 

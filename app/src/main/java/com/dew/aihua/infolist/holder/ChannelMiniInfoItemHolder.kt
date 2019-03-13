@@ -35,7 +35,7 @@ open class ChannelMiniInfoItemHolder(infoItemBuilder: InfoItemBuilder,
                 itemThumbnailView,
                 ImageDisplayConstants.DISPLAY_THUMBNAIL_OPTIONS)
 
-        itemView.setOnClickListener { _ ->
+        itemView.setOnClickListener {
             if (itemBuilder.onChannelSelectedListener != null) {
                 itemBuilder.onChannelSelectedListener!!.selected(infoItem)
             }

@@ -1293,6 +1293,8 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(),
     }
 
     companion object {
+        private val TAG = VideoDetailFragment::class.java.simpleName
+
         const val AUTO_PLAY = "auto_play"
 
         // Amount of videos to show on start
