@@ -559,7 +559,7 @@ class VideoDetailFragment : BaseStateFragment<StreamInfo>(),
             }
 
             BaseFragment.imageLoader.displayImage(
-                info.thumbnailUrl, thumbnailImageView,
+                info.uploaderAvatarUrl, thumbnailImageView,
                 ImageDisplayConstants.DISPLAY_THUMBNAIL_OPTIONS, onFailListener
             )
         }

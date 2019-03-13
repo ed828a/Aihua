@@ -64,8 +64,14 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
 
     private fun getGridLayoutManager(): androidx.recyclerview.widget.RecyclerView.LayoutManager {
         val resources = activity!!.resources
-        var width = resources.getDimensionPixelSize(R.dimen.video_item_grid_thumbnail_image_width)
-        width += (24 * resources.displayMetrics.density).toInt()
+//        var width = resources.getDimensionPixelSize(R.dimen.video_item_grid_thumbnail_image_width)
+//        width += (24 * resources.displayMetrics.density).toInt()
+
+        val width = if(resources.displayMetrics.widthPixels > resources.displayMetrics.heightPixels ){
+            resources.displayMetrics.widthPixels / 2
+        } else {
+            resources.displayMetrics.widthPixels
+        }
         val spanCount = Math.floor(resources.displayMetrics.widthPixels / width.toDouble()).toInt()
         val layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, spanCount)
         layoutManager.spanSizeLookup = infoListAdapter!!.getSpanSizeLookup(spanCount)

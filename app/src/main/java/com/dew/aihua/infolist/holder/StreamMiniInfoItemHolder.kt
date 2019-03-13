@@ -1,19 +1,27 @@
 package com.dew.aihua.infolist.holder
 
 import android.content.Intent
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.dew.aihua.R
 import com.dew.aihua.infolist.adapter.InfoItemBuilder
 import com.dew.aihua.player.helper.ImageDisplayConstants
 import com.dew.aihua.player.helper.Localization
 import com.dew.aihua.player.playerUI.PopupVideoPlayer.Companion.ACTION_CLOSE
+import com.dew.aihua.report.ErrorActivity
+import com.dew.aihua.ui.fragment.BaseFragment
 import com.dew.aihua.ui.fragment.VideoDetailFragment
+import com.dew.aihua.util.NavigationHelper
+import com.nostra13.universalimageloader.core.ImageLoader
+import de.hdodenhof.circleimageview.CircleImageView
 import org.schabi.newpipe.extractor.InfoItem
+import org.schabi.newpipe.extractor.stream.StreamInfo
 import org.schabi.newpipe.extractor.stream.StreamInfoItem
 import org.schabi.newpipe.extractor.stream.StreamType
 
@@ -27,6 +35,7 @@ open class StreamMiniInfoItemHolder(infoItemBuilder: InfoItemBuilder, layoutId: 
     val itemVideoTitleView: TextView = itemView.findViewById(R.id.itemVideoTitleView)
     val itemUploaderView: TextView = itemView.findViewById(R.id.itemUploaderView)
     val itemDurationView: TextView = itemView.findViewById(R.id.itemDurationView)
+    val itemUploaderThumbnail: CircleImageView = itemView.findViewById(R.id.detail_uploader_thumbnail_view)
 
     constructor(infoItemBuilder: InfoItemBuilder, parent: ViewGroup) : this(
         infoItemBuilder,
@@ -40,6 +49,20 @@ open class StreamMiniInfoItemHolder(infoItemBuilder: InfoItemBuilder, layoutId: 
 
         itemVideoTitleView.text = infoItem.name
         itemUploaderView.text = infoItem.uploaderName
+
+        if (infoItem is StreamInfo && !TextUtils.isEmpty(infoItem.uploaderAvatarUrl)) {
+            ImageLoader.getInstance().displayImage(
+                infoItem.uploaderAvatarUrl, itemUploaderThumbnail,
+                ImageDisplayConstants.DISPLAY_AVATAR_OPTIONS
+            )
+        } else {
+            if (!TextUtils.isEmpty(infoItem.thumbnailUrl)) {
+                ImageLoader.getInstance().displayImage(
+                    infoItem.thumbnailUrl, itemUploaderThumbnail,
+                    ImageDisplayConstants.DISPLAY_AVATAR_OPTIONS
+                )
+            }
+        }
 
         when {
             infoItem.duration > 0 -> {
@@ -73,7 +96,7 @@ open class StreamMiniInfoItemHolder(infoItemBuilder: InfoItemBuilder, layoutId: 
                 ImageDisplayConstants.DISPLAY_THUMBNAIL_OPTIONS
             )
 
-        itemView.setOnClickListener { view ->
+        val listener: (view: View) -> Unit = { view ->
             val fragment =
                 (view.context as androidx.fragment.app.FragmentActivity).supportFragmentManager.findFragmentById(R.id.fragment_holder)
 
@@ -91,6 +114,30 @@ open class StreamMiniInfoItemHolder(infoItemBuilder: InfoItemBuilder, layoutId: 
                 itemBuilder.onStreamSelectedListener?.selected(infoItem)
             }
         }
+        itemVideoTitleView.setOnClickListener(listener)
+        itemThumbnailView.setOnClickListener(listener)
+
+        val listener2: (view: View) -> Unit = { view ->
+            if (TextUtils.isEmpty(infoItem.uploaderUrl)) {
+                Log.w(TAG, "Can't open channel because we got no channel URL")
+            } else {
+                try {
+                    NavigationHelper.openChannelFragment(
+                        (view.context as androidx.fragment.app.FragmentActivity).supportFragmentManager,
+                        infoItem.serviceId,
+                        infoItem.uploaderUrl,
+                        infoItem.uploaderName
+                    )
+                } catch (e: Exception) {
+                    val context = itemView.context
+                    context?.let {
+                        ErrorActivity.reportUiError(it as AppCompatActivity, e)
+                    }
+                }
+            }
+        }
+        itemUploaderThumbnail.setOnClickListener(listener2)
+        itemUploaderView.setOnClickListener(listener2)
 
         when (infoItem.streamType) {
             StreamType.AUDIO_STREAM, StreamType.VIDEO_STREAM, StreamType.LIVE_STREAM, StreamType.AUDIO_LIVE_STREAM -> enableLongClick(

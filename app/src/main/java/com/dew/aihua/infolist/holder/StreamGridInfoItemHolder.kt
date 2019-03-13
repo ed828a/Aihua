@@ -9,7 +9,7 @@ import com.dew.aihua.infolist.adapter.InfoItemBuilder
 /**
  *  Created by Edward on 3/2/2019.
  */
-class StreamGridInfoItemHolder(infoItemBuilder: InfoItemBuilder, parent: ViewGroup) : StreamMiniInfoItemHolder(infoItemBuilder, R.layout.list_stream_grid_item_constraint, parent){
+class StreamGridInfoItemHolder(infoItemBuilder: InfoItemBuilder, parent: ViewGroup) : StreamMiniInfoItemHolder(infoItemBuilder, R.layout.list_stream_grid_item_cardview, parent){
     init {
         Log.d(TAG, "StreamGridInfoItemHolder, init() parent = $parent")
 //        val params = RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
