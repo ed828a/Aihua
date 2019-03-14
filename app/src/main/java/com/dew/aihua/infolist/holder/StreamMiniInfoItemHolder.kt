@@ -15,10 +15,8 @@ import com.dew.aihua.player.helper.ImageDisplayConstants
 import com.dew.aihua.player.helper.Localization
 import com.dew.aihua.player.playerUI.PopupVideoPlayer.Companion.ACTION_CLOSE
 import com.dew.aihua.report.ErrorActivity
-import com.dew.aihua.ui.fragment.BaseFragment
 import com.dew.aihua.ui.fragment.VideoDetailFragment
 import com.dew.aihua.util.NavigationHelper
-import com.nostra13.universalimageloader.core.ImageLoader
 import de.hdodenhof.circleimageview.CircleImageView
 import org.schabi.newpipe.extractor.InfoItem
 import org.schabi.newpipe.extractor.stream.StreamInfo
@@ -35,7 +33,7 @@ open class StreamMiniInfoItemHolder(infoItemBuilder: InfoItemBuilder, layoutId: 
     val itemVideoTitleView: TextView = itemView.findViewById(R.id.itemVideoTitleView)
     val itemUploaderView: TextView = itemView.findViewById(R.id.itemUploaderView)
     val itemDurationView: TextView = itemView.findViewById(R.id.itemDurationView)
-    val itemUploaderThumbnail: CircleImageView = itemView.findViewById(R.id.detail_uploader_thumbnail_view)
+    private val itemUploaderThumbnail: CircleImageView? = itemView.findViewById(R.id.detail_uploader_thumbnail_view)
 
     constructor(infoItemBuilder: InfoItemBuilder, parent: ViewGroup) : this(
         infoItemBuilder,
@@ -50,19 +48,22 @@ open class StreamMiniInfoItemHolder(infoItemBuilder: InfoItemBuilder, layoutId: 
         itemVideoTitleView.text = infoItem.name
         itemUploaderView.text = infoItem.uploaderName
 
-        if (infoItem is StreamInfo && !TextUtils.isEmpty(infoItem.uploaderAvatarUrl)) {
-            itemBuilder.imageLoader.displayImage(
-                infoItem.uploaderAvatarUrl, itemUploaderThumbnail,
-                ImageDisplayConstants.DISPLAY_AVATAR_OPTIONS
-            )
-        } else {
-            if (!TextUtils.isEmpty(infoItem.thumbnailUrl)) {
+        itemUploaderThumbnail?.let {itemUploaderThumbnail ->
+            if (infoItem is StreamInfo && !TextUtils.isEmpty(infoItem.uploaderAvatarUrl)) {
                 itemBuilder.imageLoader.displayImage(
-                    infoItem.thumbnailUrl, itemUploaderThumbnail,
+                    infoItem.uploaderAvatarUrl, itemUploaderThumbnail,
                     ImageDisplayConstants.DISPLAY_AVATAR_OPTIONS
                 )
+            } else {
+                if (!TextUtils.isEmpty(infoItem.thumbnailUrl)) {
+                    itemBuilder.imageLoader.displayImage(
+                        infoItem.thumbnailUrl, itemUploaderThumbnail,
+                        ImageDisplayConstants.DISPLAY_AVATAR_OPTIONS
+                    )
+                }
             }
         }
+
 
         when {
             infoItem.duration > 0 -> {
@@ -136,7 +137,7 @@ open class StreamMiniInfoItemHolder(infoItemBuilder: InfoItemBuilder, layoutId: 
                 }
             }
         }
-        itemUploaderThumbnail.setOnClickListener(listener2)
+        itemUploaderThumbnail?.setOnClickListener(listener2)
         itemUploaderView.setOnClickListener(listener2)
 
         when (infoItem.streamType) {

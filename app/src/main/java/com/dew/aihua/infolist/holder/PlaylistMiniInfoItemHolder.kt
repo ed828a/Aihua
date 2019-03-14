@@ -24,7 +24,7 @@ open class PlaylistMiniInfoItemHolder(infoItemBuilder: InfoItemBuilder, layoutId
     val itemTitleView: TextView = itemView.findViewById(R.id.itemTitleView)
     val itemUploaderView: TextView = itemView.findViewById(R.id.itemUploaderView)
     val itemStreamCountView: TextView = itemView.findViewById(R.id.itemStreamCountView)
-    val itemUploaderThumbnail: CircleImageView = itemView.findViewById(R.id.detail_uploader_thumbnail_view)
+    val itemUploaderThumbnail: CircleImageView? = itemView.findViewById(R.id.detail_uploader_thumbnail_view)
 
 
     constructor(infoItemBuilder: InfoItemBuilder, parent: ViewGroup) : this(infoItemBuilder, R.layout.list_playlist_mini_item, parent)
@@ -36,7 +36,7 @@ open class PlaylistMiniInfoItemHolder(infoItemBuilder: InfoItemBuilder, layoutId
         itemStreamCountView.text = infoItem.streamCount.toString()
         itemUploaderView.text = infoItem.uploaderName
 
-        if (!TextUtils.isEmpty(infoItem.thumbnailUrl) ) {
+        if (itemUploaderThumbnail != null && !TextUtils.isEmpty(infoItem.thumbnailUrl) ) {
             itemBuilder.imageLoader.displayImage(
                 infoItem.thumbnailUrl, itemUploaderThumbnail,
                 ImageDisplayConstants.DISPLAY_AVATAR_OPTIONS
