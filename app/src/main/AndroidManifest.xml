@@ -83,11 +83,11 @@
             android:label="@string/settings"/>
 
         <activity
-            android:name=".download.ui.activity.DownloadActivity"
+            android:name="com.dew.aihua.data.network.download.ui.activity.DownloadActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask" />
 
-        <activity android:name=".download.ui.activity.ExtSDDownloadFailedActivity" />
+        <activity android:name="com.dew.aihua.data.network.download.ui.activity.ExtSDDownloadFailedActivity" />
 
 
         <provider
@@ -111,9 +111,9 @@
         <service
             android:name=".player.playerUI.PopupVideoPlayer"
             android:exported="false" />
-        <service android:name=".download.service.DownloadManagerService" />
-        <service android:name=".local.subscription.service.SubscriptionsExportService" />
-        <service android:name=".local.subscription.service.SubscriptionsImportService" />
+        <service android:name="com.dew.aihua.data.network.download.service.DownloadManagerService" />
+        <service android:name="com.dew.aihua.ui.local.subscription.service.SubscriptionsExportService" />
+        <service android:name="com.dew.aihua.ui.local.subscription.service.SubscriptionsImportService" />
         <service android:name=".ui.activity.RouterActivity$FetcherService" />
 
         <receiver android:name="androidx.media.session.MediaButtonReceiver">

@@ -4,11 +4,9 @@ import android.app.Activity
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import com.dew.aihua.infolist.adapter.InfoItemBuilder
-import com.dew.aihua.infolist.adapter.InfoListAdapter
-import com.dew.aihua.infolist.holder.*
-import com.dew.aihua.player.playqueque.holder.FallbackViewHolder
+import com.dew.aihua.ui.infolist.adapter.InfoItemBuilder
+import com.dew.aihua.ui.infolist.adapter.InfoListAdapter
+import com.dew.aihua.ui.infolist.holder.*
 import com.dew.aihua.util.OnClickGesture
 import org.schabi.newpipe.extractor.InfoItem
 import org.schabi.newpipe.extractor.stream.StreamInfoItem

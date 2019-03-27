@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.dew.aihua.R
-import com.dew.aihua.database.subscription.SubscriptionEntity
-import com.dew.aihua.local.subscription.SubscriptionService
+import com.dew.aihua.data.local.database.subscription.SubscriptionEntity
+import com.dew.aihua.ui.local.subscription.SubscriptionService
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
 import com.dew.aihua.report.UserAction

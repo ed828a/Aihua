@@ -4,7 +4,6 @@ package com.dew.aihua.ui.fragment
 import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -13,9 +12,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.dew.aihua.R
-import com.dew.aihua.infolist.adapter.InfoItemDialog
-import com.dew.aihua.infolist.adapter.InfoListAdapter
-import com.dew.aihua.local.dialog.PlaylistAppendDialog
+import com.dew.aihua.ui.infolist.adapter.InfoItemDialog
+import com.dew.aihua.ui.infolist.adapter.InfoListAdapter
+import com.dew.aihua.ui.local.dialog.PlaylistAppendDialog
 import com.dew.aihua.player.helper.AnimationUtils.animateView
 import com.dew.aihua.player.playqueque.queque.SinglePlayQueue
 import com.dew.aihua.report.ErrorActivity

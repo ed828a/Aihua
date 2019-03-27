@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.AttrRes
 import com.dew.aihua.R
-import com.dew.aihua.ui.model.SuggestionItem
+import com.dew.aihua.data.model.SuggestionItem
 import java.util.ArrayList
 
 /**

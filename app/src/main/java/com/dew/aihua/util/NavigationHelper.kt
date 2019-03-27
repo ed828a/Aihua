@@ -12,7 +12,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.preference.PreferenceManager
 import com.dew.aihua.R
-import com.dew.aihua.download.ui.activity.DownloadActivity
+import com.dew.aihua.data.network.download.ui.activity.DownloadActivity
 import com.dew.aihua.player.helper.*
 import com.dew.aihua.player.playerUI.*
 import com.dew.aihua.player.playerUI.BasePlayer.Companion.PLAYBACK_QUALITY

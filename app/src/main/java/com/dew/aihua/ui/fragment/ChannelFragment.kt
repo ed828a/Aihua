@@ -14,10 +14,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.dew.aihua.R
-import com.dew.aihua.database.subscription.SubscriptionEntity
-import com.dew.aihua.infolist.adapter.InfoItemDialog
-import com.dew.aihua.local.dialog.PlaylistAppendDialog
-import com.dew.aihua.local.subscription.SubscriptionService
+import com.dew.aihua.data.local.database.subscription.SubscriptionEntity
+import com.dew.aihua.ui.infolist.adapter.InfoItemDialog
+import com.dew.aihua.ui.local.dialog.PlaylistAppendDialog
+import com.dew.aihua.ui.local.subscription.SubscriptionService
 import com.dew.aihua.player.helper.AnimationUtils
 import com.dew.aihua.player.helper.AnimationUtils.animateBackgroundColor
 import com.dew.aihua.player.helper.AnimationUtils.animateTextColor

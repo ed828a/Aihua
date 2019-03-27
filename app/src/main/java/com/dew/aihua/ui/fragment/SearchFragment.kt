@@ -18,7 +18,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.TooltipCompat
 import androidx.preference.PreferenceManager
 import com.dew.aihua.R
-import com.dew.aihua.local.history.HistoryRecordManager
+import com.dew.aihua.ui.local.history.HistoryRecordManager
 import com.dew.aihua.player.helper.AnimationUtils
 import com.dew.aihua.player.helper.AnimationUtils.animateView
 import com.dew.aihua.player.helper.Constants
@@ -30,7 +30,7 @@ import com.dew.aihua.report.UserAction
 import com.dew.aihua.ui.activity.ReCaptchaActivity
 import com.dew.aihua.ui.adapter.SuggestionListAdapter
 import com.dew.aihua.ui.contract.BackPressable
-import com.dew.aihua.ui.model.SuggestionItem
+import com.dew.aihua.data.model.SuggestionItem
 import com.dew.aihua.util.LayoutManagerSmoothScroller
 import com.dew.aihua.util.NavigationHelper
 import icepick.State

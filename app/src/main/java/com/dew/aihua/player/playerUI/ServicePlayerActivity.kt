@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.dew.aihua.R
-import com.dew.aihua.local.dialog.PlaylistAppendDialog
+import com.dew.aihua.ui.local.dialog.PlaylistAppendDialog
 import com.dew.aihua.player.dialog.PlaybackParameterDialog
 import com.dew.aihua.player.helper.Localization
 import com.dew.aihua.player.helper.PlayerHelper.formatPitch

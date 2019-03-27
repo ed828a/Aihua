@@ -26,7 +26,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:contentDescription="@string/todo"
-        android:src="@drawable/ic_aihua_launcher" />
+        android:src="@mipmap/ic_launcher_primary_background" />
 
     <TextView
         android:id="@+id/drawer_header_np_text_view"
@@ -45,11 +45,11 @@
     <TextView
         android:id="@+id/drawer_header_service_view"
         android:layout_width="wrap_content"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/drawer_header_np_text_view"
-        android:layout_alignStart="@id/drawer_header_np_text_view"
+        android:layout_alignStart="@id/drawer_header_np_nude_view"
         android:layout_alignEnd="@id/drawer_header_np_text_view"
-        android:text="@string/youtube"
+        android:text="@string/online_video"
         android:gravity="center_horizontal"
         android:textColor="@color/drawer_header_font_color"
         android:textSize="18sp"

@@ -254,7 +254,7 @@ class MainActivity : AppCompatActivity(){
         try {
             val selectedServiceName = NewPipe.getService(
                 ServiceHelper.getSelectedServiceId(this)).serviceInfo.name
-            headerServiceView!!.text = selectedServiceName
+//            headerServiceView!!.text = selectedServiceName
         } catch (e: Exception) {
             ErrorActivity.reportUiError(this, e)
         }
@@ -275,11 +275,6 @@ class MainActivity : AppCompatActivity(){
             NavigationHelper.openMainActivity(this)
         }
 
-        with(window){
-            clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            statusBarColor = ContextCompat.getColor(themedContext, R.color.dark_aihua_dark_color)
-        }
     }
 
     override fun onNewIntent(intent: Intent?) {

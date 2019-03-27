@@ -19,7 +19,7 @@ import com.dew.aihua.player.playback.PlaybackListener
 import com.dew.aihua.player.playqueque.adapter.PlayQueueAdapter
 import com.dew.aihua.player.playqueque.queque.PlayQueue
 import com.dew.aihua.R
-import com.dew.aihua.local.history.HistoryRecordManager
+import com.dew.aihua.ui.local.history.HistoryRecordManager
 import com.dew.aihua.player.helper.*
 import com.dew.aihua.player.mediasession.BasePlayerMediaSession
 import com.dew.aihua.player.mediasource.FailedMediaSource

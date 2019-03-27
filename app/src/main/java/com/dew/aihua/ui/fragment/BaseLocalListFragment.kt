@@ -8,7 +8,7 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.preference.PreferenceManager
 import com.dew.aihua.R
-import com.dew.aihua.local.adapter.LocalItemListAdapter
+import com.dew.aihua.ui.local.adapter.LocalItemListAdapter
 import com.dew.aihua.player.helper.AnimationUtils.animateView
 import com.dew.aihua.ui.contract.ListViewContract
 

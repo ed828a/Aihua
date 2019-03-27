@@ -10,7 +10,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.preference.Preference
 import com.dew.aihua.R
-import com.dew.aihua.database.AppDatabase.Companion.DATABASE_NAME
+import com.dew.aihua.data.local.database.AppDatabase.Companion.DATABASE_NAME
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
 import com.dew.aihua.report.UserAction

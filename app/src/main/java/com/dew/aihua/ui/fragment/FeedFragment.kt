@@ -6,8 +6,8 @@ import android.os.Handler
 import android.util.Log
 import android.view.*
 import com.dew.aihua.R
-import com.dew.aihua.database.subscription.SubscriptionEntity
-import com.dew.aihua.local.subscription.SubscriptionService
+import com.dew.aihua.data.local.database.subscription.SubscriptionEntity
+import com.dew.aihua.ui.local.subscription.SubscriptionService
 import com.dew.aihua.report.UserAction
 import io.reactivex.Flowable
 import io.reactivex.MaybeObserver

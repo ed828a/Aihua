@@ -9,10 +9,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.dew.aihua.R
-import com.dew.aihua.database.AppDatabase
-import com.dew.aihua.database.playlist.model.PlaylistRemoteEntity
-import com.dew.aihua.infolist.adapter.InfoItemDialog
-import com.dew.aihua.local.playlist.RemotePlaylistManager
+import com.dew.aihua.data.local.database.AppDatabase
+import com.dew.aihua.data.local.database.playlist.model.PlaylistRemoteEntity
+import com.dew.aihua.ui.infolist.adapter.InfoItemDialog
+import com.dew.aihua.ui.local.playlist.RemotePlaylistManager
 import com.dew.aihua.player.helper.AnimationUtils.animateView
 import com.dew.aihua.player.helper.ExtractorHelper
 import com.dew.aihua.player.helper.ImageDisplayConstants

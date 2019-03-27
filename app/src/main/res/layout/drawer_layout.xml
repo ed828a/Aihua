@@ -40,7 +40,7 @@
             android:id="@+id/settingsNavigation"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="?attr/aihua_primary_color"
+            android:background="?attr/windowBackground"
             android:src="?attr/ic_settings"
             tools:ignore="ContentDescription" />
         <TextView
@@ -51,7 +51,7 @@
             android:id="@+id/settingsAddTabNavigation"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="?attr/aihua_primary_color"
+            android:background="?attr/windowBackground"
             android:src="?attr/ic_add_tabs"
             tools:ignore="ContentDescription" />
         <TextView
@@ -63,7 +63,7 @@
             android:id="@+id/historyTabNavigation"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="?attr/aihua_primary_color"
+            android:background="?attr/windowBackground"
             android:src="?attr/ic_history"
             tools:ignore="ContentDescription" />
         <TextView

@@ -37,15 +37,6 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        with(window){
-            clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            statusBarColor = ContextCompat.getColor(themedContext, R.color.dark_aihua_dark_color)
-        }
-    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val actionBar = supportActionBar

@@ -15,8 +15,6 @@
         <item name="colorAccent">@color/light_youtube_accent_color</item>
         <item name="android:windowBackground">@color/light_background_color</item>
         <item name="windowBackground">@color/light_background_color</item>
-        <item name="aihua_primary_color">@color/light_background_color</item>
-
 
         <item name="thumbs_up">@drawable/ic_thumb_up_black_24dp</item>
         <item name="thumbs_down">@drawable/ic_thumb_down_black_24dp</item>
@@ -80,12 +78,11 @@
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/dark_aihua_primary_color</item>
+        <item name="colorPrimary">@color/dark_youtube_primary_color</item>
         <item name="colorPrimaryDark">@color/dark_youtube_dark_color</item>
         <item name="colorAccent">@color/dark_youtube_accent_color</item>
         <item name="android:windowBackground">@color/dark_background_color</item>
         <item name="windowBackground">@color/dark_background_color</item>
-        <item name="aihua_primary_color">@color/dark_aihua_primary_color</item>
 
         <item name="thumbs_up">@drawable/ic_thumb_up_white_24dp</item>
         <item name="thumbs_down">@drawable/ic_thumb_down_white_24dp</item>
@@ -147,7 +144,6 @@
     <style name="BlackTheme" parent="DarkTheme">
         <item name="android:windowBackground">@color/black_background_color</item>
         <item name="windowBackground">@color/black_background_color</item>
-        <item name="aihua_primary_color">@color/black_background_color</item>
         <item name="colorPrimary">@color/black_background_color</item>
 
         <item name="separator_color">@color/black_separator_color</item>
@@ -196,18 +192,6 @@
 
     <style name="Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">18sp</item>
-    </style>
-
-    <style name="OldVideoPlayerTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/light_youtube_primary_color</item>
-        <item name="colorPrimaryDark">@color/light_youtube_dark_color</item>
-        <item name="colorAccent">@color/light_youtube_accent_color</item>
-        <item name="android:windowFullscreen">false</item>
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="windowActionBarOverlay">true</item>
-        <item name="android:actionBarStyle">@style/OldVideoPlayerActionBarTheme</item>
-        <item name="actionBarStyle">@style/OldVideoPlayerActionBarTheme</item>
-        <item name="android:windowBackground">@android:color/black</item>
     </style>
 
     <style name="OldVideoPlayerActionBarTheme" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">

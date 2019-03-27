@@ -15,11 +15,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.dew.aihua.R
-import com.dew.aihua.database.AppDatabase
-import com.dew.aihua.database.LocalItem
-import com.dew.aihua.database.playlist.model.PlaylistStreamEntry
-import com.dew.aihua.infolist.adapter.InfoItemDialog
-import com.dew.aihua.local.playlist.LocalPlaylistManager
+import com.dew.aihua.data.local.database.AppDatabase
+import com.dew.aihua.data.local.database.LocalItem
+import com.dew.aihua.data.local.database.playlist.model.PlaylistStreamEntry
+import com.dew.aihua.ui.infolist.adapter.InfoItemDialog
+import com.dew.aihua.ui.local.playlist.LocalPlaylistManager
 import com.dew.aihua.player.helper.AnimationUtils.animateView
 import com.dew.aihua.player.helper.Localization
 import com.dew.aihua.player.playerUI.PopupVideoPlayer.Companion.ACTION_CLOSE

@@ -9,7 +9,6 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.text.Html
 import android.text.Html.FROM_HTML_MODE_LEGACY
 import android.text.Spanned
@@ -28,13 +27,13 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dew.aihua.R
-import com.dew.aihua.download.adapter.StreamItemAdapter
-import com.dew.aihua.download.ui.dialog.DownloadDialog
-import com.dew.aihua.infolist.adapter.InfoItemBuilder
-import com.dew.aihua.infolist.adapter.InfoItemDialog
-import com.dew.aihua.infolist.adapter.InfoListAdapter
-import com.dew.aihua.local.dialog.PlaylistAppendDialog
-import com.dew.aihua.local.history.HistoryRecordManager
+import com.dew.aihua.data.network.download.adapter.StreamItemAdapter
+import com.dew.aihua.data.network.download.ui.dialog.DownloadDialog
+import com.dew.aihua.ui.infolist.adapter.InfoItemBuilder
+import com.dew.aihua.ui.infolist.adapter.InfoItemDialog
+import com.dew.aihua.ui.infolist.adapter.InfoListAdapter
+import com.dew.aihua.ui.local.dialog.PlaylistAppendDialog
+import com.dew.aihua.ui.local.history.HistoryRecordManager
 import com.dew.aihua.player.helper.*
 import com.dew.aihua.player.helper.AnimationUtils.animateView
 import com.dew.aihua.player.playerUI.MainVideoPlayer
@@ -45,7 +44,7 @@ import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.UserAction
 import com.dew.aihua.ui.activity.ReCaptchaActivity
 import com.dew.aihua.ui.contract.BackPressable
-import com.dew.aihua.ui.model.StackItem
+import com.dew.aihua.data.model.StackItem
 import com.dew.aihua.util.NavigationHelper
 import com.dew.aihua.util.OnClickGesture
 import com.nirhart.parallaxscroll.views.ParallaxScrollView

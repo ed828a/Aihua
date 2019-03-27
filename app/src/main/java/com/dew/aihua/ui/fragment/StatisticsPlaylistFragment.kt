@@ -12,10 +12,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.dew.aihua.R
-import com.dew.aihua.database.LocalItem
-import com.dew.aihua.database.stream.model.StreamStatisticsEntry
-import com.dew.aihua.infolist.adapter.InfoItemDialog
-import com.dew.aihua.local.history.HistoryRecordManager
+import com.dew.aihua.data.local.database.LocalItem
+import com.dew.aihua.data.local.database.stream.model.StreamStatisticsEntry
+import com.dew.aihua.ui.infolist.adapter.InfoItemDialog
+import com.dew.aihua.ui.local.history.HistoryRecordManager
 import com.dew.aihua.player.helper.ThemeHelper
 import com.dew.aihua.player.playerUI.PopupVideoPlayer.Companion.ACTION_CLOSE
 import com.dew.aihua.player.playqueque.queque.PlayQueue

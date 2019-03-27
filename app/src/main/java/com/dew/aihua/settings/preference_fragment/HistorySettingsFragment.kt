@@ -5,7 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import com.dew.aihua.R
-import com.dew.aihua.local.history.HistoryRecordManager
+import com.dew.aihua.ui.local.history.HistoryRecordManager
 import com.dew.aihua.player.helper.InfoCache
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
