@@ -1,6 +1,7 @@
 package com.dew.aihua.data.local.database.downloadDB
 
 import androidx.room.*
+import io.reactivex.Flowable
 
 /**
  *  Created by Edward on 3/2/2019.
@@ -10,7 +11,7 @@ import androidx.room.*
 interface DownloadDAO {
 
     @Query("SELECT * FROM ${MissionEntity.TABLE_NAME} ORDER BY ${MissionEntity.TIMESTAMP}")
-    fun loadMissions(): List<MissionEntity>
+    fun loadMissions(): Flowable<List<MissionEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMission(missionEntity: MissionEntity)

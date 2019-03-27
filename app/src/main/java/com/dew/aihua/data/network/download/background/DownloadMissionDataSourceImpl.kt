@@ -25,11 +25,11 @@ class DownloadMissionDataSourceImpl(val context: Context) : DownloadMissionDataS
 
     override fun loadMissions(): Flowable<List<MissionControl>> {
         return Flowable.defer {
-            Flowable.just(
                 downloadDb.downloadDAO().loadMissions()
-                    .map {
-                        MissionControl(it)
-                    }).subscribeOn(Schedulers.io())
+                    .map {list ->
+                        list.map { MissionControl(it) }
+                    }
+                    .subscribeOn(Schedulers.io())
         }
     }
 
@@ -59,8 +59,7 @@ class DownloadMissionDataSourceImpl(val context: Context) : DownloadMissionDataS
 
     override fun isCached(): Single<Boolean> {
         return Single.defer {
-            Single.just(downloadDb.downloadDAO().loadMissions().isNotEmpty())
-                .subscribeOn(Schedulers.io())
+            downloadDb.downloadDAO().loadMissions().any { it.isNotEmpty() }
         }
     }
 
