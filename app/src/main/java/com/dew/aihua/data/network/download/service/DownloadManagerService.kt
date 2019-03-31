@@ -18,7 +18,7 @@ import com.dew.aihua.data.network.download.background.DownloadMissionManager
 import com.dew.aihua.data.network.download.background.DownloadMissionManagerImpl
 import com.dew.aihua.data.network.download.background.MissionControl
 import com.dew.aihua.data.network.download.background.MissionControlListener
-import com.dew.aihua.data.network.download.ui.activity.DownloadActivity
+import com.dew.aihua.ui.download.activity.DownloadActivity
 import com.dew.aihua.settings.AppSettings
 import java.util.ArrayList
 

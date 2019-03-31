@@ -19,7 +19,7 @@ import com.dew.aihua.player.playback.PlaybackListener
 import com.dew.aihua.player.playqueque.adapter.PlayQueueAdapter
 import com.dew.aihua.player.playqueque.queque.PlayQueue
 import com.dew.aihua.R
-import com.dew.aihua.ui.local.history.HistoryRecordManager
+import com.dew.aihua.data.local.manoeuvre.HistoryRecordManager
 import com.dew.aihua.player.helper.*
 import com.dew.aihua.player.mediasession.BasePlayerMediaSession
 import com.dew.aihua.player.mediasource.FailedMediaSource
@@ -58,7 +58,8 @@ abstract class BasePlayer(protected val context: Context) : Player.EventListener
     }
     private val intentFilter: IntentFilter = IntentFilter()  // for setup receiver of this class and its subclass
 
-    private val recordManager: HistoryRecordManager = HistoryRecordManager(context)
+    private val recordManager: HistoryRecordManager =
+        HistoryRecordManager(context)
 
     private val loadControl: LoadControl = LoadController()
     private val renderFactory: RenderersFactory = DefaultRenderersFactory(context)

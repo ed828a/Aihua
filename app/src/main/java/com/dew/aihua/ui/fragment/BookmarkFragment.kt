@@ -75,7 +75,7 @@ class BookmarkFragment : BaseLocalListFragment<List<PlaylistLocalItem>, Void>() 
         super.initViews(rootView, savedInstanceState)
         Log.d("BookmarkFragment", "BookmarkFragment::initViews() called.")
 
-        if (!useAsFrontPage) {
+        if (!isUsedAsFrontPage) {
             setTitle(activity!!.getString(R.string.tab_bookmarks))
         }
     }

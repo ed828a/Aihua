@@ -32,9 +32,10 @@ task clean(type: Delete) {
 ext {
     supportLibVersion = '1.1.0-alpha03'   //'1.0.0-beta01'
     exoPlayerLibVersion = '2.9.5' //2.9.5 was 2.8.4
-    roomDbLibVersion = '2.1.0-alpha04' //'2.0.0-beta01'
-    leakCanaryLibVersion = '1.6.1' //1.6.1
+    roomDbLibVersion = '2.1.0-alpha06' //'2.0.0-beta01'
+    leakCanaryLibVersion = '1.6.2' //1.6.1
     okHttpLibVersion = '3.11.0'
     icepickLibVersion = '3.2.0'
     stethoLibVersion = '1.5.0'
+    lifecycle_version = "2.0.0"
 }

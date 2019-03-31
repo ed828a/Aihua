@@ -18,7 +18,7 @@ import com.dew.aihua.R
 import com.dew.aihua.data.local.database.AppDatabase
 import com.dew.aihua.data.local.database.LocalItem
 import com.dew.aihua.data.local.database.playlist.model.PlaylistStreamEntry
-import com.dew.aihua.ui.infolist.adapter.InfoItemDialog
+import com.dew.aihua.ui.dialog.InfoItemDialog
 import com.dew.aihua.ui.local.playlist.LocalPlaylistManager
 import com.dew.aihua.player.helper.AnimationUtils.animateView
 import com.dew.aihua.player.helper.Localization

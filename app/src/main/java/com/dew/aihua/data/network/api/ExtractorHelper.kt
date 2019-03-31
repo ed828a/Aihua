@@ -1,4 +1,4 @@
-package com.dew.aihua.player.helper
+package com.dew.aihua.data.network.api
 
 import android.content.Context
 import android.content.Intent
@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import com.dew.aihua.R
 import com.dew.aihua.player.helper.Constants.NO_SERVICE_ID
+import com.dew.aihua.data.local.cache.InfoCache
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
 import com.dew.aihua.report.UserAction
@@ -162,7 +163,13 @@ object ExtractorHelper {
                                       loadFromNetwork: Single<I>
     ): Single<I> {
         checkServiceId(serviceId)
-        val loadFromNetwork1 = loadFromNetwork.doOnSuccess { info -> InfoCache.putInfo(serviceId, url, info) }
+        val loadFromNetwork1 = loadFromNetwork.doOnSuccess { info ->
+            InfoCache.putInfo(
+                serviceId,
+                url,
+                info
+            )
+        }
 
         return if (forceLoad) {
             InfoCache.removeInfo(serviceId, url)
@@ -282,8 +289,10 @@ object ExtractorHelper {
      * Check if throwable have Interrupted* exception as one of its causes.
      */
     fun isInterruptedCaused(throwable: Throwable): Boolean {
-        return ExtractorHelper.hasExactCauseThrowable(throwable,
+        return hasExactCauseThrowable(
+            throwable,
             InterruptedIOException::class.java,
-            InterruptedException::class.java)
+            InterruptedException::class.java
+        )
     }
 }

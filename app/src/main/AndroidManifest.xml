@@ -83,11 +83,11 @@
             android:label="@string/settings"/>
 
         <activity
-            android:name="com.dew.aihua.data.network.download.ui.activity.DownloadActivity"
+            android:name="com.dew.aihua.ui.download.activity.DownloadActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask" />
 
-        <activity android:name="com.dew.aihua.data.network.download.ui.activity.ExtSDDownloadFailedActivity" />
+        <activity android:name="com.dew.aihua.ui.download.activity.ExtSDDownloadFailedActivity" />
 
 
         <provider

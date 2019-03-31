@@ -5,9 +5,9 @@ import android.util.Log
 import android.view.*
 import com.dew.aihua.R
 import com.dew.aihua.player.helper.AnimationUtils.animateView
-import com.dew.aihua.player.helper.ExtractorHelper
+import com.dew.aihua.data.network.api.ExtractorHelper
 import com.dew.aihua.report.UserAction
-import com.dew.aihua.util.KioskTranslator
+import com.dew.aihua.data.network.helper.KioskTranslator
 import icepick.State
 import io.reactivex.Single
 import org.schabi.newpipe.extractor.ListExtractor
@@ -38,7 +38,7 @@ class KioskFragment : BaseListInfoFragment<KioskInfo>() {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        if (useAsFrontPage && isVisibleToUser && activity != null) {
+        if (isUsedAsFrontPage && isVisibleToUser && activity != null) {
             try {
                 setTitle(kioskTranslatedName)
             } catch (e: Exception) {
@@ -61,7 +61,7 @@ class KioskFragment : BaseListInfoFragment<KioskInfo>() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         val supportActionBar = activity!!.supportActionBar
-        if (supportActionBar != null && useAsFrontPage) {
+        if (supportActionBar != null && isUsedAsFrontPage) {
             supportActionBar.setDisplayHomeAsUpEnabled(false)
         }
     }
@@ -99,7 +99,7 @@ class KioskFragment : BaseListInfoFragment<KioskInfo>() {
         super.handleResult(result)
 
         name = kioskTranslatedName
-        if (!useAsFrontPage) {
+        if (!isUsedAsFrontPage) {
             setTitle(kioskTranslatedName)
         }
 

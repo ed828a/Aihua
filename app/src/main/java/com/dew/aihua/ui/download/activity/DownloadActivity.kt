@@ -1,4 +1,4 @@
-package com.dew.aihua.data.network.download.ui.activity
+package com.dew.aihua.ui.download.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import com.dew.aihua.R
 import com.dew.aihua.data.network.download.background.DeleteDownloadManager
 import com.dew.aihua.data.network.download.service.DownloadManagerService
-import com.dew.aihua.data.network.download.ui.fragment.DownloadMissionsFragment
+import com.dew.aihua.ui.download.fragment.DownloadMissionsFragment
 import com.dew.aihua.player.helper.ThemeHelper
 import com.dew.aihua.settings.SettingsActivity
 import io.reactivex.Completable

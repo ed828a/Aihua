@@ -1,4 +1,4 @@
-package com.dew.aihua.data.network.download.ui.fragment
+package com.dew.aihua.ui.download.fragment
 
 import android.app.Activity
 import android.content.*
@@ -7,6 +7,7 @@ import android.os.IBinder
 import android.preference.PreferenceManager
 import android.view.*
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.dew.aihua.R
 import com.dew.aihua.data.network.download.adapter.MissionAdapter
 import com.dew.aihua.data.network.download.background.DeleteDownloadManager

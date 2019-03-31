@@ -135,10 +135,6 @@ class MainFragment : BaseFragment(), TabLayout.OnTabSelectedListener {
     }
 
     private fun updateTabsIcon() {
-//        for (i in tabsList.indices) {
-//            val tabToSet = tabLayout.getTabAt(i)
-//            tabToSet?.setIcon(tabsList[i].getTabIconRes(activity!!))
-//        }
         tabsList.forEach {
             tabLayout.getTabAt(tabsList.indexOf(it))?.setIcon(it.getTabIconRes(activity!!))
         }

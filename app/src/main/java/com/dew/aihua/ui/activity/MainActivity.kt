@@ -9,14 +9,12 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.*
-import android.widget.ImageView
-import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.preference.PreferenceManager
 import com.dew.aihua.R
 import com.dew.aihua.player.helper.Constants
@@ -28,12 +26,11 @@ import com.dew.aihua.ui.contract.BackPressable
 import com.dew.aihua.ui.fragment.MainFragment
 import com.dew.aihua.ui.fragment.SearchFragment
 import com.dew.aihua.ui.fragment.VideoDetailFragment
-import com.dew.aihua.util.KioskTranslator
+import com.dew.aihua.data.network.helper.KioskTranslator
 import com.dew.aihua.util.NavigationHelper
 import com.dew.aihua.util.StateSaver
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.drawer_layout.*
-import kotlinx.android.synthetic.main.drawer_layout.view.*
 import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.StreamingService
 import org.schabi.newpipe.extractor.exceptions.ExtractionException
@@ -44,7 +41,7 @@ import org.schabi.newpipe.extractor.exceptions.ExtractionException
 class MainActivity : AppCompatActivity(){
 
     private var toggle: ActionBarDrawerToggle? = null
-    private var drawer: androidx.drawerlayout.widget.DrawerLayout? = null
+    private var drawer: DrawerLayout? = null
     private var drawerItems: NavigationView? = null
     private var headerServiceView: TextView? = null
 
@@ -169,6 +166,7 @@ class MainActivity : AppCompatActivity(){
             ITEM_ID_BOOKMARKS -> NavigationHelper.openBookmarksFragment(supportFragmentManager)
             ITEM_ID_DOWNLOADS -> NavigationHelper.openDownloads(this)
             ITEM_ID_HISTORY -> NavigationHelper.openStatisticFragment(supportFragmentManager)
+
             else -> { // for Available Kiosk, actually only Trending from NewPipe extractor YouTube Service.
                 val currentServiceId = ServiceHelper.getSelectedServiceId(this)
                 val service = NewPipe.getService(currentServiceId)

@@ -12,7 +12,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.dew.aihua.R
-import com.dew.aihua.ui.infolist.adapter.InfoItemDialog
+import com.dew.aihua.ui.dialog.InfoItemDialog
 import com.dew.aihua.ui.infolist.adapter.InfoListAdapter
 import com.dew.aihua.ui.local.dialog.PlaylistAppendDialog
 import com.dew.aihua.player.helper.AnimationUtils.animateView
@@ -301,7 +301,7 @@ abstract class BaseListFragment<I, N> : BaseStateFragment<I>(), ListViewContract
         val supportActionBar = activity!!.supportActionBar
         if (supportActionBar != null) {
             supportActionBar.setDisplayShowTitleEnabled(true)
-            if (useAsFrontPage) {
+            if (isUsedAsFrontPage) {
                 supportActionBar.setDisplayHomeAsUpEnabled(false)
             } else {
                 supportActionBar.setDisplayHomeAsUpEnabled(true)

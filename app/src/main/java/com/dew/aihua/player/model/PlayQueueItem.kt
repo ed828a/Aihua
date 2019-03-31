@@ -1,6 +1,6 @@
 package com.dew.aihua.player.model
 
-import com.dew.aihua.player.helper.ExtractorHelper
+import com.dew.aihua.data.network.api.ExtractorHelper
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.schabi.newpipe.extractor.stream.StreamInfo

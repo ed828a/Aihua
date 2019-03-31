@@ -14,8 +14,8 @@ import androidx.annotation.StringRes
 import androidx.preference.PreferenceManager
 import com.dew.aihua.R
 import com.dew.aihua.player.helper.AnimationUtils.animateView
-import com.dew.aihua.player.helper.ExtractorHelper
-import com.dew.aihua.player.helper.InfoCache
+import com.dew.aihua.data.network.api.ExtractorHelper
+import com.dew.aihua.data.local.cache.InfoCache
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
 import com.dew.aihua.report.UserAction

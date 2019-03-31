@@ -5,29 +5,26 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.dew.aihua.App
 import com.nostra13.universalimageloader.core.ImageLoader
 import icepick.Icepick
 import icepick.State
 
 /**
- *  Created by Edward on 3/2/2019.
- */
-
-/**
  *  Created by Edward on 2/23/2019.
  */
 
-abstract class BaseFragment : androidx.fragment.app.Fragment() {
+abstract class BaseFragment : Fragment() {
 
-    private val TAG = this::class.java.simpleName + "@" + Integer.toHexString(Companion.hashCode())
+
 
     protected var activity: AppCompatActivity? = null
 
-    //These values are used for controlling framgents when they are part of the frontpage
+    //These values are used for controlling fragments when they are part of the front page
     @State
     @JvmField
-    var useAsFrontPage = false
+    var isUsedAsFrontPage = false
     private var mIsVisibleToUser = false
 
     protected fun getFM(): androidx.fragment.app.FragmentManager? =
@@ -37,7 +34,7 @@ abstract class BaseFragment : androidx.fragment.app.Fragment() {
             parentFragment!!.fragmentManager
 
     fun useAsFrontPage(value: Boolean) {
-        useAsFrontPage = value
+        isUsedAsFrontPage = value
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -102,12 +99,13 @@ abstract class BaseFragment : androidx.fragment.app.Fragment() {
 
     open fun setTitle(title: String) {
         Log.d(TAG, "setTitle() called with: title = [$title]")
-        if ((!useAsFrontPage || mIsVisibleToUser) && activity != null && activity!!.supportActionBar != null) {
+        if ((!isUsedAsFrontPage || mIsVisibleToUser) && activity != null && activity!!.supportActionBar != null) {
             activity!!.supportActionBar!!.title = title
         }
     }
 
     companion object {
+        private val TAG = BaseFragment::class.java.simpleName
         val imageLoader = ImageLoader.getInstance()!!
     }
 }

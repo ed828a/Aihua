@@ -1,4 +1,4 @@
-package com.dew.aihua.ui.infolist.adapter
+package com.dew.aihua.ui.dialog
 
 import android.app.Activity
 import android.app.AlertDialog

@@ -15,14 +15,14 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.dew.aihua.R
 import com.dew.aihua.data.local.database.subscription.SubscriptionEntity
-import com.dew.aihua.ui.infolist.adapter.InfoItemDialog
+import com.dew.aihua.ui.dialog.InfoItemDialog
 import com.dew.aihua.ui.local.dialog.PlaylistAppendDialog
 import com.dew.aihua.ui.local.subscription.SubscriptionService
 import com.dew.aihua.player.helper.AnimationUtils
 import com.dew.aihua.player.helper.AnimationUtils.animateBackgroundColor
 import com.dew.aihua.player.helper.AnimationUtils.animateTextColor
 import com.dew.aihua.player.helper.AnimationUtils.animateView
-import com.dew.aihua.player.helper.ExtractorHelper
+import com.dew.aihua.data.network.api.ExtractorHelper
 import com.dew.aihua.player.helper.ImageDisplayConstants
 import com.dew.aihua.player.helper.Localization
 import com.dew.aihua.player.playqueque.queque.ChannelPlayQueue
@@ -83,7 +83,7 @@ class ChannelFragment : BaseListInfoFragment<ChannelInfo>() {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (activity != null
-            && useAsFrontPage
+            && isUsedAsFrontPage
             && isVisibleToUser) {
             setTitle(if (currentInfo != null) currentInfo!!.name else name)
         }
@@ -160,7 +160,7 @@ class ChannelFragment : BaseListInfoFragment<ChannelInfo>() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         val supportActionBar = activity!!.supportActionBar
-        if (useAsFrontPage && supportActionBar != null) {
+        if (isUsedAsFrontPage && supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(false)
         } else {
             inflater.inflate(R.menu.menu_channel, menu)
@@ -416,7 +416,7 @@ class ChannelFragment : BaseListInfoFragment<ChannelInfo>() {
 
     override fun setTitle(title: String) {
         super.setTitle(title)
-        if (!useAsFrontPage) headerTitleView!!.text = title
+        if (!isUsedAsFrontPage) headerTitleView!!.text = title
     }
 
     companion object {

@@ -18,11 +18,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.TooltipCompat
 import androidx.preference.PreferenceManager
 import com.dew.aihua.R
-import com.dew.aihua.ui.local.history.HistoryRecordManager
+import com.dew.aihua.data.local.manoeuvre.HistoryRecordManager
 import com.dew.aihua.player.helper.AnimationUtils
 import com.dew.aihua.player.helper.AnimationUtils.animateView
 import com.dew.aihua.player.helper.Constants
-import com.dew.aihua.player.helper.ExtractorHelper
+import com.dew.aihua.data.network.api.ExtractorHelper
 import com.dew.aihua.player.helper.ServiceHelper
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
@@ -86,6 +86,10 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
     @State
     @JvmField
     protected var wasSearchFocused = false
+
+    @State
+    @JvmField
+    protected var searchFragmentTitle: String? = null
 
     private val menuItemToFilterName: MutableMap<Int, String> = HashMap()
     private var service: StreamingService? = null
@@ -306,11 +310,15 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
+        menu.removeItem(R.id.action_history)
+        menu.removeItem(R.id.action_settings)
+        menu.removeItem(R.id.action_show_downloads)
 
-//        val supportActionBar = activity!!.supportActionBar?.apply {
-//            setDisplayShowTitleEnabled(true)
-//            setDisplayHomeAsUpEnabled(true)
-//        }
+        val supportActionBar = activity!!.supportActionBar?.apply {
+            setDisplayShowTitleEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
+            title = searchFragmentTitle
+        }
 
         var itemId = 0
         var isFirstItem = true
@@ -443,7 +451,9 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
                 Log.d(TAG, "searchEditText.onEditorAction() : event.keyCode = ${event.keyCode}, event.action = ${event.action} ")
                 hideSuggestionsPanel()
                 hideKeyboardSearch()
-                search(searchEditText.text.toString(), arrayOf(), "")
+                val query = searchEditText.text.toString()
+                search(query, arrayOf(), "")
+                searchEditText.text.clear()
                 return@setOnEditorActionListener true
             }
             false
@@ -523,6 +533,7 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
     }
 
     override fun onBackPressed(): Boolean {
+
         if (suggestionsPanel.visibility == View.VISIBLE
             && infoListAdapter!!.itemsList.size > 0
             && !isLoading.get()
@@ -744,6 +755,7 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
         this.searchString = searchString
         this.contentFilter = contentfilter
         this.sortFilter = sortFilter
+        this.searchFragmentTitle = searchString
     }
 
     ///////////////////////////////////////////////////////////////////////////

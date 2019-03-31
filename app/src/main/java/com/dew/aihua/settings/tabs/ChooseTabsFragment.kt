@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.dew.aihua.R
 import com.dew.aihua.player.helper.ServiceHelper
@@ -22,7 +23,8 @@ import com.dew.aihua.report.ErrorInfo
 import com.dew.aihua.report.UserAction
 import com.dew.aihua.settings.dialog_fragment.SelectChannelFragment
 import com.dew.aihua.settings.tabs.Tab.Companion.getTypeFrom
-import com.dew.aihua.util.KioskTranslator
+import com.dew.aihua.data.network.helper.KioskTranslator
+import com.dew.aihua.settings.model.KioskEntry
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.ServiceList
@@ -31,7 +33,7 @@ import java.util.*
 /**
  *  Created by Edward on 3/2/2019.
  */
-class ChooseTabsFragment : androidx.fragment.app.Fragment() {
+class ChooseTabsFragment : Fragment() {
 
     private lateinit var tabsManager: TabsManager
     private val tabList = ArrayList<Tab>()
@@ -174,7 +176,7 @@ class ChooseTabsFragment : androidx.fragment.app.Fragment() {
         }
 
         when (type) {
-            Tab.Type.KIOSK -> {
+            TabType.KIOSK -> {
 //                val selectFragment = SelectKioskFragment()
 //                selectFragment.setOnSelectedListener(object : SelectKioskFragment.OnSelectedListener {
 //                    override fun onKioskSelected(serviceId: Int, kioskId: String, kioskName: String) {
@@ -187,11 +189,11 @@ class ChooseTabsFragment : androidx.fragment.app.Fragment() {
                 addTrendingKioskTab(context)
                 return
             }
-            Tab.Type.CHANNEL -> {
+            TabType.CHANNEL -> {
                 val selectFragment = SelectChannelFragment()
                 selectFragment.setOnSelectedLisener(object : SelectChannelFragment.OnSelectedLisener {
                     override fun onChannelSelected(serviceId: Int, url: String, name: String) {
-                        addTab(Tab.ChannelTab(serviceId, url, name))
+                        addTab(ChannelTab(serviceId, url, name))
                     }
                 })
 
@@ -205,10 +207,10 @@ class ChooseTabsFragment : androidx.fragment.app.Fragment() {
     private fun getAvailableTabs(context: Context): Array<AddTabDialog.ChooseTabListItem> {
         val returnList = ArrayList<AddTabDialog.ChooseTabListItem>()
 
-        for (type in Tab.Type.values()) {
+        for (type in TabType.values()) {
             val tab = type.tab
             when (type) {
-                Tab.Type.BLANK -> if (!tabList.contains(tab)) {
+                TabType.BLANK -> if (!tabList.contains(tab)) {
                     returnList.add(
                         AddTabDialog.ChooseTabListItem(
                             tab.tabId, getString(R.string.blank_page_summary),
@@ -217,14 +219,14 @@ class ChooseTabsFragment : androidx.fragment.app.Fragment() {
                     )
                 }
 
-                Tab.Type.KIOSK -> returnList.add(
+                TabType.KIOSK -> returnList.add(
                     AddTabDialog.ChooseTabListItem(
                         tab.tabId, getString(R.string.kiosk_page_summary),
                         ThemeHelper.resolveResourceIdFromAttr(context, R.attr.ic_hot)
                     )
                 )
 
-                Tab.Type.CHANNEL -> returnList.add(
+                TabType.CHANNEL -> returnList.add(
                     AddTabDialog.ChooseTabListItem(
                         tab.tabId, getString(R.string.channel_page_summary),
                         tab.getTabIconRes(context)
@@ -272,7 +274,7 @@ class ChooseTabsFragment : androidx.fragment.app.Fragment() {
         }
 
         kioskList.forEach { entry ->
-            val tab = Tab.KioskTab(entry.serviceId, entry.kioskId)
+            val tab = KioskTab(entry.serviceId, entry.kioskId)
             if (!tabList.contains(tab)){
                 addTab(tab)
             } else {
@@ -317,9 +319,9 @@ class ChooseTabsFragment : androidx.fragment.app.Fragment() {
 //                var tabName = tab.getTabName(requireContext())
                 var tabName = tab.getTabName(itemView.context)
                 when (type) {
-                    Tab.Type.BLANK -> tabName = requireContext().getString(R.string.blank_page_summary)
-                    Tab.Type.KIOSK -> tabName = "${NewPipe.getNameOfService((tab as Tab.KioskTab).kioskServiceId)}/$tabName"
-                    Tab.Type.CHANNEL -> tabName = "${NewPipe.getNameOfService((tab as Tab.ChannelTab).channelServiceId)}/$tabName"
+                    TabType.BLANK -> tabName = requireContext().getString(R.string.blank_page_summary)
+                    TabType.KIOSK -> tabName = "${NewPipe.getNameOfService((tab as KioskTab).kioskServiceId)}/$tabName"
+                    TabType.CHANNEL -> tabName = "${NewPipe.getNameOfService((tab as ChannelTab).channelServiceId)}/$tabName"
                     else -> {}
                 }
 
@@ -389,7 +391,7 @@ class ChooseTabsFragment : androidx.fragment.app.Fragment() {
                 selectedTabsAdapter.notifyItemRemoved(position)
 
                 if (tabList.isEmpty()) {
-                    tabList.add(Tab.Type.BLANK.tab)
+                    tabList.add(TabType.BLANK.tab)
                     selectedTabsAdapter.notifyItemInserted(0)
                 }
             }

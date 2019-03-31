@@ -1,7 +1,7 @@
 package com.dew.aihua.player.playqueque.queque
 
 
-import com.dew.aihua.player.helper.ExtractorHelper
+import com.dew.aihua.data.network.api.ExtractorHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.schabi.newpipe.extractor.playlist.PlaylistInfo

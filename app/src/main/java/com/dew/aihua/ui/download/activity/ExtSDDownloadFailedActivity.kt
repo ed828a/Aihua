@@ -1,4 +1,4 @@
-package com.dew.aihua.data.network.download.ui.activity
+package com.dew.aihua.ui.download.activity
 
 import android.app.AlertDialog
 import android.content.DialogInterface

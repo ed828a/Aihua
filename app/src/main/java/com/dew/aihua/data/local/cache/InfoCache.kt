@@ -1,7 +1,9 @@
-package com.dew.aihua.player.helper
+package com.dew.aihua.data.local.cache
 
 import android.util.Log
 import android.util.LruCache
+import com.dew.aihua.data.model.CacheData
+import com.dew.aihua.player.helper.ServiceHelper
 import org.schabi.newpipe.extractor.Info
 
 /**
@@ -9,7 +11,15 @@ import org.schabi.newpipe.extractor.Info
  */
 
 object InfoCache {
+    private const val TAG = "InfoCache"
 
+    private const val MAX_ITEMS_ON_CACHE = 60
+    /**
+     * Trim the cache to this size
+     */
+    private const val TRIM_CACHE_TO = 30
+
+    private val lruCache = LruCache<String, CacheData>(MAX_ITEMS_ON_CACHE)
 
     val size: Long
         get() = synchronized(lruCache) {
@@ -19,7 +29,12 @@ object InfoCache {
     fun getFromKey(serviceId: Int, url: String): Info? {
         Log.d(TAG, "getFromKey() called with: serviceId = [$serviceId], url = [$url]")
         synchronized(lruCache) {
-            return getInfo(keyOf(serviceId, url))
+            return getInfo(
+                keyOf(
+                    serviceId,
+                    url
+                )
+            )
         }
     }
 
@@ -29,14 +44,23 @@ object InfoCache {
         val expirationMillis = ServiceHelper.getCacheExpirationMillis(info.serviceId)
         synchronized(lruCache) {
             val data = CacheData(info, expirationMillis)
-            lruCache.put(keyOf(serviceId, url), data)
+            lruCache.put(
+                keyOf(
+                    serviceId,
+                    url
+                ), data)
         }
     }
 
     fun removeInfo(serviceId: Int, url: String) {
         Log.d(TAG, "removeInfo() called with: serviceId = [$serviceId], url = [$url]")
         synchronized(lruCache) {
-            lruCache.remove(keyOf(serviceId, url))
+            lruCache.remove(
+                keyOf(
+                    serviceId,
+                    url
+                )
+            )
         }
     }
 
@@ -55,43 +79,34 @@ object InfoCache {
         }
     }
 
-    private class CacheData(val info: Info, timeoutMillis: Long) {
-        private val expireTimestamp: Long = System.currentTimeMillis() + timeoutMillis
+//    private class CacheData(val info: Info, timeoutMillis: Long) {
+//        private val expireTimestamp: Long = System.currentTimeMillis() + timeoutMillis
+//
+//        val isExpired: Boolean
+//            get() = System.currentTimeMillis() > expireTimestamp
+//
+//    }
 
-        val isExpired: Boolean
-            get() = System.currentTimeMillis() > expireTimestamp
-
-    }
 
 
-    private const val TAG = "InfoCache"
-
-    //        val instance = InfoCache()
-    private const val MAX_ITEMS_ON_CACHE = 60
-    /**
-     * Trim the cache to this size
-     */
-    private const val TRIM_CACHE_TO = 30
-
-    private val lruCache = LruCache<String, CacheData>(MAX_ITEMS_ON_CACHE)
 
     private fun keyOf(serviceId: Int, url: String): String {
         return serviceId.toString() + url
     }
 
     private fun removeStaleCache() {
-        for ((key, data) in InfoCache.lruCache.snapshot()) {
+        for ((key, data) in lruCache.snapshot()) {
             if (data != null && data.isExpired) {
-                InfoCache.lruCache.remove(key)
+                lruCache.remove(key)
             }
         }
     }
 
     private fun getInfo(key: String): Info? {
-        val data = InfoCache.lruCache.get(key) ?: return null
+        val data = lruCache.get(key) ?: return null
 
         if (data.isExpired) {
-            InfoCache.lruCache.remove(key)
+            lruCache.remove(key)
             return null
         }
 

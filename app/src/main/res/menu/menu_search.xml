@@ -3,30 +3,37 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/filter"
-        android:icon="?attr/filter"
-        android:title="@string/filter"
-        app:showAsAction="always">
-        <menu>
-            <group
-                android:id="@+id/search_filter_group"
-                android:checkableBehavior="single">
-                <item
-                    android:id="@+id/menu_filter_all"
-                    android:checked="true"
-                    android:title="@string/all"/>
-                <item
-                    android:id="@+id/menu_filter_video"
-                    android:title="@string/video"/>
-                <item
-                    android:id="@+id/menu_filter_channel"
-                    android:title="@string/channel"/>
-                <item
-                    android:id="@+id/menu_filter_playlist"
-                    android:title="@string/playlist"/>
-            </group>
-        </menu>
-    </item>
+        android:id="@+id/action_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="?attr/search"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="always" />
+
+    <!--<item-->
+        <!--android:id="@+id/filter"-->
+        <!--android:icon="?attr/filter"-->
+        <!--android:title="@string/filter"-->
+        <!--app:showAsAction="always">-->
+        <!--<menu>-->
+            <!--<group-->
+                <!--android:id="@+id/search_filter_group"-->
+                <!--android:checkableBehavior="single">-->
+                <!--<item-->
+                    <!--android:id="@+id/menu_filter_all"-->
+                    <!--android:checked="true"-->
+                    <!--android:title="@string/all"/>-->
+                <!--<item-->
+                    <!--android:id="@+id/menu_filter_video"-->
+                    <!--android:title="@string/video"/>-->
+                <!--<item-->
+                    <!--android:id="@+id/menu_filter_channel"-->
+                    <!--android:title="@string/channel"/>-->
+                <!--<item-->
+                    <!--android:id="@+id/menu_filter_playlist"-->
+                    <!--android:title="@string/playlist"/>-->
+            <!--</group>-->
+        <!--</menu>-->
+    <!--</item>-->
 
 
 </menu>

@@ -21,14 +21,15 @@ object TabsJsonHelper {
 
     val FALLBACK_INITIAL_TABS_LIST: List<Tab> = Collections.unmodifiableList(
         Arrays.asList(
-            Tab.KioskTab(ServiceList.YouTube.serviceId, "Trending"),
-            Tab.Type.SUBSCRIPTIONS.tab,
-            Tab.Type.HISTORY.tab
+            KioskTab(ServiceList.YouTube.serviceId, "Trending"),
+            TabType.SUBSCRIPTIONS.tab,
+            TabType.HISTORY.tab,
+            TabType.SEARCH.tab
         )
     )
 
     class InvalidJsonException : Exception {
-        private constructor() : super() {}
+        private constructor() : super()
 
         constructor(message: String) : super(message) {}
 
@@ -43,7 +44,7 @@ object TabsJsonHelper {
      * [fallback list][.FALLBACK_INITIAL_TABS_LIST] will be returned.
      *
      *
-     * Tabs with invalid ids (i.e. not in the [Tab.Type] enum) will be ignored.
+     * Tabs with invalid ids (i.e. not in the TabType enum) will be ignored.
      *
      * @param tabsJson a JSON string got getTabFrom [.getJsonToSave].
      * @return a list of [tabs][Tab].

@@ -1,7 +1,5 @@
 package com.dew.aihua
 
-
-
 import android.annotation.TargetApi
 import android.app.Application
 import android.app.NotificationChannel
@@ -12,15 +10,19 @@ import android.os.Build
 import android.util.Log
 import androidx.multidex.MultiDex
 import androidx.preference.PreferenceManager
-import com.dew.aihua.player.helper.ExtractorHelper
+import com.dew.aihua.data.local.database.AppDatabase
+import com.dew.aihua.data.local.manoeuvre.HistoryRecordManager
+import com.dew.aihua.data.network.api.ExtractorHelper
 import com.dew.aihua.player.helper.Localization
 import com.dew.aihua.report.AcraReportSenderFactory
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
 import com.dew.aihua.report.UserAction
 import com.dew.aihua.settings.SettingsActivity
-import com.dew.aihua.util.ImageDownloader
-import com.dew.aihua.util.PageDownloader
+import com.dew.aihua.data.network.helper.ImageDownloader
+import com.dew.aihua.data.network.helper.PageDownloader
+import com.dew.aihua.data.repository.Repository
+import com.dew.aihua.ui.viewmodel.ViewModelFactory
 import com.dew.aihua.util.StateSaver
 import com.facebook.stetho.Stetho
 import com.facebook.stetho.okhttp3.StethoInterceptor
@@ -38,6 +40,12 @@ import okhttp3.OkHttpClient
 import org.acra.ACRA
 import org.acra.config.ACRAConfigurationException
 import org.acra.config.ConfigurationBuilder
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.generic.bind
+import org.kodein.di.generic.instance
+import org.kodein.di.generic.provider
+import org.kodein.di.generic.singleton
 import org.schabi.newpipe.extractor.NewPipe
 import java.io.File
 import java.io.IOException
@@ -45,7 +53,27 @@ import java.io.InterruptedIOException
 import java.net.SocketException
 import java.util.concurrent.TimeUnit
 
-class App: Application() {
+class App: Application() , KodeinAware{
+    override val kodein: Kodein = Kodein.lazy {
+        bind<AppDatabase>() with singleton {
+            AppDatabase.getDatabase(applicationContext)
+        }
+
+        bind<HistoryRecordManager>() with singleton {
+            HistoryRecordManager(applicationContext)
+        }
+
+        bind<Repository>() with singleton {
+            Repository.getInstance(applicationContext, instance(), instance())
+        }
+
+        bind<ViewModelFactory>() with singleton {
+            ViewModelFactory(instance())
+        }
+    }
+
+
+
     private var refWatcher: RefWatcher? = null
 
     private val downloader: PageDownloader

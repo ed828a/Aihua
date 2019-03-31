@@ -56,7 +56,7 @@ class FeedFragment : BaseListFragment<List<SubscriptionEntity>, Void>() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        if (!useAsFrontPage) {
+        if (!isUsedAsFrontPage) {
             setTitle(activity!!.getString(R.string.fragment_whats_new))
         }
         return inflater.inflate(R.layout.fragment_feed, container, false)
@@ -101,7 +101,7 @@ class FeedFragment : BaseListFragment<List<SubscriptionEntity>, Void>() {
 
         val supportActionBar = activity!!.supportActionBar
 
-        if (useAsFrontPage) {
+        if (isUsedAsFrontPage) {
             supportActionBar?.setDisplayShowTitleEnabled(true)
 //            supportActionBar?.setDisplayShowTitleEnabled(false)
         }

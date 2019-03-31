@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import com.dew.aihua.R
-import com.dew.aihua.util.PageDownloader
+import com.dew.aihua.data.network.helper.PageDownloader
 import com.dew.aihua.util.Utility
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers

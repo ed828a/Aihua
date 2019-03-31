@@ -1,4 +1,4 @@
-package com.dew.aihua.data.network.download.ui.dialog
+package com.dew.aihua.ui.download.dialog
 
 import android.content.Context
 import android.os.Bundle

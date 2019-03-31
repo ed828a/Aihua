@@ -16,7 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.NavUtils
 import com.dew.aihua.R
-import com.dew.aihua.util.PageDownloader
+import com.dew.aihua.data.network.helper.PageDownloader
 
 class ReCaptchaActivity : AppCompatActivity() {
 

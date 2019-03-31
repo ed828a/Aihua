@@ -22,8 +22,8 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 import com.dew.aihua.R
-import com.dew.aihua.data.network.download.ui.dialog.DownloadDialog
-import com.dew.aihua.player.helper.ExtractorHelper
+import com.dew.aihua.ui.download.dialog.DownloadDialog
+import com.dew.aihua.data.network.api.ExtractorHelper
 import com.dew.aihua.player.helper.ListHelper
 import com.dew.aihua.player.helper.PermissionHelper
 import com.dew.aihua.player.helper.ThemeHelper

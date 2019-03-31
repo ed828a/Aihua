@@ -7,7 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import com.dew.aihua.data.local.database.downloadDB.MissionEntity
 import com.dew.aihua.data.network.download.background.MissionControl.Companion.NO_ERROR
-import com.dew.aihua.data.network.download.ui.activity.ExtSDDownloadFailedActivity
+import com.dew.aihua.ui.download.activity.ExtSDDownloadFailedActivity
 import com.dew.aihua.util.Utility
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableCompletableObserver

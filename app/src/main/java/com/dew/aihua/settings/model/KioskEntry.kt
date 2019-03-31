@@ -1,4 +1,4 @@
-package com.dew.aihua.settings.tabs
+package com.dew.aihua.settings.model
 
 /**
  *  Created by Edward on 3/7/2019.

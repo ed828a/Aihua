@@ -14,7 +14,7 @@ import com.dew.aihua.player.helper.ServiceHelper
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
 import com.dew.aihua.report.UserAction
-import com.dew.aihua.util.KioskTranslator
+import com.dew.aihua.data.network.helper.KioskTranslator
 import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.ServiceList
 import java.util.*

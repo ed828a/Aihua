@@ -5,7 +5,7 @@ import android.util.Log
 import com.dew.aihua.data.local.database.AppDatabase
 import com.dew.aihua.data.local.database.subscription.SubscriptionDAO
 import com.dew.aihua.data.local.database.subscription.SubscriptionEntity
-import com.dew.aihua.player.helper.ExtractorHelper
+import com.dew.aihua.data.network.api.ExtractorHelper
 import io.reactivex.*
 import io.reactivex.schedulers.Schedulers
 import org.schabi.newpipe.extractor.channel.ChannelInfo
