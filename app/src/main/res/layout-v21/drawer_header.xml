@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/drawer_header_np_text_view"
         android:layout_alignStart="@id/drawer_header_np_text_view"
-        android:text="@string/youtube"
+        android:text="Online Video"
         android:textColor="@color/drawer_header_font_color"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/drawer_header_np_text_view"

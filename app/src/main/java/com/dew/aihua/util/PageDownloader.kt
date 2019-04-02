@@ -1,7 +1,10 @@
 package com.dew.aihua.util
 
-import android.text.TextUtils
 
+import android.text.TextUtils
+import okhttp3.*
+import org.schabi.newpipe.extractor.DownloadRequest
+import org.schabi.newpipe.extractor.DownloadResponse
 import org.schabi.newpipe.extractor.exceptions.ReCaptchaException
 import org.schabi.newpipe.extractor.utils.Localization
 
@@ -10,14 +13,27 @@ import java.io.InputStream
 import java.util.HashMap
 import java.util.concurrent.TimeUnit
 
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.ResponseBody
 
-/**
- *  Created by Edward on 3/2/2019.
+/*
+ * Created by Christian Schabesberger on 28.01.16.
+ *
+ * Copyright (C) Christian Schabesberger 2016 <chris.schabesberger@mailbox.org>
+ * PageDownloader.java is part of NewPipe.
+ *
+ * NewPipe is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * NewPipe is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with NewPipe.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 class PageDownloader private constructor(builder: OkHttpClient.Builder) : org.schabi.newpipe.extractor.Downloader {
     var cookies: String? = null
     private val client: OkHttpClient = builder
@@ -93,10 +109,13 @@ class PageDownloader private constructor(builder: OkHttpClient.Builder) : org.sc
     private fun getBody(siteUrl: String, customProperties: Map<String, String>): ResponseBody? {
         val requestBuilder = Request.Builder()
             .method("GET", null).url(siteUrl)
-            .addHeader("User-Agent", USER_AGENT)
 
         for ((key, value) in customProperties) {
             requestBuilder.addHeader(key, value)
+        }
+
+        if (!customProperties.containsKey("User-Agent")) {
+            requestBuilder.header("User-Agent", USER_AGENT)
         }
 
         if (!TextUtils.isEmpty(cookies)) {
@@ -131,6 +150,98 @@ class PageDownloader private constructor(builder: OkHttpClient.Builder) : org.sc
         return download(siteUrl, emptyMap())
     }
 
+
+    @Throws(IOException::class, ReCaptchaException::class)
+    override fun get(siteUrl: String, request: DownloadRequest): DownloadResponse? {
+        val requestBuilder = Request.Builder()
+            .method("GET", null).url(siteUrl)
+
+        val requestHeaders = request.requestHeaders
+        // set custom headers in request
+        for ((key, value1) in requestHeaders) {
+            for (value in value1) {
+                requestBuilder.addHeader(key, value)
+            }
+        }
+
+        if (!requestHeaders.containsKey("User-Agent")) {
+            requestBuilder.header("User-Agent", USER_AGENT)
+        }
+
+        if (!TextUtils.isEmpty(cookies)) {
+            requestBuilder.addHeader("Cookie", cookies!!)
+        }
+
+        val okRequest = requestBuilder.build()
+        val response = client.newCall(okRequest).execute()
+        val body = response.body()
+
+        if (response.code() == 429) {
+            throw ReCaptchaException("reCaptcha Challenge requested")
+        }
+
+        if (body == null) {
+            response.close()
+            return null
+        }
+
+        return DownloadResponse(body.string(), response.headers().toMultimap())
+    }
+
+    @Throws(IOException::class, ReCaptchaException::class)
+    override fun get(siteUrl: String): DownloadResponse? {
+        return get(siteUrl, DownloadRequest.emptyRequest)
+    }
+
+    @Throws(IOException::class, ReCaptchaException::class)
+    override fun post(siteUrl: String, request: DownloadRequest): DownloadResponse? {
+
+        val requestHeaders = request.requestHeaders
+        if (null == requestHeaders["Content-Type"] || requestHeaders["Content-Type"]!!.isEmpty()) {
+            // content type header is required. maybe throw an exception here
+            return null
+        }
+
+        val contentType = requestHeaders["Content-Type"]!![0]
+
+        var okRequestBody: RequestBody? = null
+        if (null != request.requestBody) {
+            okRequestBody = RequestBody.create(MediaType.parse(contentType), request.requestBody)
+        }
+        val requestBuilder = Request.Builder()
+            .method("POST", okRequestBody).url(siteUrl)
+
+        // set custom headers in request
+        for ((key, value1) in requestHeaders) {
+            for (value in value1) {
+                requestBuilder.addHeader(key, value)
+            }
+        }
+
+        if (!requestHeaders.containsKey("User-Agent")) {
+            requestBuilder.header("User-Agent", USER_AGENT)
+        }
+
+        if (!TextUtils.isEmpty(cookies)) {
+            requestBuilder.addHeader("Cookie", cookies!!)
+        }
+
+        val okRequest = requestBuilder.build()
+        val response = client.newCall(okRequest).execute()
+        val body = response.body()
+
+        if (response.code() == 429) {
+            throw ReCaptchaException("reCaptcha Challenge requested")
+        }
+
+        if (body == null) {
+            response.close()
+            return null
+        }
+
+        return DownloadResponse(body.string(), response.headers().toMultimap())
+    }
+
     companion object {
         const val USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0"
 
@@ -142,10 +253,9 @@ class PageDownloader private constructor(builder: OkHttpClient.Builder) : org.sc
          *
          * @param builder if null, default builder will be used
          */
-        fun init(builder: OkHttpClient.Builder?): PageDownloader {
-            instance =
-                PageDownloader(builder ?: OkHttpClient.Builder())
-            return instance!!
+        fun init(builder: OkHttpClient.Builder?): PageDownloader =
+            instance ?: synchronized(PageDownloader::class.java){
+                instance ?: PageDownloader(builder ?: OkHttpClient.Builder()).also { instance = it }
         }
     }
 }
