@@ -98,6 +98,20 @@
             app:layout_constraintStart_toStartOf="@+id/itemVideoTitleView"
             app:layout_constraintTop_toBottomOf="@+id/itemVideoTitleView"
             tools:text="Uploader" />
+
+        <TextView
+            android:id="@+id/itemAdditionalDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:maxLines="1"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="@dimen/video_item_search_upload_date_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/itemVideoTitleView"
+            tools:text="2 years ago • 10M views" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

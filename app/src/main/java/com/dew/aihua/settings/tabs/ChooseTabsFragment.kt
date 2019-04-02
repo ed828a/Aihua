@@ -15,6 +15,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.dew.aihua.R
 import com.dew.aihua.player.helper.ServiceHelper
 import com.dew.aihua.player.helper.ThemeHelper
@@ -170,8 +171,10 @@ class ChooseTabsFragment : Fragment() {
         val type = getTypeFrom(tabId)
 
         if (type == null) {
-            ErrorActivity.reportError(requireContext(), IllegalStateException("Tab id not found: $tabId"), null, null,
-                ErrorInfo.make(UserAction.SOMETHING_ELSE, "none", "Choosing tabs on settings", 0))
+            ErrorActivity.reportError(
+                requireContext(), IllegalStateException("Tab id not found: $tabId"), null, null,
+                ErrorInfo.make(UserAction.SOMETHING_ELSE, "none", "Choosing tabs on settings", 0)
+            )
             return
         }
 
@@ -275,7 +278,7 @@ class ChooseTabsFragment : Fragment() {
 
         kioskList.forEach { entry ->
             val tab = KioskTab(entry.serviceId, entry.kioskId)
-            if (!tabList.contains(tab)){
+            if (!tabList.contains(tab)) {
                 addTab(tab)
             } else {
                 Toast.makeText(context, "Trending Tab is already there.", Toast.LENGTH_SHORT).show()
@@ -287,7 +290,8 @@ class ChooseTabsFragment : Fragment() {
     // List Handling
     ///////////////////////////////////////////////////////////////////////////
 
-    inner class SelectedTabsAdapter(val tabList: List<Tab>, private val itemTouchHelper: ItemTouchHelper?) : androidx.recyclerview.widget.RecyclerView.Adapter<SelectedTabsAdapter.TabViewHolder>() {
+    inner class SelectedTabsAdapter(val tabList: List<Tab>, private val itemTouchHelper: ItemTouchHelper?) :
+        RecyclerView.Adapter<SelectedTabsAdapter.TabViewHolder>() {
 
         fun swapItems(fromPosition: Int, toPosition: Int) {
             Collections.swap(tabList, fromPosition, toPosition)
@@ -321,8 +325,10 @@ class ChooseTabsFragment : Fragment() {
                 when (type) {
                     TabType.BLANK -> tabName = requireContext().getString(R.string.blank_page_summary)
                     TabType.KIOSK -> tabName = "${NewPipe.getNameOfService((tab as KioskTab).kioskServiceId)}/$tabName"
-                    TabType.CHANNEL -> tabName = "${NewPipe.getNameOfService((tab as ChannelTab).channelServiceId)}/$tabName"
-                    else -> {}
+                    TabType.CHANNEL -> tabName =
+                        "${NewPipe.getNameOfService((tab as ChannelTab).channelServiceId)}/$tabName"
+                    else -> {
+                    }
                 }
 
                 tabNameView.text = tabName
@@ -342,7 +348,6 @@ class ChooseTabsFragment : Fragment() {
                     } else {
                         false
                     }
-
                 }
         }
     }
@@ -351,7 +356,8 @@ class ChooseTabsFragment : Fragment() {
     private fun getItemTouchCallback(): ItemTouchHelper.SimpleCallback =
         object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-            ItemTouchHelper.START or ItemTouchHelper.END) {
+            ItemTouchHelper.START or ItemTouchHelper.END
+        ) {
 
             // Called by the ItemTouchHelper when user is dragging a view out of bounds.
             override fun interpolateOutOfBoundsScroll(
@@ -359,18 +365,26 @@ class ChooseTabsFragment : Fragment() {
                 viewSize: Int,
                 viewSizeOutOfBounds: Int,
                 totalSize: Int,
-                msSinceStartScroll: Long): Int {
+                msSinceStartScroll: Long
+            ): Int {
 
-                val standardSpeed = super.interpolateOutOfBoundsScroll(recyclerView, viewSize,
-                    viewSizeOutOfBounds, totalSize, msSinceStartScroll)
-                val minimumAbsVelocity = Math.max(12,
-                    Math.abs(standardSpeed))
+                val standardSpeed = super.interpolateOutOfBoundsScroll(
+                    recyclerView, viewSize,
+                    viewSizeOutOfBounds, totalSize, msSinceStartScroll
+                )
+                val minimumAbsVelocity = Math.max(
+                    12,
+                    Math.abs(standardSpeed)
+                )
                 return minimumAbsVelocity * Math.signum(viewSizeOutOfBounds.toFloat()).toInt()
             }
 
             // Called when ItemTouchHelper wants to move the dragged item getTabFrom its old position to the new position.
-            override fun onMove(recyclerView: androidx.recyclerview.widget.RecyclerView, source: androidx.recyclerview.widget.RecyclerView.ViewHolder,
-                                target: androidx.recyclerview.widget.RecyclerView.ViewHolder): Boolean {
+            override fun onMove(
+                recyclerView: androidx.recyclerview.widget.RecyclerView,
+                source: androidx.recyclerview.widget.RecyclerView.ViewHolder,
+                target: androidx.recyclerview.widget.RecyclerView.ViewHolder
+            ): Boolean {
                 if (source.itemViewType != target.itemViewType) {
                     return false  // not moved
                 }

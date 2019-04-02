@@ -61,6 +61,7 @@
         <item name="ic_settings">@drawable/ic_settings_black_24dp</item>
         <item name="ic_add_tabs">@drawable/ic_add_tabs_black</item>
         <item name="ic_history">@drawable/ic_history_black_24dp</item>
+        <item name="ic_add_circle_outline">@drawable/ic_add_circle_outline_black_24dp</item>
 
         <item name="separator_color">@color/light_separator_color</item>
         <item name="contrast_background_color">@color/light_contrast_background_color</item>
@@ -125,6 +126,7 @@
         <item name="ic_settings">@drawable/ic_settings_white_24dp</item>
         <item name="ic_add_tabs">@drawable/ic_add_tabs_white</item>
         <item name="ic_history">@drawable/ic_history_white_24dp</item>
+        <item name="ic_add_circle_outline">@drawable/ic_add_circle_outline_white_24dp</item>
 
         <item name="separator_color">@color/dark_separator_color</item>
         <item name="contrast_background_color">@color/dark_contrast_background_color</item>

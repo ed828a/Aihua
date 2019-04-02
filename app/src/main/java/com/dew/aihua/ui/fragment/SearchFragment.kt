@@ -1,5 +1,6 @@
 package com.dew.aihua.ui.fragment
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -19,18 +20,20 @@ import androidx.appcompat.widget.TooltipCompat
 import androidx.preference.PreferenceManager
 import com.dew.aihua.R
 import com.dew.aihua.data.local.manoeuvre.HistoryRecordManager
+import com.dew.aihua.data.model.SuggestionItem
+import com.dew.aihua.data.network.api.ExtractorHelper
 import com.dew.aihua.player.helper.AnimationUtils
 import com.dew.aihua.player.helper.AnimationUtils.animateView
 import com.dew.aihua.player.helper.Constants
-import com.dew.aihua.data.network.api.ExtractorHelper
 import com.dew.aihua.player.helper.ServiceHelper
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
 import com.dew.aihua.report.UserAction
+import com.dew.aihua.settings.dialog_fragment.SelectChannelFragment
+import com.dew.aihua.settings.tabs.*
 import com.dew.aihua.ui.activity.ReCaptchaActivity
 import com.dew.aihua.ui.adapter.SuggestionListAdapter
 import com.dew.aihua.ui.contract.BackPressable
-import com.dew.aihua.data.model.SuggestionItem
 import com.dew.aihua.util.LayoutManagerSmoothScroller
 import com.dew.aihua.util.NavigationHelper
 import icepick.State
@@ -67,7 +70,7 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
     @JvmField
     protected var serviceId = Constants.NO_SERVICE_ID
 
-    // these three represet the current search query
+    // these three re-preset the current search query
     @State
     @JvmField
     protected var searchString: String? = null
@@ -78,7 +81,7 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
     @JvmField
     protected var sortFilter: String? = null
 
-    // these two represtent the last search
+    // these two re-prestent the last search
     @State
     @JvmField
     protected var lastSearchedString: String? = null
@@ -124,6 +127,9 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
 
     private var textWatcher: TextWatcher? = null
 
+    private val tabList = ArrayList<Tab>()
+    private lateinit var tabsManager: TabsManager
+
     /**
      * Set wasLoading to true so when the fragment onResume is called, the initial search is done.
      */
@@ -153,6 +159,7 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
         contentCountry =
             preferences.getString(getString(R.string.content_country_key), getString(R.string.default_country_value))
                 ?: getString(R.string.default_country_value)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -220,12 +227,17 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
             hideSuggestionsPanel()
         }
         wasSearchFocused = false
+
+        tabsManager = TabsManager.getTabsManager(requireContext())
+        updateTabList()
     }
 
     override fun onDestroyView() {
         Log.d(TAG, "onDestroyView() called")
         unsetSearchListeners()
         super.onDestroyView()
+
+        saveChanges()
     }
 
     override fun onDestroy() {
@@ -310,6 +322,7 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
+
         menu.removeItem(R.id.action_history)
         menu.removeItem(R.id.action_settings)
         menu.removeItem(R.id.action_show_downloads)
@@ -319,6 +332,7 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
             setDisplayHomeAsUpEnabled(true)
             title = searchFragmentTitle
         }
+
 
         var itemId = 0
         var isFirstItem = true
@@ -344,9 +358,33 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        val contentFilter = ArrayList<String>(1)
-        contentFilter.add(menuItemToFilterName[item.itemId]!!)
-        changeContentFilter(item, contentFilter)
+//        when (item.itemId) {
+//            R.id.action_add_search_tab -> {
+//                val editView = LayoutInflater.from(activity)
+//                    .inflate(R.layout.dialog_input_prompts, null)
+//
+//                android.app.AlertDialog.Builder(activity)
+//                    .setTitle("Tab Title")
+//                    .setView(editView)
+//                    .setPositiveButton("OK") { _, _ ->
+//                        searchFragmentTitle = editView.findViewById<EditText>(R.id.editUserInput).text.toString()
+////                        addSearchTab(searchFragmentTitle!!)
+//                    }
+//                    .setNegativeButton("Cancel") { dialog, which ->
+//
+//                    }
+//                    .create()
+//                    .show()
+//            }
+//
+//            else -> {
+                val contentFilter = ArrayList<String>(1)
+                contentFilter.add(menuItemToFilterName[item.itemId]!!)
+                changeContentFilter(item, contentFilter)
+//            }
+//
+//        }
+
         return true
     }
 
@@ -448,7 +486,10 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
             Log.d(TAG, "searchEditText.onEditorAction() : v = [$v], actionId = [$actionId], event = [$event]")
 
             if (event != null && (event.keyCode == KeyEvent.KEYCODE_ENTER || event.action == EditorInfo.IME_ACTION_SEARCH)) {
-                Log.d(TAG, "searchEditText.onEditorAction() : event.keyCode = ${event.keyCode}, event.action = ${event.action} ")
+                Log.d(
+                    TAG,
+                    "searchEditText.onEditorAction() : event.keyCode = ${event.keyCode}, event.action = ${event.action} "
+                )
                 hideSuggestionsPanel()
                 hideKeyboardSearch()
                 val query = searchEditText.text.toString()
@@ -633,7 +674,6 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
                                 onSuggestionError(throwable)
                             }
                         }
-
                     }
                 }
             }
@@ -644,7 +684,10 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
     }
 
     private fun search(searchString: String?, contentFilter: Array<String>, sortFilter: String) {
-        Log.d(TAG, "search() called with: query = [$searchString], contentFilter = $contentFilter, sortFilter = $sortFilter")
+        Log.d(
+            TAG,
+            "search() called with: query = [$searchString], contentFilter = $contentFilter, sortFilter = $sortFilter"
+        )
         if (TextUtils.isEmpty(searchString)) return
 
         try {
@@ -699,12 +742,16 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
         super.startLoading(forceLoad)
         compositeDisposable.clear()
         if (searchDisposable != null && !searchDisposable!!.isDisposed) searchDisposable!!.dispose()
-        searchDisposable = ExtractorHelper.searchFor(serviceId, searchString!!, Arrays.asList(*contentFilter), sortFilter!!)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnEvent { _, _ -> isLoading.set(false) }
-            .subscribe({ result -> this.handleResult(result) },
-                { error -> this.onError(error) })
+        searchDisposable =
+            ExtractorHelper.searchFor(serviceId, searchString!!, Arrays.asList(*contentFilter), sortFilter!!)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnEvent { _, _ ->
+                    isLoading.set(false)
+
+                }
+                .subscribe({ result -> this.handleResult(result) },
+                    { error -> this.onError(error) })
 
     }
 
@@ -805,6 +852,7 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
     // Search Results
     ///////////////////////////////////////////////////////////////////////////
 
+    @SuppressLint("ResourceType")
     override fun handleResult(result: SearchInfo) {
         Log.d(
             TAG,
@@ -825,6 +873,7 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
         if (infoListAdapter != null && infoListAdapter!!.itemsList.size == 0) {
             if (!result.relatedItems.isEmpty()) {
                 infoListAdapter!!.addInfoItemList(result.relatedItems)
+
             } else {
                 infoListAdapter!!.clearStreamItemList()
                 showEmptyState()
@@ -870,11 +919,31 @@ class SearchFragment : BaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<
         return true
     }
 
+    private fun addSearchTab(title: String) {
+
+        if (this.searchString != null) {
+            addTab(SearchTab(searchString = this.searchString!!, searchTabName = title))
+            fragmentManager?.popBackStackImmediate()
+            NavigationHelper.gotoMainFragment(fragmentManager!!)
+        }
+    }
+
+    private fun addTab(tab: Tab) {
+        tabList.add(tab)
+//        selectedTabsAdapter.notifyDataSetChanged()
+    }
+
+    private fun updateTabList() {
+        tabList.clear()
+        tabList.addAll(tabsManager.getTabs())
+    }
+
+    private fun saveChanges() {
+        tabsManager.saveTabs(tabList) // save tabList to SharedPreference
+    }
+
     companion object {
         private const val TAG = "SearchFragment"
-        ///////////////////////////////////////////////////////////////////////////
-        // Search
-        ///////////////////////////////////////////////////////////////////////////
 
         /**
          * The suggestions will only be fetched getTabFrom network if the query meet this threshold (>=).

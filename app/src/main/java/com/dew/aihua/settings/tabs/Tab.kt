@@ -348,19 +348,19 @@ class SearchTab : Tab {
     override val tabId: Int
         get() = SEARCH_TAB_ID
 
-//    override val fragment: NewSearchFragment
-//        get() {
-//            Log.d(TAG, "SearchTab::getFragment called")
-//            return NewSearchFragment.getInstance(searchServiceId, searchString ?: "mostPopular")
-//        }
-
-    override val fragment: SearchFragment
+    override val fragment: NewSearchFragment
         get() {
             Log.d(TAG, "SearchTab::getFragment called")
-            return SearchFragment.getInstance(searchServiceId, searchString ?: "mostPopular")
+            return NewSearchFragment.getInstance(searchServiceId, searchString ?: "mostPopular")
         }
 
-    constructor(searchServiceId: Int = 0, searchString: String = "most Popular", searchTabName: String = "most Popular") {
+//    override val fragment: SearchFragment
+//        get() {
+//            Log.d(TAG, "SearchTab::getFragment called")
+//            return SearchFragment.getInstance(searchServiceId, searchString ?: "mostPopular")
+//        }
+
+    constructor(searchServiceId: Int = 0, searchString: String = "Most Popular", searchTabName: String = "Most Popular") {
         Log.d(TAG, "SearchTab() called with SERVICE_ID = $searchServiceId, searchString = $searchString")
         this.searchServiceId = searchServiceId
         this.searchString = searchString

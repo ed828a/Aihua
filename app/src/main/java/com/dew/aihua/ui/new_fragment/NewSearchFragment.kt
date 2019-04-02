@@ -40,6 +40,7 @@ import com.jakewharton.rxbinding2.widget.RxSearchView
 import icepick.State
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
@@ -106,6 +107,10 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
     @JvmField
     protected var nextPageUrl: String? = null      // SateSave takes care it
 
+    @State
+    @JvmField
+    protected var searchFragmentTitle: String? = null
+
     private val menuItemToFilterName: MutableMap<Int, String> = HashMap()
     private var service: StreamingService? = null
 
@@ -134,6 +139,7 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
 
     private lateinit var searchView: SearchView
     private lateinit var fragmentView: View
+    private val disposables = CompositeDisposable()
 
     /**
      * Set wasLoading to true so when the fragment onResume is called, the initial search is done.
@@ -295,6 +301,7 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
         if (searchDisposable != null) searchDisposable!!.dispose()
         if (suggestionDisposable != null) suggestionDisposable!!.dispose()
         if (!compositeDisposable.isDisposed) compositeDisposable.dispose()
+        disposables.clear()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -343,14 +350,14 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
         val supportActionBar = activity!!.supportActionBar?.apply {
             setDisplayShowTitleEnabled(true)
             setDisplayHomeAsUpEnabled(true)
-
+            title = searchFragmentTitle
         }
 
         val view = menu.findItem(R.id.action_search)?.actionView ?: throw Exception("searchView is null")
 
         searchView = view as SearchView
         with(searchView) {
-            setIconifiedByDefault(false)
+            setIconifiedByDefault(true)
             requestFocus()
         }
         if (TextUtils.isEmpty(searchString))
@@ -388,7 +395,7 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
                 {}
             )
 
-        compositeDisposable.add(d)
+        disposables.add(d)
 
         val searchCloseButtonId = searchView.context.resources
             .getIdentifier("android:id/search_close_btn", null, null)
@@ -719,6 +726,8 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
         this.searchString = searchString
         this.contentFilter = contentfilter
         this.sortFilter = sortFilter
+        this.searchFragmentTitle = searchString
+
     }
 
 ///////////////////////////////////////////////////////////////////////////

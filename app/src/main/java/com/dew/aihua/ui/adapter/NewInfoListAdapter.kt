@@ -8,12 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dew.aihua.player.playqueque.holder.FallbackViewHolder
 import com.dew.aihua.ui.builder.NewInfoItemBuilder
-import com.dew.aihua.ui.holder.NewInfoItemHolder
-import com.dew.aihua.ui.holder.NewStreamGridInfoItemHolder
-import com.dew.aihua.ui.holder.NewStreamInfoItemHolder
-import com.dew.aihua.ui.infolist.holder.HeaderFooterHolder
+import com.dew.aihua.ui.holder.*
+import com.dew.aihua.ui.infolist.holder.*
 import com.dew.aihua.util.OnClickGesture
-
 import org.schabi.newpipe.extractor.InfoItem
 import org.schabi.newpipe.extractor.channel.ChannelInfoItem
 import org.schabi.newpipe.extractor.playlist.PlaylistInfoItem
@@ -93,10 +90,10 @@ class NewInfoListAdapter(activity: Activity) : GeneralListAdapter<InfoItem>() {
             FOOTER_TYPE -> HeaderFooterHolder(footer!!)
             STREAM_HOLDER_TYPE -> NewStreamInfoItemHolder(infoItemBuilder, parent)
             GRID_STREAM_HOLDER_TYPE -> NewStreamGridInfoItemHolder(infoItemBuilder, parent)
-//            CHANNEL_HOLDER_TYPE -> ChannelInfoItemHolder(infoItemBuilder, parent)
-//            GRID_CHANNEL_HOLDER_TYPE -> ChannelGridInfoItemHolder(infoItemBuilder, parent)
-//            PLAYLIST_HOLDER_TYPE -> PlaylistInfoItemHolder(infoItemBuilder, parent)
-//            GRID_PLAYLIST_HOLDER_TYPE -> PlaylistGridInfoItemHolder(infoItemBuilder, parent)
+            CHANNEL_HOLDER_TYPE -> NewChannelInfoItemHolder(infoItemBuilder, parent)
+            GRID_CHANNEL_HOLDER_TYPE -> NewChannelGridInfoItemHolder(infoItemBuilder, parent)
+            PLAYLIST_HOLDER_TYPE -> NewPlaylistInfoItemHolder(infoItemBuilder, parent)
+            GRID_PLAYLIST_HOLDER_TYPE -> NewPlaylistGridInfoItemHolder(infoItemBuilder, parent)
             else -> {
                 Log.e(TAG, "onCreateViewHolder(), viewType is invalid: viewType = $viewType")
                 FallbackViewHolder(View(parent.context))

@@ -47,7 +47,8 @@
 
     <attr name="ic_history" format="reference"/>
     <attr name="ic_add_tabs" format="reference"/>
-    <attr name="ic_settings" format="reference" />
+    <attr name="ic_settings" format="reference"/>
+    <attr name="ic_add_circle_outline" format="reference"/>
 
     <!-- Can't refer to colors directly in drawable's xml-->
     <attr name="toolbar_shadow_drawable" format="reference"/>

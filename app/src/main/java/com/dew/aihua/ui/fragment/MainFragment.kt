@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.PagerAdapter
 import com.dew.aihua.R
 import com.dew.aihua.player.helper.ServiceHelper
 import com.dew.aihua.report.ErrorActivity
@@ -193,16 +194,15 @@ class MainFragment : BaseFragment(), TabLayout.OnTabSelectedListener {
         override fun getItemPosition(`object`: Any): Int {
             // Causes adapter to reload all Fragments when
             // notifyDataSetChanged is called
-            return androidx.viewpager.widget.PagerAdapter.POSITION_NONE
+            return PagerAdapter.POSITION_NONE
         }
 
         override fun getCount(): Int = tabsList.size
 
-
         override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
             childFragmentManager
                 .beginTransaction()
-                .remove(`object` as androidx.fragment.app.Fragment)
+                .remove(`object` as Fragment)
                 .commitNowAllowingStateLoss()
         }
     }
