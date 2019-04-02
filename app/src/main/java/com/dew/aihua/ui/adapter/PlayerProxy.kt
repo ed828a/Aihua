@@ -43,9 +43,11 @@ class PlayerProxy(val context: Context) {
     @State
     @JvmField
     var serviceId = Constants.NO_SERVICE_ID
+
     @State
     @JvmField
     var name: String? = null
+
     @State
     @JvmField
     var url: String? = null

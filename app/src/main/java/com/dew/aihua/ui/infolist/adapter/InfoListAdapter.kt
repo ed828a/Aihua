@@ -4,6 +4,7 @@ import android.app.Activity
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.dew.aihua.ui.infolist.holder.*
 import com.dew.aihua.player.playqueque.holder.FallbackViewHolder
 import com.dew.aihua.util.OnClickGesture
@@ -16,7 +17,7 @@ import java.util.*
 /**
  *  Created by Edward on 3/2/2019.
  */
-class InfoListAdapter(activity: Activity) : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+class InfoListAdapter(activity: Activity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val infoItemBuilder: InfoItemBuilder = InfoItemBuilder(activity)
     val itemsList: ArrayList<InfoItem> = ArrayList()

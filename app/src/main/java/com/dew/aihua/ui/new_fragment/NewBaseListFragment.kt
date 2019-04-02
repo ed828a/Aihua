@@ -6,10 +6,13 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.dew.aihua.R
+import com.dew.aihua.player.playqueque.queque.SinglePlayQueue
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.ui.adapter.NewInfoListAdapter
 import com.dew.aihua.ui.contract.OnScrollBelowItemsListener
 import com.dew.aihua.ui.dialog.InfoItemDialog
+import com.dew.aihua.ui.local.dialog.PlaylistAppendDialog
+import com.dew.aihua.util.NavigationHelper
 import com.dew.aihua.util.OnClickGesture
 import org.schabi.newpipe.extractor.InfoItem
 import org.schabi.newpipe.extractor.channel.ChannelInfoItem
@@ -51,12 +54,12 @@ abstract class NewBaseListFragment<I, N> : GeneralListFragment<I, N, InfoItem, N
             override fun selected(selectedItem: ChannelInfoItem) {
                 try {
                     onItemSelected(selectedItem)
-//                    NavigationHelper.openChannelFragment(
-//                        getFM(),
-//                        selectedItem.serviceId,
-//                        selectedItem.url,
-//                        selectedItem.name
-//                    )
+                    NavigationHelper.openChannelFragment(
+                        getFM(),
+                        selectedItem.serviceId,
+                        selectedItem.url,
+                        selectedItem.name
+                    )
                 } catch (e: Exception) {
                     val context = getActivity()
                     context?.let {
@@ -71,12 +74,12 @@ abstract class NewBaseListFragment<I, N> : GeneralListFragment<I, N, InfoItem, N
             override fun selected(selectedItem: PlaylistInfoItem) {
                 try {
                     onItemSelected(selectedItem)
-//                    NavigationHelper.openPlaylistFragment(
-//                        getFM(),
-//                        selectedItem.serviceId,
-//                        selectedItem.url,
-//                        selectedItem.name
-//                    )
+                    NavigationHelper.openPlaylistFragment(
+                        getFM(),
+                        selectedItem.serviceId,
+                        selectedItem.url,
+                        selectedItem.name
+                    )
                 } catch (e: Exception) {
                     val context = getActivity()
                     context?.let {
@@ -115,7 +118,7 @@ abstract class NewBaseListFragment<I, N> : GeneralListFragment<I, N, InfoItem, N
     abstract fun actionOnSelectedValidStream(selectedItem: StreamInfoItem)
     // Todo 4: on the concrete class, this function can do either play selected stream directly or show the details of the select stream and its related videos
 //    NavigationHelper.openAnchorPlayer(activity!!, selectedItem.serviceId, selectedItem.url, selectedItem.name)
-//        NavigationHelper.openVideoDetailFragment(getFM(), selectedItem.serviceId, selectedItem.url, selectedItem.name)
+//    NavigationHelper.openVideoDetailFragment(getFM(), selectedItem.serviceId, selectedItem.url, selectedItem.name)
 
     protected fun onScrollToBottom() {
         if (hasMoreItems() && !isLoading.get()) {
@@ -137,12 +140,12 @@ abstract class NewBaseListFragment<I, N> : GeneralListFragment<I, N, InfoItem, N
 
         val actions = DialogInterface.OnClickListener { _, which ->
             when (which) {
-//                0 -> NavigationHelper.enqueueOnBackgroundPlayer(context, SinglePlayQueue(item))
-//                1 -> NavigationHelper.enqueueOnPopupPlayer(activity, SinglePlayQueue(item))
-//                2 -> if (fragmentManager != null) {
-//                    PlaylistAppendDialog.fromStreamInfoItems(listOf(item))
-//                        .show(fragmentManager!!, TAG)
-//                }
+                0 -> NavigationHelper.enqueueOnBackgroundPlayer(context, SinglePlayQueue(item))
+                1 -> NavigationHelper.enqueueOnPopupPlayer(activity, SinglePlayQueue(item))
+                2 -> if (fragmentManager != null) {
+                    PlaylistAppendDialog.fromStreamInfoItems(listOf(item))
+                        .show(fragmentManager!!, TAG)
+                }
                 3 -> shareUrl(item.name, item.url)
                 else -> {
                 }

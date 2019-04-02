@@ -4,7 +4,9 @@ import android.content.Context
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import com.dew.aihua.ui.holder.NewChannelInfoItemHolder
 import com.dew.aihua.ui.holder.NewInfoItemHolder
+import com.dew.aihua.ui.holder.NewPlaylistInfoItemHolder
 import com.dew.aihua.ui.holder.NewStreamInfoItemHolder
 import com.dew.aihua.util.OnClickGesture
 import org.schabi.newpipe.extractor.InfoItem
@@ -32,8 +34,8 @@ class NewInfoItemBuilder(context: Context) : GeneralItemBuilder(context) {
         Log.d(TAG, "holderFromInfoType(): InfoType = $infoType, useMiniVariant = $useMiniVariant")
         return when (infoType) {
             InfoItem.InfoType.STREAM -> NewStreamInfoItemHolder(this, parent)
-//            InfoItem.InfoType.CHANNEL -> ChannelInfoItemHolder(this, parent)
-//            InfoItem.InfoType.PLAYLIST -> PlaylistInfoItemHolder(this, parent)
+            InfoItem.InfoType.CHANNEL -> NewChannelInfoItemHolder(this, parent)
+            InfoItem.InfoType.PLAYLIST -> NewPlaylistInfoItemHolder(this, parent)
             else -> {
                 Log.e(TAG, "Wrong infoType: $infoType")
                 throw RuntimeException("InfoType not expected = ${infoType.name}")

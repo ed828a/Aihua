@@ -281,13 +281,13 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
 
         if (suggestionDisposable == null || suggestionDisposable!!.isDisposed) initSuggestionObserver()
 
-        if (TextUtils.isEmpty(searchString)) {
-            showKeyboardSearch()
-            showSuggestionsPanel()
-        } else {
-            hideKeyboardSearch()
-            hideSuggestionsPanel()
-        }
+//        if (TextUtils.isEmpty(searchString)) {
+//            showKeyboardSearch()
+//            showSuggestionsPanel()
+//        } else {
+//            hideKeyboardSearch()
+//            hideSuggestionsPanel()
+//        }
     }
 
     override fun onDestroyView() {
@@ -845,7 +845,7 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
     override fun actionOnSelectedValidStream(selectedItem: StreamInfoItem) {
         Log.d(TAG, "actionOnSelectedValidStream() selectedItem = $selectedItem")
 
-//        NavigationHelper.openAnchorPlayer(activity!!, selectedItem.serviceId, selectedItem.url, selectedItem.name)
+        NavigationHelper.openAnchorPlayer(activity!!, selectedItem.serviceId, selectedItem.url, selectedItem.name)
 //        NavigationHelper.openVideoDetailFragment(getFM(), selectedItem.serviceId, selectedItem.url, selectedItem.name)
 
     }
