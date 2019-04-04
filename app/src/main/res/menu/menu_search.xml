@@ -9,4 +9,10 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/action_add_tab"
+        android:title="@string/add_tab"
+        android:icon="@drawable/ic_add_circle_outline_white_24dp"
+        app:showAsAction="ifRoom" />
+
 </menu>

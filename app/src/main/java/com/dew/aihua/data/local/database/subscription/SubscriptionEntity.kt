@@ -4,7 +4,7 @@ import androidx.room.*
 import com.dew.aihua.data.local.database.subscription.SubscriptionEntity.Companion.SUBSCRIPTION_SERVICE_ID
 import com.dew.aihua.data.local.database.subscription.SubscriptionEntity.Companion.SUBSCRIPTION_TABLE
 import com.dew.aihua.data.local.database.subscription.SubscriptionEntity.Companion.SUBSCRIPTION_URL
-import com.dew.aihua.player.helper.Constants
+import com.dew.aihua.util.Constants
 import org.schabi.newpipe.extractor.channel.ChannelInfo
 import org.schabi.newpipe.extractor.channel.ChannelInfoItem
 

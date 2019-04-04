@@ -6,10 +6,10 @@ import androidx.annotation.DrawableRes
 import androidx.fragment.app.Fragment
 import com.dew.aihua.R
 import com.dew.aihua.data.network.helper.KioskTranslator
-import com.dew.aihua.player.helper.Constants.NO_ID_STRING
-import com.dew.aihua.player.helper.Constants.NO_NAME_STRING
-import com.dew.aihua.player.helper.Constants.NO_SERVICE_ID
-import com.dew.aihua.player.helper.Constants.NO_URL_STRING
+import com.dew.aihua.util.Constants.NO_ID_STRING
+import com.dew.aihua.util.Constants.NO_NAME_STRING
+import com.dew.aihua.util.Constants.NO_SERVICE_ID
+import com.dew.aihua.util.Constants.NO_URL_STRING
 import com.dew.aihua.player.helper.ThemeHelper
 import com.dew.aihua.settings.tabs.TabType.Companion.BLANK_TAB_ID
 import com.dew.aihua.settings.tabs.TabType.Companion.BOOKMARK_TAB_ID

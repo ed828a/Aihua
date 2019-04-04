@@ -7,7 +7,7 @@ import com.dew.aihua.data.local.database.playlist.model.PlaylistRemoteEntity.Com
 import com.dew.aihua.data.local.database.playlist.model.PlaylistRemoteEntity.Companion.REMOTE_PLAYLIST_SERVICE_ID
 import com.dew.aihua.data.local.database.playlist.model.PlaylistRemoteEntity.Companion.REMOTE_PLAYLIST_TABLE
 import com.dew.aihua.data.local.database.playlist.model.PlaylistRemoteEntity.Companion.REMOTE_PLAYLIST_URL
-import com.dew.aihua.player.helper.Constants
+import com.dew.aihua.util.Constants
 import org.schabi.newpipe.extractor.playlist.PlaylistInfo
 
 /**

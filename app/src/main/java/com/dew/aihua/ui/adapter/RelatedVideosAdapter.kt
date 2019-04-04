@@ -18,7 +18,7 @@ import java.util.ArrayList
  *  Created by Edward on 3/5/2019.
  */
 
-class RelatedVideosAdapter(activity: Activity) : RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+class RelatedVideosAdapter(activity: Activity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val infoItemBuilder: InfoItemBuilder = InfoItemBuilder(activity)
     val itemsList: ArrayList<InfoItem> = ArrayList()

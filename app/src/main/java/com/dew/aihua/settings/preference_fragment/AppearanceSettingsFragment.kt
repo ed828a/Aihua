@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.preference.Preference
 import com.dew.aihua.R
-import com.dew.aihua.player.helper.Constants
+import com.dew.aihua.util.Constants
 
 /**
  *  Created by Edward on 3/2/2019.

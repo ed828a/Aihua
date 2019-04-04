@@ -6,7 +6,7 @@ import android.os.Handler
 import android.util.Log
 import android.widget.Toast
 import com.dew.aihua.R
-import com.dew.aihua.player.helper.Constants.NO_SERVICE_ID
+import com.dew.aihua.util.Constants.NO_SERVICE_ID
 import com.dew.aihua.data.local.cache.InfoCache
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo

@@ -16,6 +16,7 @@ import android.widget.SearchView
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dew.aihua.R
@@ -23,7 +24,7 @@ import com.dew.aihua.data.local.manoeuvre.HistoryRecordManager
 import com.dew.aihua.data.model.SuggestionItem
 import com.dew.aihua.player.helper.AnimationUtils
 import com.dew.aihua.player.helper.AnimationUtils.animateView
-import com.dew.aihua.player.helper.Constants
+import com.dew.aihua.util.Constants
 import com.dew.aihua.player.helper.ServiceHelper
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
@@ -35,6 +36,9 @@ import com.dew.aihua.ui.viewmodel.ViewModelFactory
 import com.dew.aihua.util.LayoutManagerSmoothScroller
 import com.dew.aihua.util.NavigationHelper
 import com.dew.aihua.ui.viewmodel.SearchFragmentViewModel
+import com.dew.aihua.util.Constants.ACTION_ADD_TAB_MESSAGE
+import com.dew.aihua.util.Constants.KEY_SEARCH_STRING
+import com.dew.aihua.util.Constants.KEY_TAB_TITLE
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxSearchView
 import icepick.State
@@ -65,7 +69,8 @@ import java.util.concurrent.TimeUnit
  *  ListExtractor: Base class to extractors something who has a list (e.g. playlists, users).
  */
 
-class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<*>>(), BackPressable, KodeinAware {
+class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItemsPage<*>>(), BackPressable,
+    KodeinAware {
     override val kodein: Kodein by closestKodein()
     private val viewModelFactory: ViewModelFactory by instance()
 
@@ -196,9 +201,7 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
         hideKeyboardSearch()
     }
 
-    override fun onResume() {
-        Log.d(TAG, "onResume() called, searchString = $searchString")
-        super.onResume()
+    private fun setObservers(viewModel: SearchFragmentViewModel) {
 
         with(viewModel) {
             onEvent.observe(this@NewSearchFragment, Observer { resultArrived ->
@@ -249,6 +252,13 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
                 if (error != null) onSuggestionError(error)
             })
         }
+    }
+
+    override fun onResume() {
+        Log.d(TAG, "onResume() called, searchString = $searchString")
+        super.onResume()
+
+        setObservers(viewModel)
 
         try {
             service = viewModel.getStreamingService(serviceId)
@@ -278,16 +288,8 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
             }
         }
 
-
         if (suggestionDisposable == null || suggestionDisposable!!.isDisposed) initSuggestionObserver()
 
-//        if (TextUtils.isEmpty(searchString)) {
-//            showKeyboardSearch()
-//            showSuggestionsPanel()
-//        } else {
-//            hideKeyboardSearch()
-//            hideSuggestionsPanel()
-//        }
     }
 
     override fun onDestroyView() {
@@ -384,11 +386,13 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
                         searchString = queryEvent.queryText().toString()
                         searchView.setQuery("", false)
                         searchView.clearFocus()
+                        hideSuggestionsPanel()
                         search(searchString, this.contentFilter, sortFilter!!)
                     } else {
                         searchString = queryEvent.queryText().toString()
                         suggestionPublisher.onNext(searchString!!)
-                        if (!isSuggestionPanelShowing) showSuggestionsPanel()
+//                        if (!isSuggestionPanelShowing)
+                            showSuggestionsPanel()
                     }
                 },
 
@@ -397,22 +401,22 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
 
         disposables.add(d)
 
-        val searchCloseButtonId = searchView.context.resources
-            .getIdentifier("android:id/search_close_btn", null, null)
-        val closeButton = searchView.findViewById<ImageView>(searchCloseButtonId)
-        val searchTextViewId = searchView.context.resources
-            .getIdentifier("android:id/search_src_text", null, null)
-        val searchTextView = searchView.findViewById<EditText>(searchTextViewId)
-
-        if (closeButton != null){
-            val d1 = RxView.clicks(closeButton)
-                .subscribe {
-                    searchTextView.text.clear()
-                    suggestionListAdapter.setItems(emptyList())
-                    hideSuggestionsPanel()
-                }
-            compositeDisposable.add(d1)
-        }
+//        val searchCloseButtonId = searchView.context.resources
+//            .getIdentifier("android:id/search_close_btn", null, null)
+//        val closeButton = searchView.findViewById<ImageView>(searchCloseButtonId)
+//        val searchTextViewId = searchView.context.resources
+//            .getIdentifier("android:id/search_src_text", null, null)
+//        val searchTextView = searchView.findViewById<EditText>(searchTextViewId)
+//
+//        if (closeButton != null) {
+//            val d1 = RxView.clicks(closeButton)
+//                .subscribe {
+//                    searchTextView.text.clear()
+//                    suggestionListAdapter.setItems(emptyList())
+//                    hideSuggestionsPanel()
+//                }
+//            compositeDisposable.add(d1)
+//        }
 //        searchView.setOnCloseListener {
 //            if (searchView.query.isEmpty()) {
 //                // go back to MainFragment
@@ -452,10 +456,42 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
         when (item.itemId) {
             R.id.action_search -> {
             }
+            R.id.action_add_tab -> {
+                Log.d(TAG, "onOptionsItemSelected(): searchString = $searchString")
+                val editView = LayoutInflater.from(activity)
+                    .inflate(R.layout.dialog_input_prompts, null)
+
+                android.app.AlertDialog.Builder(activity)
+                    .setTitle("Tab Title")
+                    .setView(editView)
+                    .setPositiveButton("OK") { _, _ ->
+                        searchFragmentTitle = editView.findViewById<EditText>(R.id.editUserInput).text.toString()
+                        Log.d(
+                            TAG,
+                            "onOptionsItemSelected(): searchFragmentTitle = $searchFragmentTitle, sendingMessage"
+                        )
+
+                        // addSearchTab(searchFragmentTitle!!)
+                        val intent = Intent(ACTION_ADD_TAB_MESSAGE)
+                        // You can also include some extra data.
+                        intent.putExtra(KEY_SEARCH_STRING, searchString)
+                        intent.putExtra(KEY_TAB_TITLE, searchFragmentTitle)
+                        LocalBroadcastManager.getInstance(activity!!).sendBroadcast(intent)
+
+                    }
+                    .setNegativeButton("Cancel") { dialog, which ->
+
+                    }
+                    .create()
+                    .show()
+
+            }
             else -> {
-                val contentFilter = ArrayList<String>(1)
-                contentFilter.add(menuItemToFilterName[item.itemId]!!)
-                changeContentFilter(item, contentFilter)
+                if (item.groupId == 1) {
+                    val contentFilter = ArrayList<String>(1)
+                    contentFilter.add(menuItemToFilterName[item.itemId]!!)
+                    changeContentFilter(item, contentFilter)
+                }
             }
         }
 
@@ -706,9 +742,9 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
         hideKeyboardSearch()
     }
 
-///////////////////////////////////////////////////////////////////////////
-// Utils
-///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    // Utils
+    ///////////////////////////////////////////////////////////////////////////
 
     private fun changeContentFilter(item: MenuItem, contentFilter: List<String>) {
         this.filterItemCheckedId = item.itemId
@@ -730,9 +766,9 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
 
     }
 
-///////////////////////////////////////////////////////////////////////////
-// Suggestion Results
-///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    // Suggestion Results
+    ///////////////////////////////////////////////////////////////////////////
 
     private fun handleSuggestions(suggestions: List<SuggestionItem>) {
         Log.d(TAG, "handleSuggestions(): suggestions = $suggestions")
@@ -758,9 +794,9 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
         )
     }
 
-///////////////////////////////////////////////////////////////////////////
-// Contract
-///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    // Contract
+    ///////////////////////////////////////////////////////////////////////////
 
     override fun hideLoading() {
         super.hideLoading()
@@ -773,9 +809,9 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
         hideKeyboardSearch()
     }
 
-///////////////////////////////////////////////////////////////////////////
-// Search Results
-///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    // Search Results
+    ///////////////////////////////////////////////////////////////////////////
 
     override fun handleResult(result: SearchInfo) {
         Log.d(

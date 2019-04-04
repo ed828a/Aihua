@@ -7,7 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import com.dew.aihua.R
 import com.dew.aihua.ui.infolist.adapter.InfoItemBuilder
-import com.dew.aihua.player.helper.Constants
+import com.dew.aihua.util.Constants
 import com.dew.aihua.data.network.api.ExtractorHelper
 import com.dew.aihua.player.helper.ListHelper
 import com.dew.aihua.player.playerUI.MainVideoPlayer

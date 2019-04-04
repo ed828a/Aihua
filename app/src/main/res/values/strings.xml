@@ -39,6 +39,7 @@
     <string name="tab_bookmarks">Bookmarked Playlists</string>
     <string name="tab_new" translatable="false">New Tab</string>
     <string name="tab_choose" translatable="false">Choose Tab</string>
+    <string name="tab_search" translatable="false">Search Tab</string>
 
     <string name="fragment_whats_new">What\'s New</string>
 
@@ -607,5 +608,5 @@
     <string name="navigation_drawer_close" translatable="false">Navigation Drawer Close</string>
     <string name="menu_action_add_search_tab" translatable="false">add search tab</string>
     <!--<string name="todo" translatable="false">TODO</string>-->
-    <!--<string name="youtube" translatable="false">YouTube</string>-->
+    <string name="add_tab" translatable="false">Add Tab</string>
 </resources>

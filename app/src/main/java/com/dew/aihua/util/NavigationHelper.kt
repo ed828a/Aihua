@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.preference.PreferenceManager
 import com.dew.aihua.R
 import com.dew.aihua.data.local.cache.InfoCache
@@ -232,7 +233,7 @@ object NavigationHelper {
         return fragmentManager.popBackStackImmediate(SEARCH_FRAGMENT_TAG, 0)
     }
 
-    fun openSearchFragment(fragmentManager: androidx.fragment.app.FragmentManager?,
+    fun openSearchFragment(fragmentManager: FragmentManager?,
                            serviceId: Int,
                            searchString: String) {
         fragmentManager?.let {

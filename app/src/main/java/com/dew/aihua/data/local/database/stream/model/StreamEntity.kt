@@ -4,7 +4,7 @@ import androidx.room.*
 import com.dew.aihua.data.local.database.stream.model.StreamEntity.Companion.STREAM_SERVICE_ID
 import com.dew.aihua.data.local.database.stream.model.StreamEntity.Companion.STREAM_TABLE
 import com.dew.aihua.data.local.database.stream.model.StreamEntity.Companion.STREAM_URL
-import com.dew.aihua.player.helper.Constants
+import com.dew.aihua.util.Constants
 import com.dew.aihua.player.model.PlayQueueItem
 import org.schabi.newpipe.extractor.stream.StreamInfo
 import org.schabi.newpipe.extractor.stream.StreamInfoItem

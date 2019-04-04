@@ -47,6 +47,7 @@ import com.dew.aihua.ui.activity.ReCaptchaActivity
 import com.dew.aihua.ui.contract.BackPressable
 import com.dew.aihua.data.model.StackItem
 import com.dew.aihua.data.network.api.ExtractorHelper
+import com.dew.aihua.util.Constants
 import com.dew.aihua.util.NavigationHelper
 import com.dew.aihua.util.OnClickGesture
 import com.nirhart.parallaxscroll.views.ParallaxScrollView

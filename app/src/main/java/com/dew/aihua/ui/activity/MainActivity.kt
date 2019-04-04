@@ -17,7 +17,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.preference.PreferenceManager
 import com.dew.aihua.R
-import com.dew.aihua.player.helper.Constants
+import com.dew.aihua.util.Constants
 import com.dew.aihua.player.helper.PermissionHelper
 import com.dew.aihua.player.helper.ServiceHelper
 import com.dew.aihua.player.helper.ThemeHelper
@@ -34,11 +34,17 @@ import kotlinx.android.synthetic.main.drawer_layout.*
 import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.StreamingService
 import org.schabi.newpipe.extractor.exceptions.ExtractionException
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.IntentFilter
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.dew.aihua.util.Constants.ACTION_ADD_TAB_MESSAGE
+import com.dew.aihua.util.Constants.KEY_SEARCH_STRING
+import com.dew.aihua.util.Constants.KEY_SEARCH_STRING_INT
+import com.dew.aihua.util.Constants.KEY_TAB_TITLE
 
 
-
-
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
 
     private var toggle: ActionBarDrawerToggle? = null
     private var drawer: DrawerLayout? = null
@@ -64,7 +70,10 @@ class MainActivity : AppCompatActivity(){
             val w = window
             // When this flag is enabled for a window, it automatically sets the system UI visibility flags
             //   View.SYSTEM_UI_FLAG_LAYOUT_STABLE and View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            w.setFlags(
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+            )
             // same as w.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         }
 
@@ -79,13 +88,15 @@ class MainActivity : AppCompatActivity(){
             ErrorActivity.reportUiError(this, e)
         }
 
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(mMessageReceiver, IntentFilter(ACTION_ADD_TAB_MESSAGE))
     }
 
     @Throws(Exception::class)
     private fun setupDrawer() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         drawer = findViewById(R.id.drawer_layout)
-        drawerItems = findViewById(R.id.navigation)
+        drawerItems = findViewById(R.id.navigationView)
 
         //Tabs
         val currentServiceId = ServiceHelper.getSelectedServiceId(this)
@@ -166,6 +177,11 @@ class MainActivity : AppCompatActivity(){
             ITEM_ID_BOOKMARKS -> NavigationHelper.openBookmarksFragment(supportFragmentManager)
             ITEM_ID_DOWNLOADS -> NavigationHelper.openDownloads(this)
             ITEM_ID_HISTORY -> NavigationHelper.openStatisticFragment(supportFragmentManager)
+            ITEM_ID_SEARCH -> {
+                val string = item.actionView?.getTag(KEY_SEARCH_STRING_INT) as String?
+                val string2 = item.tooltipText.toString()
+                NavigationHelper.openSearchFragment(supportFragmentManager, ServiceHelper.getSelectedServiceId(this), string2)
+            }
 
             else -> { // for Available Kiosk, actually only Trending from NewPipe extractor YouTube Service.
                 val currentServiceId = ServiceHelper.getSelectedServiceId(this)
@@ -184,7 +200,7 @@ class MainActivity : AppCompatActivity(){
     }
 
     private fun setupDrawerHeader() {
-        val navigationView = findViewById<NavigationView>(R.id.navigation)
+        val navigationView = findViewById<NavigationView>(R.id.navigationView)
         val hView = navigationView.getHeaderView(0)
 
         headerServiceView = hView.findViewById(R.id.drawer_header_service_view)
@@ -240,6 +256,7 @@ class MainActivity : AppCompatActivity(){
         if (!isChangingConfigurations) {
             StateSaver.clearStateFiles()
         }
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver)
     }
 
     @SuppressLint("RtlHardcoded")
@@ -251,7 +268,8 @@ class MainActivity : AppCompatActivity(){
         drawer!!.closeDrawer(Gravity.LEFT, false)
         try {
             val selectedServiceName = NewPipe.getService(
-                ServiceHelper.getSelectedServiceId(this)).serviceInfo.name
+                ServiceHelper.getSelectedServiceId(this)
+            ).serviceInfo.name
 //            headerServiceView!!.text = selectedServiceName
         } catch (e: Exception) {
             ErrorActivity.reportUiError(this, e)
@@ -459,18 +477,23 @@ class MainActivity : AppCompatActivity(){
                         }
 
                         StreamingService.LinkType.CHANNEL -> {
-                            NavigationHelper.openChannelFragment(supportFragmentManager,
+                            NavigationHelper.openChannelFragment(
+                                supportFragmentManager,
                                 serviceId,
                                 url,
-                                title)
+                                title
+                            )
                         }
                         StreamingService.LinkType.PLAYLIST -> {
-                            NavigationHelper.openPlaylistFragment(supportFragmentManager,
+                            NavigationHelper.openPlaylistFragment(
+                                supportFragmentManager,
                                 serviceId,
                                 url,
-                                title)
+                                title
+                            )
                         }
-                        StreamingService.LinkType.NONE -> {}
+                        StreamingService.LinkType.NONE -> {
+                        }
                     }
                 }
 
@@ -480,7 +503,8 @@ class MainActivity : AppCompatActivity(){
                     NavigationHelper.openSearchFragment(
                         supportFragmentManager,
                         serviceId,
-                        searchString)
+                        searchString
+                    )
 
                 }
                 else -> NavigationHelper.gotoMainFragment(supportFragmentManager)
@@ -488,8 +512,27 @@ class MainActivity : AppCompatActivity(){
         } catch (e: Exception) {
             ErrorActivity.reportUiError(this, e)
         }
-
     }
+
+    private val mMessageReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.d(TAG, "mMessageReceiver(): onReceive()")
+            // Get extra data included in the Intent
+            if (intent.hasExtra(KEY_SEARCH_STRING) && intent.hasExtra(KEY_SEARCH_STRING)) {
+                val searchString = intent.getStringExtra(KEY_SEARCH_STRING)
+                val tabTitle = intent.getStringExtra(KEY_TAB_TITLE)
+                Log.d(TAG, "mMessageReceiver(): searchString = $searchString, tabTitle = $tabTitle")
+                val item: MenuItem = navigationView.menu
+                    .add(R.id.menu_tabs_group, ITEM_ID_SEARCH, ORDER, tabTitle)
+
+                item.setIcon(ThemeHelper.resolveResourceIdFromAttr(context, R.attr.ic_channel))
+                Log.d(TAG, "item.actionView = ${item.actionView}")
+                item.tooltipText = searchString
+                item.actionView?.setTag(KEY_SEARCH_STRING_INT, searchString)
+            }
+        }
+    }
+
 
     companion object {
         private const val TAG = "MainActivity"
@@ -499,6 +542,7 @@ class MainActivity : AppCompatActivity(){
         private const val ITEM_ID_BOOKMARKS = -3
         private const val ITEM_ID_DOWNLOADS = -4
         private const val ITEM_ID_HISTORY = -5
+        private const val ITEM_ID_SEARCH = -6
         private const val ITEM_ID_SETTINGS = 0
         private const val ITEM_ID_ABOUT = 1
 

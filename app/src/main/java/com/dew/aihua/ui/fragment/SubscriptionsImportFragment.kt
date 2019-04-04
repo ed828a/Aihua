@@ -21,7 +21,7 @@ import com.dew.aihua.ui.local.subscription.service.SubscriptionsImportService.Co
 import com.dew.aihua.ui.local.subscription.service.SubscriptionsImportService.Companion.INPUT_STREAM_MODE
 import com.dew.aihua.ui.local.subscription.service.SubscriptionsImportService.Companion.KEY_MODE
 import com.dew.aihua.ui.local.subscription.service.SubscriptionsImportService.Companion.KEY_VALUE
-import com.dew.aihua.player.helper.Constants
+import com.dew.aihua.util.Constants
 import com.dew.aihua.player.helper.ServiceHelper
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo

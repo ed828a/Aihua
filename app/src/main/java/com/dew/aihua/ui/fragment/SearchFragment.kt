@@ -24,12 +24,11 @@ import com.dew.aihua.data.model.SuggestionItem
 import com.dew.aihua.data.network.api.ExtractorHelper
 import com.dew.aihua.player.helper.AnimationUtils
 import com.dew.aihua.player.helper.AnimationUtils.animateView
-import com.dew.aihua.player.helper.Constants
+import com.dew.aihua.util.Constants
 import com.dew.aihua.player.helper.ServiceHelper
 import com.dew.aihua.report.ErrorActivity
 import com.dew.aihua.report.ErrorInfo
 import com.dew.aihua.report.UserAction
-import com.dew.aihua.settings.dialog_fragment.SelectChannelFragment
 import com.dew.aihua.settings.tabs.*
 import com.dew.aihua.ui.activity.ReCaptchaActivity
 import com.dew.aihua.ui.adapter.SuggestionListAdapter

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import com.dew.aihua.player.helper.Constants
+import com.dew.aihua.util.Constants
 import icepick.State
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers

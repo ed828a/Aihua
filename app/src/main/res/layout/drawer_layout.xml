@@ -11,7 +11,7 @@
     android:orientation="vertical">
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation"
+        android:id="@+id/navigationView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:elevation="4dp"
@@ -21,8 +21,8 @@
         android:id="@+id/navigation_drawer_footer"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:layout_alignStart="@id/navigation"
-        android:layout_alignEnd="@id/navigation"
+        android:layout_alignStart="@id/navigationView"
+        android:layout_alignEnd="@id/navigationView"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"/>
 
