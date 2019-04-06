@@ -245,6 +245,7 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
             })
 
             suggestions.observe(this@NewSearchFragment, Observer { list ->
+                Log.d(TAG, "suggestions Observing: thread = ${Thread.currentThread().name}" )
                 if (list != null) handleSuggestions(list)
             })
 
@@ -287,6 +288,8 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
                 }
             }
         }
+
+        hideSuggestionsPanel()
 
         if (suggestionDisposable == null || suggestionDisposable!!.isDisposed) initSuggestionObserver()
 
@@ -331,9 +334,6 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
 
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Init's
-    ///////////////////////////////////////////////////////////////////////////
 
     override fun reloadContent() {
         if (!TextUtils.isEmpty(searchString)) search(searchString, arrayOf(), "")
@@ -390,8 +390,9 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
                         search(searchString, this.contentFilter, sortFilter!!)
                     } else {
                         searchString = queryEvent.queryText().toString()
+                        Log.d(TAG, "SearchViewQueryTextEvent: searchString = $searchString")
                         suggestionPublisher.onNext(searchString!!)
-//                        if (!isSuggestionPanelShowing)
+                        if (!isSuggestionPanelShowing)
                             showSuggestionsPanel()
                     }
                 },
@@ -417,7 +418,10 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
 //                }
 //            compositeDisposable.add(d1)
 //        }
-//        searchView.setOnCloseListener {
+
+        searchView.setOnCloseListener {
+            Log.d(TAG, "onCloseListener called")
+            hideSuggestionsPanel()
 //            if (searchView.query.isEmpty()) {
 //                // go back to MainFragment
 //                false
@@ -427,7 +431,9 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
 //                suggestionListAdapter.setItems(arrayListOf())
 //                false
 //            }
-//        }
+            false
+
+        }
 
         var itemId = 0
         var isFirstItem = true
@@ -636,7 +642,7 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
         if (suggestionDisposable != null && !suggestionDisposable!!.isDisposed) suggestionDisposable!!.dispose()
 
         val d = suggestionPublisher
-            .subscribeOn(Schedulers.computation())
+            .subscribeOn(Schedulers.io())
             .debounce(SUGGESTIONS_DEBOUNCE.toLong(), TimeUnit.MILLISECONDS)
             .startWith(
                 if (searchString != null)
@@ -651,7 +657,8 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
                     suggestionDisposable = viewModel.loadSuggestions(queryString)
                 }
             }
-        compositeDisposable.add(d)
+
+        disposables.add(d)
 
     }
 

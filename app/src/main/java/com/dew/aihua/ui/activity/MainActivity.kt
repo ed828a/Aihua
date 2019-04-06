@@ -525,7 +525,8 @@ class MainActivity : AppCompatActivity() {
                 val item: MenuItem = navigationView.menu
                     .add(R.id.menu_tabs_group, ITEM_ID_SEARCH, ORDER, tabTitle)
 
-                item.setIcon(ThemeHelper.resolveResourceIdFromAttr(context, R.attr.ic_channel))
+//                item.setIcon(ThemeHelper.resolveResourceIdFromAttr(context, R.attr.ic_channel))
+                item.setIcon(R.drawable.ic_channel_white_24dp)
                 Log.d(TAG, "item.actionView = ${item.actionView}")
                 item.tooltipText = searchString
                 item.actionView?.setTag(KEY_SEARCH_STRING_INT, searchString)
