@@ -37,11 +37,17 @@ import org.schabi.newpipe.extractor.exceptions.ExtractionException
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
+import android.text.TextUtils
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.dew.aihua.ui.model.DrawerMenuItem
 import com.dew.aihua.util.Constants.ACTION_ADD_TAB_MESSAGE
 import com.dew.aihua.util.Constants.KEY_SEARCH_STRING
 import com.dew.aihua.util.Constants.KEY_SEARCH_STRING_INT
 import com.dew.aihua.util.Constants.KEY_TAB_TITLE
+import com.grack.nanojson.JsonObject
+import com.grack.nanojson.JsonParser
+import com.grack.nanojson.JsonSink
+import com.grack.nanojson.JsonWriter
 
 
 class MainActivity : AppCompatActivity() {
@@ -125,6 +131,17 @@ class MainActivity : AppCompatActivity() {
             .add(R.id.menu_tabs_group, ITEM_ID_HISTORY, ORDER, R.string.action_history)
             .setIcon(ThemeHelper.resolveResourceIdFromAttr(this, R.attr.history))
 
+        // extra menu items
+        val list = getDrawerMenuItemsFromSharePreference()
+        if (list.isNotEmpty()) {
+            drawerMenuItems.clear()
+            drawerMenuItems.addAll(list)
+            list.forEach {
+                drawerItems!!.menu.add(it.groupId, it.itemId, it.order, it.title)
+                    .setIcon(it.icon)
+            }
+        }
+
         toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close)
         toggle!!.syncState()
         drawer!!.addDrawerListener(toggle!!)
@@ -178,9 +195,14 @@ class MainActivity : AppCompatActivity() {
             ITEM_ID_DOWNLOADS -> NavigationHelper.openDownloads(this)
             ITEM_ID_HISTORY -> NavigationHelper.openStatisticFragment(supportFragmentManager)
             ITEM_ID_SEARCH -> {
-                val string = item.actionView?.getTag(KEY_SEARCH_STRING_INT) as String?
-                val string2 = item.tooltipText.toString()
-                NavigationHelper.openSearchFragment(supportFragmentManager, ServiceHelper.getSelectedServiceId(this), string2)
+                val string = item.title
+//                val string2 = item.tooltipText.toString()
+                val query = getSearchStringByTitle(item.title.toString())
+                NavigationHelper.openSearchFragment(
+                    supportFragmentManager,
+                    ServiceHelper.getSelectedServiceId(this),
+                    query
+                )
             }
 
             else -> { // for Available Kiosk, actually only Trending from NewPipe extractor YouTube Service.
@@ -197,6 +219,14 @@ class MainActivity : AppCompatActivity() {
                 NavigationHelper.openKioskFragment(supportFragmentManager, currentServiceId, serviceName)
             }
         }
+    }
+
+    private fun getSearchStringByTitle(title: String): String {
+        drawerMenuItems.forEach {
+            if (it.title == title) return it.searchString
+        }
+
+        return ""
     }
 
     private fun setupDrawerHeader() {
@@ -252,6 +282,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        Log.d(TAG, "onDestroy() called")
         super.onDestroy()
         if (!isChangingConfigurations) {
             StateSaver.clearStateFiles()
@@ -261,6 +292,7 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("RtlHardcoded")
     override fun onResume() {
+        Log.d(TAG, "onResume() called")
         super.onResume()
 
         // close drawer on return, and don't show animation, so its looks like the drawer isn't open
@@ -291,6 +323,80 @@ class MainActivity : AppCompatActivity() {
             NavigationHelper.openMainActivity(this)
         }
 
+    }
+
+    override fun onStart() {
+        Log.d(TAG, "onStart() called")
+        super.onStart()
+    }
+
+    override fun onPause() {
+        Log.d(TAG, "onPause() called")
+        super.onPause()
+        if (drawerMenuItems.isNotEmpty())
+            saveDrawerMenuItemsToSharedPreference(drawerMenuItems)
+    }
+
+    private fun saveDrawerMenuItemsToSharedPreference(drawerMeuItems: List<DrawerMenuItem>) {
+        val jsonString = saveListToJson(drawerMeuItems)
+        PreferenceManager.getDefaultSharedPreferences(applicationContext)
+            .edit().putString(KEY_DRAWER_MENU_ITEM_LIST, jsonString).apply()
+
+    }
+
+    private fun saveListToJson(list: List<DrawerMenuItem>): String {
+        val jsonWrite = JsonWriter.string()
+        val jsonArray = jsonWrite.`object`().array(KEY_DRAWER_MENU_ITEM_LIST)
+        list.forEach {
+            writeDrawerMenuItemToJson(it, jsonArray)
+        }
+        jsonArray.end()
+        jsonWrite.end()
+        return jsonWrite.done()
+    }
+
+    private fun writeDrawerMenuItemToJson(drawerMenuItem: DrawerMenuItem, jsonSink: JsonSink<*>) {
+        jsonSink.`object`()
+        jsonSink.value("groupId", drawerMenuItem.groupId)
+            .value("itemId", drawerMenuItem.itemId)
+            .value("order", drawerMenuItem.order)
+            .value("title", drawerMenuItem.title)
+            .value("icon", drawerMenuItem.icon)
+            .value("searchString", drawerMenuItem.searchString)
+        jsonSink.end()
+    }
+
+    private fun getDrawerMenuItemsFromSharePreference(): List<DrawerMenuItem> {
+        val jsonObjectString =
+            PreferenceManager.getDefaultSharedPreferences(applicationContext).getString(KEY_DRAWER_MENU_ITEM_LIST, "")
+        val menuItems = arrayListOf<DrawerMenuItem>()
+
+        Log.d(TAG, "getDrawerMenuItemsFromSharePreference(): jsonObjectString = $jsonObjectString ")
+
+        if (TextUtils.isEmpty(jsonObjectString)) return menuItems
+
+        val jsonObject =
+            JsonParser.`object`().from(jsonObjectString) ?: throw Exception("JSON doesn't contain Json Object")
+        val jsonArray =
+            jsonObject.getArray(KEY_DRAWER_MENU_ITEM_LIST) ?: throw Exception("JSON doesn't contain Json Array")
+        for (obj in jsonArray) {
+            if (obj is JsonObject) {
+                val menuItem = getDrawerMenuItem(obj)
+                menuItems.add(menuItem)
+            }
+        }
+
+        return menuItems
+    }
+
+    private fun getDrawerMenuItem(obj: JsonObject): DrawerMenuItem {
+        val groupId = obj.getInt("groupId")
+        val itemId = obj.getInt("itemId")
+        val order = obj.getInt("order")
+        val title = obj.getString("title")
+        val icon = obj.getInt("icon")
+        val searchString = obj.getString("searchString")
+        return DrawerMenuItem(groupId, itemId, order, title, icon, searchString)
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -514,6 +620,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val drawerMenuItems: MutableList<DrawerMenuItem> = arrayListOf()
+
     private val mMessageReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             Log.d(TAG, "mMessageReceiver(): onReceive()")
@@ -530,6 +638,16 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "item.actionView = ${item.actionView}")
                 item.tooltipText = searchString
                 item.actionView?.setTag(KEY_SEARCH_STRING_INT, searchString)
+                drawerMenuItems.add(
+                    DrawerMenuItem(
+                        R.id.menu_tabs_group,
+                        ITEM_ID_SEARCH,
+                        ORDER,
+                        tabTitle,
+                        R.drawable.ic_channel_white_24dp,
+                        searchString
+                    )
+                )
             }
         }
     }
@@ -548,5 +666,6 @@ class MainActivity : AppCompatActivity() {
         private const val ITEM_ID_ABOUT = 1
 
         private const val ORDER = 0
+        const val KEY_DRAWER_MENU_ITEM_LIST = "key_drawer_menu_item_list"
     }
 }
