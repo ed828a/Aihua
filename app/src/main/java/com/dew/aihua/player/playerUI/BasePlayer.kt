@@ -354,7 +354,7 @@ abstract class BasePlayer(protected val context: Context) : Player.EventListener
         currentThumbnail = loadedImage
     }
 
-    override fun onLoadingCancelled(imageUri: String, view: View) {
+    override fun onLoadingCancelled(imageUri: String, view: View?) {
 
         Log.d(TAG, "Thumbnail - onLoadingCancelled() called with: imageUri = [$imageUri], view = [$view]")
         currentThumbnail = null
