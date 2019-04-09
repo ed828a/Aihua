@@ -602,7 +602,7 @@ class PopupVideoPlayer : Service() {
             updateNotification(-1)
         }
 
-        override fun onLoadingCancelled(imageUri: String, view: View) {
+        override fun onLoadingCancelled(imageUri: String, view: View?) {
             super.onLoadingCancelled(imageUri, view)
             resetNotification()
             updateNotification(-1)
