@@ -12,7 +12,7 @@ enum class TabType(val tab: Tab) {
     HISTORY(HistoryTab()),
     KIOSK(KioskTab()),
     CHANNEL(ChannelTab()),
-    SEARCH(SearchTab());
+    SEARCH(SearchTab(searchServiceId = 0, searchString = "Most Popular", searchTabName = "Most Popular"));
 
     val tabId: Int
         get() = tab.tabId

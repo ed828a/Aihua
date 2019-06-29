@@ -63,7 +63,7 @@ class MainFragment : BaseFragment(), TabLayout.OnTabSelectedListener {
         tabLayout = rootView.findViewById(R.id.main_tab_layout)
         viewPager = rootView.findViewById(R.id.pager)
 
-        /*  Nested fragment, use child fragment here to maintain backstack in view pager. */
+        /*  Nested fragment, use child fragment here to maintain back-stack in view pager. */
         pagerAdapter = SelectedTabsPagerAdapter(childFragmentManager)
         viewPager.adapter = pagerAdapter
 
@@ -152,6 +152,7 @@ class MainFragment : BaseFragment(), TabLayout.OnTabSelectedListener {
     override fun onTabSelected(selectedTab: TabLayout.Tab) {
         Log.d(TAG, "onTabSelected() called with: selectedTab = [$selectedTab]")
         updateCurrentTitle()
+
     }
 
     override fun onTabUnselected(tab: TabLayout.Tab) {}

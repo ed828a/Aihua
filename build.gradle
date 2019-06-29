@@ -8,7 +8,7 @@ buildscript {
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'com.android.tools.build:gradle:3.4.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -31,8 +31,8 @@ task clean(type: Delete) {
 
 ext {
     supportLibVersion = '1.1.0-alpha03'   //'1.0.0-beta01'
-    exoPlayerLibVersion = '2.9.5' //2.9.5 was 2.8.4
-    roomDbLibVersion = '2.1.0-alpha06' //'2.0.0-beta01'
+    exoPlayerLibVersion = '2.9.5' //2.9.5 only, don't update to new version
+    roomDbLibVersion = '2.1.0' //'2.0.0-beta01'
     leakCanaryLibVersion = '1.6.2' //1.6.1
     okHttpLibVersion = '3.11.0'
     icepickLibVersion = '3.2.0'

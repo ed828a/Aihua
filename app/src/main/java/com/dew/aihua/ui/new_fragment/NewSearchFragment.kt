@@ -194,6 +194,7 @@ class NewSearchFragment : NewBaseListFragment<SearchInfo, ListExtractor.InfoItem
     }
 
     override fun onPause() {
+        Log.d(TAG, " onPause() called")
         super.onPause()
 
         searchDisposable?.dispose()

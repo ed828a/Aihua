@@ -350,7 +350,7 @@ class SearchTab : Tab {
 
     override val fragment: NewSearchFragment
         get() {
-            Log.d(TAG, "SearchTab::getFragment called")
+            Log.d(TAG, "NewSearchFragment::getFragment called")
             return NewSearchFragment.getInstance(searchServiceId, searchString ?: "mostPopular")
         }
 
