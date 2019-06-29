@@ -16,10 +16,10 @@ android {
     buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.dew.aihua"
-        minSdkVersion 26
+        minSdkVersion 25
         targetSdkVersion 28
-        versionCode 5
-        versionName "2.0"
+        versionCode 8
+        versionName "3.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
